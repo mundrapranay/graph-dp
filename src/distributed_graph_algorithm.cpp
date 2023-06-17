@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
             int numNodesToProcess = nodesPerWorker + (dest <= extraNodes ? 1 : 0);
             MPI_Send(&numNodesToProcess, 1, MPI_INT, dest, 0, MPI_COMM_WORLD);
             for (int i = 0; i < numNodesToProcess; i++) {
-                MPI_Send(graph[dest], graph[dest].size(), MPI_INT, dest, 0, MPI_COMM_WORLD);
+                MPI_Send(graph[dest].data(), graph[dest].size(), MPI_INT, dest, 0, MPI_COMM_WORLD);
             }
         }
 
