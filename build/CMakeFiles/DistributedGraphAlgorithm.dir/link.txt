@@ -1,0 +1,1 @@
+mpicxx -rdynamic -Wl,--dependency-file,CMakeFiles/DistributedGraphAlgorithm.dir/link.d CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.o -o DistributedGraphAlgorithm  -Wl,-rpath,/usr/local/lib /usr/local/lib/libmpi.so 
