@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
 
     // Assuming the graph is represented as an adjacency list
     // Each process will receive a portion of the adjacency list
-    std::vector<int> adjacencyList;
+    std::vector<std::vector<int>> adjacencyList;
     if (rank == 0) {
         // Root process (rank 0) reads the graph and distributes it
         // Assuming the graph is read from a file or some other source
