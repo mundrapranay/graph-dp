@@ -60,8 +60,12 @@ int main(int argc, char** argv) {
         int numNodesToProcess;
         MPI_Recv(&numNodesToProcess, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-        std::vector<int> localAdjacencyList(numNodesToProcess);
-        MPI_Recv(localAdjacencyList.data(), numNodesToProcess, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Probe(0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        int receivedCount;
+        MPI_Get_count(MPI_STATUS_IGNORE, MPI_INT, &receivedCount);
+
+        std::vector<int> localAdjacencyList(receivedCount);
+        MPI_Recv(localAdjacencyList.data(), receivedCount, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
         // Perform computation on the local adjacency list
         int nodeValue = computeNodeValue(localAdjacencyList);
