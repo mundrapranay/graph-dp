@@ -7,9 +7,9 @@ int computeNode(int node, const std::vector<int>& adjacencyList) {
     // TODO: Implement your computation logic here
     // This is just a placeholder
     int sum = 0;
-    for (int neighbor : adjacencyList) {
+    for (auto neighbor : adjacencyList) {
         // Compute the sum of neighbors (example computation)
-        sum += neighbor;
+        sum += *neighbor;
     }
     return sum;
 }
