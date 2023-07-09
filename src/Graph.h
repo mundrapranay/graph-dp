@@ -62,10 +62,13 @@ class Graph {
                 if (adjacenyList.find(vertex) == adjacenyList.end()) {
                     adjacenyList[vertex] = neighbors;
                 }
+                if (adjacenyList.find(ngh) == adjacenyList.end()) {
+                    adjacenyList[ngh] = neighbors;
+                }
                 adjacenyList[vertex].push_back(ngh);
             }
             file.close();
-            graphSize  = adjacenyList.size();   
+            graphSize = adjacenyList.size();   
         }
 
         std::unordered_map<int, std::vector<int>> getAdjacencyList() {

@@ -136,19 +136,24 @@ int main(int argc, char** argv) {
     std::string file_loc = "dblp_greedy";
     double nu = 0.9;
     double epsilon = 0.5;
+    distributed_kcore::Graph *graph;
 
-    distributed_kcore::Graph *graph = new distributed_kcore::Graph(file_loc);
-    std::cout << graph->getGraphSize() << std::endl;
-    // MPI_Init(&argc, &argv);
-    // int numProcesses, rank;
-    // MPI_Comm_size(MPI_COMM_WORLD, &numProcesses);
-    // MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    
+    MPI_Init(&argc, &argv);
+    int numProcesses, rank;
+    MPI_Comm_size(MPI_COMM_WORLD, &numProcesses);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    // if (numProcesses < 2) {
-    //     std::cerr << "Error: At least 2 processes are required." << std::endl;
-    //     MPI_Finalize();
-    //     return 1;
-    // }
+    if (numProcesses < 2) {
+        std::cerr << "Error: At least 2 processes are required." << std::endl;
+        MPI_Finalize();
+        return 1;
+    }
+    if (rank == COORDINATOR) {
+        graph = new distributed_kcore::Graph(file_loc);
+        std::cout << graph->getGraphSize() << std::endl;
+    }
+     
     // KCore_compute(rank, numProcesses, graph, nu, epsilon);
 
     // std::unordered_map<int, std::vector<int>> adjacencyList;
