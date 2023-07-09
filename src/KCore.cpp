@@ -50,10 +50,13 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
     std::unordered_map<int, std::vector<int>> adjacencyList = graph->getAdjacencyList();
     MPI_Status status;
 
-    if (rank == COORDINATOR) {
-        for (int i = 0; i < number_of_levels; i++) {
-            levels.push_back(LDS(n, epsilon, delta, false));
-        }
+    // if (rank == COORDINATOR) {
+    //     for (int i = 0; i < number_of_levels; i++) {
+    //         levels.push_back(LDS(n, epsilon, delta, false));
+    //     }
+    // }
+    for (int i = 0; i < number_of_levels; i++) {
+        levels.push_back(LDS(n, epsilon, delta, false));
     }
 
     for (int r = 0; r < number_of_levels - 1; r++) {
