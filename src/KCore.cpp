@@ -36,7 +36,7 @@ std::vector<double> KCore(std::unordered_map<int, std::vector<int>> adjacencyLis
 }
 
 
-void KCore(int rank, int nprocs, Graph* graph, double nu, double epsilon) {
+void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon) {
     std::vector<LDS> levels;
     double phi = 0.5;
     double lambda = (2/9) * (2 * nu - 5);
@@ -46,7 +46,9 @@ void KCore(int rank, int nprocs, Graph* graph, double nu, double epsilon) {
     int numworkers = nprocs - 1;
     int chunk = n / numworkers;
     int extra = n % numworkers;
-    int offset;
+    int offset, mytype, workLoad, p;
+    std::unordered_map<int, std::vector<int>> adjacencyList = graph->getAdjacencyList();
+    MPI_Status status;
 
     if (rank == COORDINATOR) {
         for (int i = 0; i < number_of_levels; i++) {
@@ -55,6 +57,10 @@ void KCore(int rank, int nprocs, Graph* graph, double nu, double epsilon) {
     }
 
     for (int r = 0; r < number_of_levels - 1; r++) {
+        // each node either releases 1 or 0 and the coordinator updates the level accordingly
+        // nextLevels stores this information
+        // int *nextLevels = new int[n];
+        int *nextLevels = (int*)malloc(n * sizeof(int)); 
         if (rank == COORDINATOR) {
             // distribute the task based on the num_workers
             // calculate the data size to send to workers
@@ -62,13 +68,59 @@ void KCore(int rank, int nprocs, Graph* graph, double nu, double epsilon) {
              * @todo: figure out offset value so that each worker 
              *        can decide the nodes to work on.
             */
-            int offset = r + 1;
-            for (int p = 1; p <= numworkers; p++) {
-                int workLoad = (p == numworkers) ? chunk + extra : chunk;
-
+            offset = 0;
+            mytype = FROM_MASTER;
+            for (p = 1; p <= numworkers; p++) {
+                workLoad = (p == numworkers) ? chunk + extra : chunk;
+                MPI_Send(&offset, 1, MPI_INT, p, mytype, MPI_COMM_WORLD);
+                MPI_Send(&workLoad, 1, MPI_INT, p, mytype, MPI_COMM_WORLD);
+                MPI_Send(&nextLevels[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD);
+                offset += workLoad;
             }
+
+            // receive results from workers
+            for (p = 1; p <= numworkers; p++) {
+                mytype = FROM_WORKER + p;
+                MPI_Recv(&offset, 1, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
+                MPI_Recv(&workLoad, 1, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
+                MPI_Recv(&nextLevels[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
+            }
+
+            // update the levels based on the data in nextLevels
         } else {
-            // 
+            // worker task
+            mytype = FROM_MASTER;
+            MPI_Recv(&offset, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
+            MPI_Recv(&workLoad, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
+            MPI_Recv(&nextLevels[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
+
+            // perform computation
+            int end_node = offset + workLoad;
+            for (int i = offset; i < end_node; i++) {
+                if (levels[r].get_level(i) == r) {
+                   int U_i = 0;
+                   for (auto ngh : adjacencyList[i]) {
+                        if (levels[r].get_level(ngh) == r) {
+                            U_i += 1;
+                        }
+                   }
+                   /**
+                     * @todo: add google-dp library to sample from Geometric Distribution
+                    */
+                   int U_hat_i = U_i;
+                   int group_index = levels[r].group_for_level(r);
+                   if (U_hat_i > pow((1 + phi), group_index)) {
+                        nextLevels[i] = 1;
+                   }
+                }
+            }
+
+            // send back the completed data to COORDINATOR
+            mytype = FROM_WORKER + rank;
+            MPI_Send(&offset, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
+            MPI_Send(&workLoad, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
+            MPI_Send(&nextLevels[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
+
         }
     }
 
@@ -79,37 +131,38 @@ int main(int argc, char** argv) {
     // std::string file_loc = argv[1];
     // double nu = std::stod(argv[2]);
     // double epsilon = std::stod(argv[3]);
-    std::string file_loc = "sample_graph.tsv";
+    std::string file_loc = "dblp_greedy";
     double nu = 0.9;
     double epsilon = 0.5;
 
     Graph *graph = new Graph(file_loc);
+    std::cout << graph->getGraphSize() << std::endl;
+    // MPI_Init(&argc, &argv);
+    // int numProcesses, rank;
+    // MPI_Comm_size(MPI_COMM_WORLD, &numProcesses);
+    // MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    MPI_Init(&argc, &argv);
-    int numProcesses, rank;
-    MPI_Comm_size(MPI_COMM_WORLD, &numProcesses);
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    // if (numProcesses < 2) {
+    //     std::cerr << "Error: At least 2 processes are required." << std::endl;
+    //     MPI_Finalize();
+    //     return 1;
+    // }
+    // KCore_compute(rank, numProcesses, graph, nu, epsilon);
 
-    if (numProcesses < 2) {
-        std::cerr << "Error: At least 2 processes are required." << std::endl;
-        MPI_Finalize();
-        return 1;
-    }
+    // std::unordered_map<int, std::vector<int>> adjacencyList;
+    // std::vector<LDS> levels;
+    // double phi = 0.5;
+    // double lambda = (2/9) * (2 * nu - 5);
+    // double delta = 9.0;
+    // int n = graph->getGraphSize();
+    // int number_of_levels = ceil(4 * pow(log(n), 2) - 1);
 
-    std::unordered_map<int, std::vector<int>> adjacencyList;
-    std::vector<LDS> levels;
-    double phi = 0.5;
-    double lambda = (2/9) * (2 * nu - 5);
-    double delta = 9.0;
-    int n = graph->getGraphSize();
-    int number_of_levels = ceil(4 * pow(log(n), 2) - 1);
-
-    if (rank == 0) {
-        adjacencyList = graph->getAdjacencyList();
-        for (int i = 0; i < number_of_levels; i++) {
-            levels.push_back(LDS(n, epsilon, delta, false));
-        }
-    }
+    // if (rank == 0) {
+    //     adjacencyList = graph->getAdjacencyList();
+    //     for (int i = 0; i < number_of_levels; i++) {
+    //         levels.push_back(LDS(n, epsilon, delta, false));
+    //     }
+    // }
 
 
 
@@ -119,7 +172,7 @@ int main(int argc, char** argv) {
 
     
 
-    std::vector<double> core_numbers = KCore(graph->getAdjacencyList(), nu, epsilon);
+    // std::vector<double> core_numbers = KCore(graph->getAdjacencyList(), nu, epsilon);
 
     return 0;
 }

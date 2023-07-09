@@ -26,6 +26,27 @@ class Graph {
 		}
     
     public:
+        // Graph(const std::string& filename) {
+        //     std::ifstream file(filename);
+        //     if (!file.is_open()) {
+        //         std::cerr << "Failed to open file: " << filename << std::endl;
+        //         return;
+        //     }
+        //     std::string line;
+        //     while (std::getline(file, line)) {
+        //         std::vector<std::string> values = splitString(line, '\t');
+        //         std::vector<int> neighbors;
+        //         int vertex = std::stoi(values[0]);
+        //         for (int i = 1; i < values.size(); i++) {
+        //             neighbors.push_back(std::stoi(values[i]));
+        //         }
+        //         adjacenyList[vertex] = neighbors;
+        //         graphSize += 1;
+        //     }
+        //     file.close();
+            
+        // }
+
         Graph(const std::string& filename) {
             std::ifstream file(filename);
             if (!file.is_open()) {
@@ -34,17 +55,17 @@ class Graph {
             }
             std::string line;
             while (std::getline(file, line)) {
-                std::vector<std::string> values = splitString(line, '\t');
+                std::vector<std::string> values = splitString(line, ' ');
                 std::vector<int> neighbors;
                 int vertex = std::stoi(values[0]);
-                for (int i = 1; i < values.size(); i++) {
-                    neighbors.push_back(std::stoi(values[i]));
+                int ngh = std::stoi(values[1]);
+                if (adjacenyList.find(vertex) == adjacenyList.end()) {
+                    adjacenyList[vertex] = neighbors;
                 }
-                adjacenyList[vertex] = neighbors;
-                graphSize += 1;
+                adjacenyList[vertex].push_back(ngh);
             }
             file.close();
-            
+            graphSize  = adjacenyList.size();   
         }
 
         std::unordered_map<int, std::vector<int>> getAdjacencyList() {
