@@ -57,8 +57,9 @@ class Graph {
             while (std::getline(file, line)) {
                 std::vector<std::string> values = splitString(line, ' ');
                 std::vector<int> neighbors;
-                int vertex = std::stoi(values[0]);
-                int ngh = std::stoi(values[1]);
+                // to ensure that its zero indexed
+                int vertex = std::stoi(values[0]) - 1;
+                int ngh = std::stoi(values[1]) - 1;
                 if (adjacenyList.find(vertex) == adjacenyList.end()) {
                     adjacenyList[vertex] = neighbors;
                 }
