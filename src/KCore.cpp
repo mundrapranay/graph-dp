@@ -136,7 +136,7 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
                      * @todo: make sure the base of log is correct
                     */
                    int U_hat_i = U_i;
-                   double group_index = floor(r / (2 * log(n)));
+                   int group_index = static_cast<int>(r / (2 * log(n)));
                    if (U_hat_i > pow((1 + phi), group_index)) {
                         nextLevels[i] = 1;
                    }
