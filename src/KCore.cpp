@@ -126,6 +126,8 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
 
 }
 
+} // end of namespace distributed_kcore
+
 int main(int argc, char** argv) {
 
     // std::string file_loc = argv[1];
@@ -135,7 +137,7 @@ int main(int argc, char** argv) {
     double nu = 0.9;
     double epsilon = 0.5;
 
-    Graph *graph = new Graph(file_loc);
+    distributed_kcore::Graph *graph = new distributed_kcore::Graph(file_loc);
     std::cout << graph->getGraphSize() << std::endl;
     // MPI_Init(&argc, &argv);
     // int numProcesses, rank;
@@ -176,4 +178,3 @@ int main(int argc, char** argv) {
 
     return 0;
 }
-} // end of namespace distributed_kcore
