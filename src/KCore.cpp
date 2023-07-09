@@ -158,7 +158,7 @@ int main(int argc, char** argv) {
         std::cout << graph->getGraphSize() << std::endl;
     }
      
-    // KCore_compute(rank, numProcesses, graph, nu, epsilon);
+    distributed_kcore::KCore_compute(rank, numProcesses, graph, nu, epsilon);
 
     // std::unordered_map<int, std::vector<int>> adjacencyList;
     // std::vector<LDS> levels;
