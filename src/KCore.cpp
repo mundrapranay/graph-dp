@@ -64,13 +64,15 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
         // nextLevels stores this information
         // int *nextLevels = new int[n];
         int *currentLevels = (int*)malloc(n * sizeof(int));
-        int *nextLevels = (int*)malloc(n * sizeof(int)); 
+        int *nextLevels = (int*)malloc(n * sizeof(int));
+        int group_index; 
         if (rank == COORDINATOR) {
             for (int node = 0; node < n; node++) {
                 currentLevels[node] = levels[r].get_level(node);
             }
             MPI_Bcast(&currentLevels, n, MPI_INT, COORDINATOR, MPI_COMM_WORLD);
             std::cout << "Broadcasted current levels" << std::endl;
+            group_index = levels[r].group_for_level(r);
             // distribute the task based on the num_workers
             // calculate the data size to send to workers
             /**
@@ -83,6 +85,7 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
                 workLoad = (p == numworkers) ? chunk + extra : chunk;
                 MPI_Send(&offset, 1, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 MPI_Send(&workLoad, 1, MPI_INT, p, mytype, MPI_COMM_WORLD);
+                MPI_Send(&group_index, 1, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 MPI_Send(&nextLevels[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 offset += workLoad;
             }
@@ -101,6 +104,7 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
             mytype = FROM_MASTER;
             MPI_Recv(&offset, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             MPI_Recv(&workLoad, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
+            MPI_Recv(&group_index, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             MPI_Recv(&nextLevels[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             std::cout << "Received at Worker: " << rank << std::endl;
             // perform computation
@@ -136,7 +140,6 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
                      * @todo: make sure the base of log is correct
                     */
                    int U_hat_i = U_i;
-                   int group_index = static_cast<int>(r / (2 * log(n)));
                    if (U_hat_i > pow((1 + phi), group_index)) {
                         nextLevels[i] = 1;
                    }
