@@ -2,6 +2,8 @@
 #include <unordered_set>
 #include <vector>
 #include <stdlib.h>
+#include <algorithm>
+#include <cassert>
 #include <math.h>
 
 typedef int intE;
