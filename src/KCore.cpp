@@ -50,21 +50,26 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
     std::unordered_map<int, std::vector<int>> adjacencyList = graph->getAdjacencyList();
     MPI_Status status;
 
-    // if (rank == COORDINATOR) {
-    //     for (int i = 0; i < number_of_levels; i++) {
-    //         levels.push_back(LDS(n, epsilon, delta, false));
-    //     }
-    // }
-    for (int i = 0; i < number_of_levels; i++) {
-        levels.push_back(LDS(n, epsilon, delta, false));
+    if (rank == COORDINATOR) {
+        for (int i = 0; i < number_of_levels; i++) {
+            levels.push_back(LDS(n, epsilon, delta, false));
+        }
     }
+    // for (int i = 0; i < number_of_levels; i++) {
+    //     levels.push_back(LDS(n, epsilon, delta, false));
+    // }
 
     for (int r = 0; r < number_of_levels - 1; r++) {
         // each node either releases 1 or 0 and the coordinator updates the level accordingly
         // nextLevels stores this information
         // int *nextLevels = new int[n];
+        int *currentLevels = (int*)malloc(n * sizeof(int));
         int *nextLevels = (int*)malloc(n * sizeof(int)); 
         if (rank == COORDINATOR) {
+            for (int node = 0; node < n; node++) {
+                currentLevels[node] = levels[r].get_level(node);
+            }
+            MPI_Bcast(&currentLevels, n, MPI_INT, FROM_MASTER, MPI_COMM_WORLD);
             // distribute the task based on the num_workers
             // calculate the data size to send to workers
             /**
@@ -99,19 +104,38 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
             std::cout << "Received at Worker: " << rank << std::endl;
             // perform computation
             int end_node = offset + workLoad;
+            // for (int i = offset; i < end_node; i++) {
+            //     if (levels[r].get_level(i) == r) {
+            //        int U_i = 0;
+            //        for (auto ngh : adjacencyList[i]) {
+            //             if (levels[r].get_level(ngh) == r) {
+            //                 U_i += 1;
+            //             }
+            //        }
+            //        /**
+            //          * @todo: add google-dp library to sample from Geometric Distribution
+            //         */
+            //        int U_hat_i = U_i;
+            //        int group_index = levels[r].group_for_level(r);
+            //        if (U_hat_i > pow((1 + phi), group_index)) {
+            //             nextLevels[i] = 1;
+            //        }
+            //     }
+            // }
             for (int i = offset; i < end_node; i++) {
-                if (levels[r].get_level(i) == r) {
+                if (currentLevels[i] == r) {
                    int U_i = 0;
                    for (auto ngh : adjacencyList[i]) {
-                        if (levels[r].get_level(ngh) == r) {
+                        if (currentLevels[ngh] == r) {
                             U_i += 1;
                         }
                    }
                    /**
                      * @todo: add google-dp library to sample from Geometric Distribution
+                     * @todo: make sure the base of log is correct
                     */
                    int U_hat_i = U_i;
-                   int group_index = levels[r].group_for_level(r);
+                   double group_index = floor(r / (2 * log(n)));
                    if (U_hat_i > pow((1 + phi), group_index)) {
                         nextLevels[i] = 1;
                    }
