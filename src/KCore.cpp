@@ -85,8 +85,6 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
                 MPI_Recv(&workLoad, 1, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
                 MPI_Recv(&nextLevels[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
             }
-
-            // update the levels based on the data in nextLevels
         } else {
             // worker task
             mytype = FROM_MASTER;
@@ -121,6 +119,12 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
             MPI_Send(&workLoad, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             MPI_Send(&nextLevels[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
 
+        }
+
+        MPI_Barrier();
+        // update the levels based on the data in nextLevels
+        if (rank == COORDINATOR) {
+            std::cout << "need to compute" << std::endl;
         }
     }
 
@@ -180,6 +184,6 @@ int main(int argc, char** argv) {
     
 
     // std::vector<double> core_numbers = KCore(graph->getAdjacencyList(), nu, epsilon);
-
+    MPI_Finalize();
     return 0;
 }
