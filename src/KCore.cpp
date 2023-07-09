@@ -77,6 +77,7 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
                 MPI_Send(&nextLevels[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 offset += workLoad;
             }
+            std::cout << "Sent from Master" << std::endl;
 
             // receive results from workers
             for (p = 1; p <= numworkers; p++) {
@@ -85,13 +86,14 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
                 MPI_Recv(&workLoad, 1, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
                 MPI_Recv(&nextLevels[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
             }
+            std::cout << "Received at Master" << std::endl;
         } else {
             // worker task
             mytype = FROM_MASTER;
             MPI_Recv(&offset, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             MPI_Recv(&workLoad, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             MPI_Recv(&nextLevels[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
-
+            std::cout << "Received at Worker: " << rank << std::endl;
             // perform computation
             int end_node = offset + workLoad;
             for (int i = offset; i < end_node; i++) {
@@ -118,6 +120,7 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
             MPI_Send(&offset, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             MPI_Send(&workLoad, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             MPI_Send(&nextLevels[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
+            std::cout << "Sent from Worker: " << rank << std::endl;
 
         }
 
