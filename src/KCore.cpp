@@ -70,6 +70,7 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
                 currentLevels[node] = levels[r].get_level(node);
             }
             MPI_Bcast(&currentLevels, n, MPI_INT, FROM_MASTER, MPI_COMM_WORLD);
+            std::cout << "Broadcasted current levels" << std::endl;
             // distribute the task based on the num_workers
             // calculate the data size to send to workers
             /**
