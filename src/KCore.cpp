@@ -143,7 +143,7 @@ int main(int argc, char** argv) {
     std::string file_loc = "dblp_greedy";
     double nu = 0.9;
     double epsilon = 0.5;
-    distributed_kcore::Graph *graph;
+    distributed_kcore::Graph *graph = new distributed_kcore::Graph(file_loc);
 
     
     MPI_Init(&argc, &argv);
@@ -156,10 +156,10 @@ int main(int argc, char** argv) {
         MPI_Finalize();
         return 1;
     }
-    if (rank == COORDINATOR) {
-        graph = new distributed_kcore::Graph(file_loc);
-        std::cout << graph->getGraphSize() << std::endl;
-    }
+    // if (rank == COORDINATOR) {
+    //     graph = new distributed_kcore::Graph(file_loc);
+    //     std::cout << graph->getGraphSize() << std::endl;
+    // }
      
     distributed_kcore::KCore_compute(rank, numProcesses, graph, nu, epsilon);
 
