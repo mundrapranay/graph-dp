@@ -121,7 +121,7 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
 
         }
 
-        MPI_Barrier();
+        MPI_Barrier(MPI_COMM_WORLD);
         // update the levels based on the data in nextLevels
         if (rank == COORDINATOR) {
             std::cout << "need to compute" << std::endl;
