@@ -632,3 +632,201 @@ events:
         
       exitCode: 0
 ...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:4 (find_package)"
+    description: "The MPI test test_mpi for C in mode normal"
+    directories:
+      source: "/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-bYmibT"
+      binary: "/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-bYmibT"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_C_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-bYmibT'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_870d7/fast
+        gmake[1]: Entering directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-bYmibT'
+        /usr/bin/gmake  -f CMakeFiles/cmTC_870d7.dir/build.make CMakeFiles/cmTC_870d7.dir/build
+        gmake[2]: Entering directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-bYmibT'
+        Building C object CMakeFiles/cmTC_870d7.dir/test_mpi.c.o
+        /usr/bin/cc    -o CMakeFiles/cmTC_870d7.dir/test_mpi.c.o -c /home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-bYmibT/test_mpi.c
+        Linking C executable cmTC_870d7
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_870d7.dir/link.txt --verbose=1
+        /usr/bin/cc -rdynamic -Wl,-rpath -Wl,/usr/local/lib -Wl,--enable-new-dtags -Wl,--dependency-file,CMakeFiles/cmTC_870d7.dir/link.d CMakeFiles/cmTC_870d7.dir/test_mpi.c.o -o cmTC_870d7  -Wl,-rpath,/usr/local/lib /usr/local/lib/libmpi.so 
+        gmake[2]: Leaving directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-bYmibT'
+        gmake[1]: Leaving directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-bYmibT'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:4 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode normal"
+    directories:
+      source: "/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-CTDl5B"
+      binary: "/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-CTDl5B"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-CTDl5B'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_c30d8/fast
+        gmake[1]: Entering directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-CTDl5B'
+        /usr/bin/gmake  -f CMakeFiles/cmTC_c30d8.dir/build.make CMakeFiles/cmTC_c30d8.dir/build
+        gmake[2]: Entering directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-CTDl5B'
+        Building CXX object CMakeFiles/cmTC_c30d8.dir/test_mpi.cpp.o
+        /usr/bin/c++    -o CMakeFiles/cmTC_c30d8.dir/test_mpi.cpp.o -c /home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-CTDl5B/test_mpi.cpp
+        Linking CXX executable cmTC_c30d8
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c30d8.dir/link.txt --verbose=1
+        /usr/bin/c++ -rdynamic -Wl,-rpath -Wl,/usr/local/lib -Wl,--enable-new-dtags -Wl,--dependency-file,CMakeFiles/cmTC_c30d8.dir/link.d CMakeFiles/cmTC_c30d8.dir/test_mpi.cpp.o -o cmTC_c30d8  -Wl,-rpath,/usr/local/lib /usr/local/lib/libmpi.so 
+        gmake[2]: Leaving directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-CTDl5B'
+        gmake[1]: Leaving directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-CTDl5B'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1672 (_MPI_try_staged_settings)"
+      - "CMakeLists.txt:4 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode MPICXX"
+    directories:
+      source: "/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-0QFlQf"
+      binary: "/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-0QFlQf"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_MPICXX"
+      cached: true
+      stdout: |
+        Change Dir: '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-0QFlQf'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_372c4/fast
+        gmake[1]: Entering directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-0QFlQf'
+        /usr/bin/gmake  -f CMakeFiles/cmTC_372c4.dir/build.make CMakeFiles/cmTC_372c4.dir/build
+        gmake[2]: Entering directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-0QFlQf'
+        Building CXX object CMakeFiles/cmTC_372c4.dir/test_mpi.cpp.o
+        /usr/bin/c++    -o CMakeFiles/cmTC_372c4.dir/test_mpi.cpp.o -c /home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-0QFlQf/test_mpi.cpp
+        Linking CXX executable cmTC_372c4
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_372c4.dir/link.txt --verbose=1
+        /usr/bin/c++ -rdynamic -Wl,-rpath -Wl,/usr/local/lib -Wl,--enable-new-dtags -Wl,--dependency-file,CMakeFiles/cmTC_372c4.dir/link.d CMakeFiles/cmTC_372c4.dir/test_mpi.cpp.o -o cmTC_372c4  -Wl,-rpath,/usr/local/lib /usr/local/lib/libmpi.so 
+        gmake[2]: Leaving directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-0QFlQf'
+        gmake[1]: Leaving directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-0QFlQf'
+        
+      exitCode: 0
+...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:4 (find_package)"
+    description: "The MPI test test_mpi for C in mode normal"
+    directories:
+      source: "/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-1o4VUp"
+      binary: "/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-1o4VUp"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_C_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-1o4VUp'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_b28c5/fast
+        gmake[1]: Entering directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-1o4VUp'
+        /usr/bin/gmake  -f CMakeFiles/cmTC_b28c5.dir/build.make CMakeFiles/cmTC_b28c5.dir/build
+        gmake[2]: Entering directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-1o4VUp'
+        Building C object CMakeFiles/cmTC_b28c5.dir/test_mpi.c.o
+        /usr/bin/cc    -o CMakeFiles/cmTC_b28c5.dir/test_mpi.c.o -c /home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-1o4VUp/test_mpi.c
+        Linking C executable cmTC_b28c5
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b28c5.dir/link.txt --verbose=1
+        /usr/bin/cc -rdynamic -Wl,-rpath -Wl,/usr/local/lib -Wl,--enable-new-dtags -Wl,--dependency-file,CMakeFiles/cmTC_b28c5.dir/link.d CMakeFiles/cmTC_b28c5.dir/test_mpi.c.o -o cmTC_b28c5  -Wl,-rpath,/usr/local/lib /usr/local/lib/libmpi.so 
+        gmake[2]: Leaving directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-1o4VUp'
+        gmake[1]: Leaving directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-1o4VUp'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:4 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode normal"
+    directories:
+      source: "/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-yPzqAx"
+      binary: "/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-yPzqAx"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-yPzqAx'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_47d95/fast
+        gmake[1]: Entering directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-yPzqAx'
+        /usr/bin/gmake  -f CMakeFiles/cmTC_47d95.dir/build.make CMakeFiles/cmTC_47d95.dir/build
+        gmake[2]: Entering directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-yPzqAx'
+        Building CXX object CMakeFiles/cmTC_47d95.dir/test_mpi.cpp.o
+        /usr/bin/c++    -o CMakeFiles/cmTC_47d95.dir/test_mpi.cpp.o -c /home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-yPzqAx/test_mpi.cpp
+        Linking CXX executable cmTC_47d95
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_47d95.dir/link.txt --verbose=1
+        /usr/bin/c++ -rdynamic -Wl,-rpath -Wl,/usr/local/lib -Wl,--enable-new-dtags -Wl,--dependency-file,CMakeFiles/cmTC_47d95.dir/link.d CMakeFiles/cmTC_47d95.dir/test_mpi.cpp.o -o cmTC_47d95  -Wl,-rpath,/usr/local/lib /usr/local/lib/libmpi.so 
+        gmake[2]: Leaving directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-yPzqAx'
+        gmake[1]: Leaving directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-yPzqAx'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1672 (_MPI_try_staged_settings)"
+      - "CMakeLists.txt:4 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode MPICXX"
+    directories:
+      source: "/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-9hFYmG"
+      binary: "/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-9hFYmG"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_MPICXX"
+      cached: true
+      stdout: |
+        Change Dir: '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-9hFYmG'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_84a52/fast
+        gmake[1]: Entering directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-9hFYmG'
+        /usr/bin/gmake  -f CMakeFiles/cmTC_84a52.dir/build.make CMakeFiles/cmTC_84a52.dir/build
+        gmake[2]: Entering directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-9hFYmG'
+        Building CXX object CMakeFiles/cmTC_84a52.dir/test_mpi.cpp.o
+        /usr/bin/c++    -o CMakeFiles/cmTC_84a52.dir/test_mpi.cpp.o -c /home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-9hFYmG/test_mpi.cpp
+        Linking CXX executable cmTC_84a52
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_84a52.dir/link.txt --verbose=1
+        /usr/bin/c++ -rdynamic -Wl,-rpath -Wl,/usr/local/lib -Wl,--enable-new-dtags -Wl,--dependency-file,CMakeFiles/cmTC_84a52.dir/link.d CMakeFiles/cmTC_84a52.dir/test_mpi.cpp.o -o cmTC_84a52  -Wl,-rpath,/usr/local/lib /usr/local/lib/libmpi.so 
+        gmake[2]: Leaving directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-9hFYmG'
+        gmake[1]: Leaving directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-9hFYmG'
+        
+      exitCode: 0
+...

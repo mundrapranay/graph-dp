@@ -54,7 +54,12 @@ class Graph {
                 return;
             }
             std::string line;
+            bool firstLine = true;
             while (std::getline(file, line)) {
+                if (firstLine) {
+                    firstLine = false;
+                    continue;
+                }
                 std::vector<std::string> values = splitString(line, ' ');
                 std::vector<int> neighbors;
                 // to ensure that its zero indexed

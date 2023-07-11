@@ -1,6 +1,8 @@
 CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.o: \
  /home/ubuntu/graph-dp/src/distributed_graph_algorithm.cpp \
- /usr/include/stdc-predef.h /usr/include/c++/11/iostream \
+ /usr/include/stdc-predef.h /usr/local/include/mpi.h \
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/stddef.h \
+ /usr/local/include/mpi_portable_platform.h /usr/include/c++/11/iostream \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -18,7 +20,6 @@ CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/x86_64-linux-gnu/bits/floatn.h \
  /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
- /usr/lib/gcc/x86_64-linux-gnu/11/include/stddef.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdarg.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h \
  /usr/include/x86_64-linux-gnu/bits/types/wint_t.h \
@@ -147,5 +148,4 @@ CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.o: \
  /usr/include/c++/11/bits/stl_uninitialized.h \
  /usr/include/c++/11/bits/stl_vector.h \
  /usr/include/c++/11/bits/stl_bvector.h \
- /usr/include/c++/11/bits/vector.tcc /usr/local/include/mpi.h \
- /usr/local/include/mpi_portable_platform.h
+ /usr/include/c++/11/bits/vector.tcc

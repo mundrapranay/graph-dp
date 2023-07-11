@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/DistributedGraphAlgorithm.dir/link.d"
-  "CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.o"
-  "CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.o.d"
+  "CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o"
+  "CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o.d"
   "DistributedGraphAlgorithm"
   "DistributedGraphAlgorithm.pdb"
 )

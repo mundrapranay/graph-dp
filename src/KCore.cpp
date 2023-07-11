@@ -42,6 +42,7 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
     double lambda = (2/9) * (2 * nu - 5);
     double delta = 9.0;
     int n = graph->getGraphSize();
+    std::cout << "graph size: " << n << std::endl;
     int number_of_levels = ceil(4 * pow(log(n), 2) - 1);
     int numworkers = nprocs - 1;
     int chunk = n / numworkers;
@@ -63,15 +64,20 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
         // each node either releases 1 or 0 and the coordinator updates the level accordingly
         // nextLevels stores this information
         // int *nextLevels = new int[n];
-        int *currentLevels = (int*)malloc(n * sizeof(int));
+        // int *currentLevels = (int*)malloc(n * sizeof(int));
+        std::vector<int> currentLevels(n);
         int *nextLevels = (int*)malloc(n * sizeof(int));
         int group_index; 
         if (rank == COORDINATOR) {
             for (int node = 0; node < n; node++) {
-                currentLevels[node] = levels[r].get_level(node);
+                // currentLevels[node] = levels[r].get_level(node);
+                currentLevels.push_back(levels[r].get_level(node));
+                // std::cout << node << std::endl;
             }
-            MPI_Bcast(&currentLevels, n, MPI_INT, COORDINATOR, MPI_COMM_WORLD);
-            std::cout << "Broadcasted current levels" << std::endl;
+            // int currLen = sizeof(currentLevels) / sizeof(int);
+            // MPI_Bcast(&currentLevels, n, MPI_INT, COORDINATOR, MPI_COMM_WORLD);
+            MPI_Bcast(currentLevels.data(), currentLevels.size(), MPI_INT, COORDINATOR, MPI_COMM_WORLD);
+            std::cout << "Broadcasted current levels of size: " << currentLevels.size() << std::endl;
             group_index = levels[r].group_for_level(r);
             // distribute the task based on the num_workers
             // calculate the data size to send to workers
@@ -107,6 +113,8 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
             MPI_Recv(&group_index, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             MPI_Recv(&nextLevels[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             std::cout << "Received at Worker: " << rank << std::endl;
+            // int currLen = sizeof(currentLevels) / sizeof(int);
+            std::cout << "Received at Worker: " << rank << " size of currentLevels: " << currentLevels.size() << std::endl;
             // perform computation
             int end_node = offset + workLoad;
             // for (int i = offset; i < end_node; i++) {
@@ -130,7 +138,9 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
             for (int i = offset; i < end_node; i++) {
                 if (currentLevels[i] == r) {
                    int U_i = 0;
+                //    std::cout << "Inside Loop Worker: " << rank << std::endl;
                    for (auto ngh : adjacencyList[i]) {
+                        // std::cout << "Worker: " << rank << " NGH: " << ngh << std::endl;
                         if (currentLevels[ngh] == r) {
                             U_i += 1;
                         }

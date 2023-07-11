@@ -129,29 +129,29 @@ DistributedGraphAlgorithm/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DistributedGraphAlgorithm.dir/build.make CMakeFiles/DistributedGraphAlgorithm.dir/build
 .PHONY : DistributedGraphAlgorithm/fast
 
-distributed_graph_algorithm.o: distributed_graph_algorithm.cpp.o
-.PHONY : distributed_graph_algorithm.o
+KCore.o: KCore.cpp.o
+.PHONY : KCore.o
 
 # target to build an object file
-distributed_graph_algorithm.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DistributedGraphAlgorithm.dir/build.make CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.o
-.PHONY : distributed_graph_algorithm.cpp.o
+KCore.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/DistributedGraphAlgorithm.dir/build.make CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o
+.PHONY : KCore.cpp.o
 
-distributed_graph_algorithm.i: distributed_graph_algorithm.cpp.i
-.PHONY : distributed_graph_algorithm.i
+KCore.i: KCore.cpp.i
+.PHONY : KCore.i
 
 # target to preprocess a source file
-distributed_graph_algorithm.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DistributedGraphAlgorithm.dir/build.make CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.i
-.PHONY : distributed_graph_algorithm.cpp.i
+KCore.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/DistributedGraphAlgorithm.dir/build.make CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.i
+.PHONY : KCore.cpp.i
 
-distributed_graph_algorithm.s: distributed_graph_algorithm.cpp.s
-.PHONY : distributed_graph_algorithm.s
+KCore.s: KCore.cpp.s
+.PHONY : KCore.s
 
 # target to generate assembly for a file
-distributed_graph_algorithm.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DistributedGraphAlgorithm.dir/build.make CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.s
-.PHONY : distributed_graph_algorithm.cpp.s
+KCore.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/DistributedGraphAlgorithm.dir/build.make CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.s
+.PHONY : KCore.cpp.s
 
 # Help Target
 help:
@@ -162,9 +162,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... DistributedGraphAlgorithm"
-	@echo "... distributed_graph_algorithm.o"
-	@echo "... distributed_graph_algorithm.i"
-	@echo "... distributed_graph_algorithm.s"
+	@echo "... KCore.o"
+	@echo "... KCore.i"
+	@echo "... KCore.s"
 .PHONY : help
 
 

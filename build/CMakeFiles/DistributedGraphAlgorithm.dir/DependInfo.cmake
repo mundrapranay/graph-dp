@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/ubuntu/graph-dp/src/distributed_graph_algorithm.cpp" "CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.o" "gcc" "CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.o.d"
+  "/home/ubuntu/graph-dp/src/KCore.cpp" "CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o" "gcc" "CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o.d"
   "" "DistributedGraphAlgorithm" "gcc" "CMakeFiles/DistributedGraphAlgorithm.dir/link.d"
   )
 

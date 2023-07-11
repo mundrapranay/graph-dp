@@ -2,7 +2,7 @@ DistributedGraphAlgorithm: \
   /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o \
   /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crti.o \
   /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o \
-  CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.o \
+  CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o \
   /usr/local/lib/libmpi.so \
   /usr/local/lib/libmpi.so \
   /usr/lib/gcc/x86_64-linux-gnu/11/libstdc++.so \
@@ -33,7 +33,6 @@ DistributedGraphAlgorithm: \
   /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crtn.o \
   /usr/local/lib/libopen-rte.so.40 \
   /usr/local/lib/libopen-pal.so.40 \
-  /lib/x86_64-linux-gnu/libm.so.6 \
   /lib64/ld-linux-x86-64.so.2 \
   /lib/x86_64-linux-gnu/libz.so.1
 
@@ -43,7 +42,7 @@ DistributedGraphAlgorithm: \
 
 /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o:
 
-CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.o:
+CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o:
 
 /usr/local/lib/libmpi.so:
 
@@ -104,8 +103,6 @@ CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.o:
 /usr/local/lib/libopen-rte.so.40:
 
 /usr/local/lib/libopen-pal.so.40:
-
-/lib/x86_64-linux-gnu/libm.so.6:
 
 /lib64/ld-linux-x86-64.so.2:
 

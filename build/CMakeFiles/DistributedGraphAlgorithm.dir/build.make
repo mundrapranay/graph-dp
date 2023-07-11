@@ -69,28 +69,28 @@ include CMakeFiles/DistributedGraphAlgorithm.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/DistributedGraphAlgorithm.dir/flags.make
 
-CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.o: CMakeFiles/DistributedGraphAlgorithm.dir/flags.make
-CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.o: /home/ubuntu/graph-dp/src/distributed_graph_algorithm.cpp
-CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.o: CMakeFiles/DistributedGraphAlgorithm.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ubuntu/graph-dp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.o"
-	mpicxx $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.o -MF CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.o.d -o CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.o -c /home/ubuntu/graph-dp/src/distributed_graph_algorithm.cpp
+CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o: CMakeFiles/DistributedGraphAlgorithm.dir/flags.make
+CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o: /home/ubuntu/graph-dp/src/KCore.cpp
+CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o: CMakeFiles/DistributedGraphAlgorithm.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ubuntu/graph-dp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o"
+	mpicxx $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o -MF CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o.d -o CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o -c /home/ubuntu/graph-dp/src/KCore.cpp
 
-CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.i"
-	mpicxx $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ubuntu/graph-dp/src/distributed_graph_algorithm.cpp > CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.i
+CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.i"
+	mpicxx $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ubuntu/graph-dp/src/KCore.cpp > CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.i
 
-CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.s"
-	mpicxx $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ubuntu/graph-dp/src/distributed_graph_algorithm.cpp -o CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.s
+CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.s"
+	mpicxx $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ubuntu/graph-dp/src/KCore.cpp -o CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.s
 
 # Object files for target DistributedGraphAlgorithm
 DistributedGraphAlgorithm_OBJECTS = \
-"CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.o"
+"CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o"
 
 # External object files for target DistributedGraphAlgorithm
 DistributedGraphAlgorithm_EXTERNAL_OBJECTS =
 
-DistributedGraphAlgorithm: CMakeFiles/DistributedGraphAlgorithm.dir/distributed_graph_algorithm.cpp.o
+DistributedGraphAlgorithm: CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o
 DistributedGraphAlgorithm: CMakeFiles/DistributedGraphAlgorithm.dir/build.make
 DistributedGraphAlgorithm: CMakeFiles/DistributedGraphAlgorithm.dir/compiler_depend.ts
 DistributedGraphAlgorithm: /usr/local/lib/libmpi.so
