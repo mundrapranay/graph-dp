@@ -66,16 +66,12 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
         // int *nextLevels = new int[n];
         // int *currentLevels = (int*)malloc(n * sizeof(int));
         std::vector<int> currentLevels(n);
-        int *nextLevels = (int*)malloc(n * sizeof(int));
+        std::vector<int> nextLevels(n);
         int group_index; 
         if (rank == COORDINATOR) {
             for (int node = 0; node < n; node++) {
-                // currentLevels[node] = levels[r].get_level(node);
-                currentLevels.push_back(levels[r].get_level(node));
-                // std::cout << node << std::endl;
+                currentLevels[node] = levels[r].get_level(node);
             }
-            // int currLen = sizeof(currentLevels) / sizeof(int);
-            // MPI_Bcast(&currentLevels, n, MPI_INT, COORDINATOR, MPI_COMM_WORLD);
             MPI_Bcast(currentLevels.data(), currentLevels.size(), MPI_INT, COORDINATOR, MPI_COMM_WORLD);
             std::cout << "Broadcasted current levels of size: " << currentLevels.size() << std::endl;
             group_index = levels[r].group_for_level(r);
@@ -105,6 +101,7 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
                 MPI_Recv(&nextLevels[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
             }
             std::cout << "Received at Master" << std::endl;
+            std::cout<< "NextLevles Len: " << nextLevels.size() << std::endl;
         } else {
             // worker task
             mytype = FROM_MASTER;
@@ -113,28 +110,9 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
             MPI_Recv(&group_index, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             MPI_Recv(&nextLevels[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             std::cout << "Received at Worker: " << rank << std::endl;
-            // int currLen = sizeof(currentLevels) / sizeof(int);
             std::cout << "Received at Worker: " << rank << " size of currentLevels: " << currentLevels.size() << std::endl;
             // perform computation
             int end_node = offset + workLoad;
-            // for (int i = offset; i < end_node; i++) {
-            //     if (levels[r].get_level(i) == r) {
-            //        int U_i = 0;
-            //        for (auto ngh : adjacencyList[i]) {
-            //             if (levels[r].get_level(ngh) == r) {
-            //                 U_i += 1;
-            //             }
-            //        }
-            //        /**
-            //          * @todo: add google-dp library to sample from Geometric Distribution
-            //         */
-            //        int U_hat_i = U_i;
-            //        int group_index = levels[r].group_for_level(r);
-            //        if (U_hat_i > pow((1 + phi), group_index)) {
-            //             nextLevels[i] = 1;
-            //        }
-            //     }
-            // }
             for (int i = offset; i < end_node; i++) {
                 if (currentLevels[i] == r) {
                    int U_i = 0;
@@ -169,7 +147,15 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
         // update the levels based on the data in nextLevels
         if (rank == COORDINATOR) {
             std::cout << "need to compute" << std::endl;
+            for (int i = 0; i < nextLevels.size(); i++) {
+                if (nextLevels[i] == 1) {
+                    levels[r+1].L[i].level = levels[r].get_level(i) + 1;
+                }
+            }
         }
+
+        // wait until COORDINATOR has computed the next level
+        MPI_Barrier(MPI_COMM_WORLD);
     }
 
 }
