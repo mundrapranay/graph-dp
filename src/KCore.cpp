@@ -146,10 +146,13 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
         MPI_Barrier(MPI_COMM_WORLD);
         // update the levels based on the data in nextLevels
         if (rank == COORDINATOR) {
-            std::cout << "need to compute" << std::endl;
             for (int i = 0; i < nextLevels.size(); i++) {
                 if (nextLevels[i] == 1) {
-                    levels[r+1].L[i].level = levels[r].get_level(i) + 1;
+                    // levels[r+1].L[i].level = levels[r].get_level(i) + 1;
+                    levels[r+1].level_increase(i, levels[r].L);
+                    std::cout << "level increased" << std::endl;
+                } else {
+                    std::cout << "level decreased" << std::endl;
                 }
             }
         }
