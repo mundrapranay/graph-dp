@@ -211,10 +211,6 @@ int main(int argc, char** argv) {
         MPI_Finalize();
         return 1;
     }
-    // if (rank == COORDINATOR) {
-    //     graph = new distributed_kcore::Graph(file_loc);
-    //     std::cout << graph->getGraphSize() << std::endl;
-    // }
      
     if (rank == COORDINATOR) {
         distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, nu, epsilon);
@@ -227,31 +223,6 @@ int main(int argc, char** argv) {
         distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, nu, epsilon);
     }
     
-
-    // std::unordered_map<int, std::vector<int>> adjacencyList;
-    // std::vector<LDS> levels;
-    // double phi = 0.5;
-    // double lambda = (2/9) * (2 * nu - 5);
-    // double delta = 9.0;
-    // int n = graph->getGraphSize();
-    // int number_of_levels = ceil(4 * pow(log(n), 2) - 1);
-
-    // if (rank == 0) {
-    //     adjacencyList = graph->getAdjacencyList();
-    //     for (int i = 0; i < number_of_levels; i++) {
-    //         levels.push_back(LDS(n, epsilon, delta, false));
-    //     }
-    // }
-
-
-
-
-
-
-
-    
-
-    // std::vector<double> core_numbers = KCore(graph->getAdjacencyList(), nu, epsilon);
     MPI_Finalize();
     return 0;
 }
