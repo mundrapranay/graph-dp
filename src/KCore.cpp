@@ -52,10 +52,22 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
     MPI_Status status;
 
     if (rank == COORDINATOR) {
+        /**
+         * @todo: 
+         *  - only one LDS and that contains a vector<LDSVertex> L that keeps
+         * track of level and all other info (adjacency list)
+        */
         for (int i = 0; i < number_of_levels; i++) {
             levels.push_back(LDS(n, epsilon, delta, false));
         }
     }
+    /**
+     * @todo:
+     *  - add all neighbours LDS->L[node].insert_neighbour(ngh_id)
+     *         - batch_insertion (check from k_core-approx code)
+     *         - EdgeOrientation/ParallelLDS/LDS.h (insert_neighbour)
+     *         - Levels Class from EdgeOrientation/ParallelLDS/LDS.h copy to LDS.h 
+    */
     // for (int i = 0; i < number_of_levels; i++) {
     //     levels.push_back(LDS(n, epsilon, delta, false));
     // }
@@ -149,6 +161,8 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
             for (int i = 0; i < nextLevels.size(); i++) {
                 if (nextLevels[i] == 1) {
                     // levels[r+1].L[i].level = levels[r].get_level(i) + 1;
+                    // LDS->L.level_increase(i, LDS->L);
+                    
                     levels[r+1].level_increase(i, levels[r].L);
                     std::cout << "level increased" << std::endl;
                 } else {

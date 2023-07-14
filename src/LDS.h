@@ -217,6 +217,10 @@ struct LDS {
     }
 
     // Moving u from level to level + 1.
+    /**
+     * bookkeeping struct, which vertices need to move for current u
+     * L -> array to access LDS array easily 
+    */
     template <class Levels>
     void level_increase(uintE u, Levels& L) {
         total_work++;
