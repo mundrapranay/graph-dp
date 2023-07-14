@@ -20,31 +20,18 @@
 namespace distributed_kcore{
 
 
-std::vector<double> KCore(std::unordered_map<int, std::vector<int>> adjacencyLists, double nu, double epsilon) {
-    std::vector<double> core_numbers;
-    LDS *lds;
-    double phi = 0.5;
-    double lambda = (2/9) * (2 * nu - 5);
-    double delta = 9.0;
-    std::vector<LDS> levels;
-    int n = adjacencyLists.size();
-    int number_of_levels = ceil(4 * pow(log(n), 2) - 1);
-    for (int i = 0; i < number_of_levels; i++) {
-        levels.push_back(LDS(n, epsilon, delta, false));
-    }
-
-    return core_numbers;
+int log_a_to_base_b(int a, double b) {
+    // log_b a = log_2 a / log_2 b
+    return log2(a) / log2(b);
 }
 
-
-void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon) {
-    std::vector<LDS> levels;
+LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon) {
     double phi = 0.5;
     double lambda = (2/9) * (2 * nu - 5);
     double delta = 9.0;
     int n = graph->getGraphSize();
     std::cout << "graph size: " << n << std::endl;
-    int number_of_levels = ceil(4 * pow(log(n), 2) - 1);
+    int number_of_levels = ceil(4 * pow(log_a_to_base_b(n, 1 + phi), 2) - 1);
     int numworkers = nprocs - 1;
     int chunk = n / numworkers;
     int extra = n % numworkers;
@@ -178,8 +165,27 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
         // wait until COORDINATOR has computed the next level
         MPI_Barrier(MPI_COMM_WORLD);
     }
-
+    MPI_Barrier(MPI_COMM_WORLD);
+    return lds;
 }
+
+std::vector<double> estimateCoreNumbers(LDS* lds, int n, double nu) {
+    std::cout << "Computing Core Numbers"  << std::endl;
+    std::vector<double> coreNumbers(n);
+    double phi = 0.5;
+    double lambda = (2/9) * (2 * nu - 5);
+    double first_term = 2.0 + lambda;
+    double second_term = 1.0 + phi;
+    for (int i = 0; i < n; i++) {
+        double frac_denom = 4 * ceil(log_a_to_base_b(n, second_term));
+        int frac_numer = lds->get_level(i) + 1;
+        int power = std::max(int(floor(frac_numer / frac_denom)) - 1, 0);
+        coreNumbers[i] = first_term * pow(second_term, power);
+    }
+
+    return coreNumbers;
+}
+
 
 } // end of namespace distributed_kcore
 
@@ -192,6 +198,7 @@ int main(int argc, char** argv) {
     double nu = 0.9;
     double epsilon = 0.5;
     distributed_kcore::Graph *graph = new distributed_kcore::Graph(file_loc);
+    int n = graph->getGraphSize();
 
     
     MPI_Init(&argc, &argv);
@@ -209,7 +216,17 @@ int main(int argc, char** argv) {
     //     std::cout << graph->getGraphSize() << std::endl;
     // }
      
-    distributed_kcore::KCore_compute(rank, numProcesses, graph, nu, epsilon);
+    if (rank == COORDINATOR) {
+        distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, nu, epsilon);
+        std::vector<double> estimated_core_numbers = distributed_kcore::estimateCoreNumbers(lds, n, nu);
+        std::cout << "Printing Core Numbers" << std::endl;
+        for (int i = 0; i < n; i++) {
+            std::cout<< i << " : " << estimated_core_numbers[i] << std::endl;
+        }
+    } else {
+        distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, nu, epsilon);
+    }
+    
 
     // std::unordered_map<int, std::vector<int>> adjacencyList;
     // std::vector<LDS> levels;
