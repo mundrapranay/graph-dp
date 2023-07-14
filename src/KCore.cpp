@@ -22,6 +22,7 @@ namespace distributed_kcore{
 
 std::vector<double> KCore(std::unordered_map<int, std::vector<int>> adjacencyLists, double nu, double epsilon) {
     std::vector<double> core_numbers;
+    LDS *lds;
     double phi = 0.5;
     double lambda = (2/9) * (2 * nu - 5);
     double delta = 9.0;
@@ -50,6 +51,7 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
     int offset, mytype, workLoad, p;
     std::unordered_map<int, std::vector<int>> adjacencyList = graph->getAdjacencyList();
     MPI_Status status;
+    LDS *lds;
 
     if (rank == COORDINATOR) {
         /**
@@ -57,8 +59,14 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
          *  - only one LDS and that contains a vector<LDSVertex> L that keeps
          * track of level and all other info (adjacency list)
         */
-        for (int i = 0; i < number_of_levels; i++) {
-            levels.push_back(LDS(n, epsilon, delta, false));
+        lds = new LDS(n, epsilon, delta, false);
+        std::unordered_map<int, std::vector<int>>::iterator it;
+        for (it = adjacencyList.begin(); it != adjacencyList.end(); it++) {
+            int node = it->first;
+            std::vector<int> nghs = it->second;
+            for (int &i: nghs) {
+                lds->L[node].insert_neighbor(i, 0);
+            }
         }
     }
     /**
@@ -68,10 +76,7 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
      *         - EdgeOrientation/ParallelLDS/LDS.h (insert_neighbour)
      *         - Levels Class from EdgeOrientation/ParallelLDS/LDS.h copy to LDS.h 
     */
-    // for (int i = 0; i < number_of_levels; i++) {
-    //     levels.push_back(LDS(n, epsilon, delta, false));
-    // }
-
+    MPI_Barrier(MPI_COMM_WORLD);
     for (int r = 0; r < number_of_levels - 1; r++) {
         // each node either releases 1 or 0 and the coordinator updates the level accordingly
         // nextLevels stores this information
@@ -82,11 +87,11 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
         int group_index; 
         if (rank == COORDINATOR) {
             for (int node = 0; node < n; node++) {
-                currentLevels[node] = levels[r].get_level(node);
+                currentLevels[node] = lds->get_level(node);
             }
             MPI_Bcast(currentLevels.data(), currentLevels.size(), MPI_INT, COORDINATOR, MPI_COMM_WORLD);
             std::cout << "Broadcasted current levels of size: " << currentLevels.size() << std::endl;
-            group_index = levels[r].group_for_level(r);
+            group_index = lds->group_for_level(r);
             // distribute the task based on the num_workers
             // calculate the data size to send to workers
             /**
@@ -160,10 +165,9 @@ void KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
         if (rank == COORDINATOR) {
             for (int i = 0; i < nextLevels.size(); i++) {
                 if (nextLevels[i] == 1) {
-                    // levels[r+1].L[i].level = levels[r].get_level(i) + 1;
                     // LDS->L.level_increase(i, LDS->L);
-                    
-                    levels[r+1].level_increase(i, levels[r].L);
+                    lds->level_increase(i, lds->L);
+                    // levels[r+1].level_increase(i, levels[r].L);
                     std::cout << "level increased" << std::endl;
                 } else {
                     std::cout << "level decreased" << std::endl;
