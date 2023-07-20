@@ -46,7 +46,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
          *  - only one LDS and that contains a vector<LDSVertex> L that keeps
          * track of level and all other info (adjacency list)
         */
-        lds = new LDS(n, epsilon, delta, false);
+        lds = new LDS(n, phi, delta, false);
         std::unordered_map<int, std::vector<int>>::iterator it;
         for (it = adjacencyList.begin(); it != adjacencyList.end(); it++) {
             int node = it->first;
@@ -157,6 +157,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
                     // levels[r+1].level_increase(i, levels[r].L);
                     std::cout << "level increased" << std::endl;
                 } else {
+                    // lds->level_decrease(i, lds->L);
                     std::cout << "level decreased" << std::endl;
                 }
             }
@@ -178,6 +179,7 @@ std::vector<double> estimateCoreNumbers(LDS* lds, int n, double nu) {
     double second_term = 1.0 + phi;
     for (int i = 0; i < n; i++) {
         double frac_denom = 4 * ceil(log_a_to_base_b(n, second_term));
+        std::cout << i  << " : " << lds->get_level(i) << std::endl;
         int frac_numer = lds->get_level(i) + 1;
         int power = std::max(int(floor(frac_numer / frac_denom)) - 1, 0);
         coreNumbers[i] = first_term * pow(second_term, power);
@@ -194,7 +196,7 @@ int main(int argc, char** argv) {
     // std::string file_loc = argv[1];
     // double nu = std::stod(argv[2]);
     // double epsilon = std::stod(argv[3]);
-    std::string file_loc = "dblp_greedy";
+    std::string file_loc = "dblp_0_index";
     double nu = 0.9;
     double epsilon = 0.5;
     distributed_kcore::Graph *graph = new distributed_kcore::Graph(file_loc);
