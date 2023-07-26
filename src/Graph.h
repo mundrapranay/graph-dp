@@ -72,6 +72,7 @@ class Graph {
                     adjacenyList[ngh] = neighbors;
                 }
                 adjacenyList[vertex].push_back(ngh);
+                adjacenyList[ngh].push_back(vertex);
             }
             file.close();
             graphSize = adjacenyList.size();   
@@ -83,6 +84,15 @@ class Graph {
 
         size_t getGraphSize() {
             return graphSize;
+        }
+
+        void printDegrees() {
+            std::unordered_map<int, std::vector<int>>::iterator it;
+            for (it = adjacenyList.begin(); it != adjacenyList.end(); it++) {
+                int node = it->first;
+                std::vector<int> nghs = it->second;
+                std::cout << "Node: " << node << " | Degree : " << nghs.size() << std::endl;
+            }
         }
 };
 

@@ -3,6 +3,7 @@
 #include <vector>
 #include <stdlib.h>
 #include <algorithm>
+#include <iostream>
 #include <cassert>
 #include <math.h>
 
@@ -223,13 +224,15 @@ struct LDS {
     */
     template <class Levels>
     void level_increase(uintE u, Levels& L) {
+        std::cout << "inside level increased entered" << std::endl;
         total_work++;
         uintE level = L[u].level;
         std::vector<uintE> same_level;
         auto& up = L[u].up;
-
+        std::cout << "up ngh size"  << up.size() << std::endl;
         up.special_iterate([&](std::vector<uintE>::iterator& vec_it,
         std::unordered_set<uintE>::iterator& set_it) {
+            // std::cout << "inside level increased special iterate" << std::endl;
         bool use_vec = (vec_it != up.vector.end());
         uintE ngh = use_vec ? *vec_it : *set_it; //*it;
         if (L[ngh].level == level) {
@@ -251,6 +254,7 @@ struct LDS {
 
             Dirty.push(ngh);
             }
+            std::cout << "SHOULDNT BE HERE" << std::endl;
         }
         });
         // We've now split L[u].up into stuff in the same level (before the
@@ -263,6 +267,7 @@ struct LDS {
         down[level].insert(ngh);
         }
         L[u].level++;  // Increase level.
+        std::cout << "inside level increased compeleted" << std::endl;
     }
 
     void fixup() {

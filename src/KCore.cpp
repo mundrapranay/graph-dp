@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <chrono>
 #include "LDS.h"
 #include "Graph.h"
 
@@ -65,12 +66,14 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
     */
     MPI_Barrier(MPI_COMM_WORLD);
     for (int r = 0; r < number_of_levels - 1; r++) {
+        std::chrono::time_point<std::chrono::high_resolution_clock> round_start, round_end;
+	    std::chrono::duration<double> round_elapsed;
+        double round_time = 0.0;
         // each node either releases 1 or 0 and the coordinator updates the level accordingly
         // nextLevels stores this information
-        // int *nextLevels = new int[n];
-        // int *currentLevels = (int*)malloc(n * sizeof(int));
-        std::vector<int> currentLevels(n);
-        std::vector<int> nextLevels(n);
+        round_start = std::chrono::high_resolution_clock::now();
+        std::vector<int> currentLevels(n, 0);
+        std::vector<int> nextLevels(n, 0);
         int group_index; 
         if (rank == COORDINATOR) {
             for (int node = 0; node < n; node++) {
@@ -106,6 +109,16 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
             }
             std::cout << "Received at Master" << std::endl;
             std::cout<< "NextLevles Len: " << nextLevels.size() << std::endl;
+
+            for (int i = 0; i < nextLevels.size(); i++) {
+                std::cout << i << std::endl;
+                if (nextLevels[i] == 1) {
+                    // LDS->L.level_increase(i, LDS->L);
+                    lds->level_increase(i, lds->L);
+                    // levels[r+1].level_increase(i, levels[r].L);
+                    std::cout << "level increased" << std::endl;
+                } 
+            }
         } else {
             // worker task
             mytype = FROM_MASTER;
@@ -134,6 +147,11 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
                    int U_hat_i = U_i;
                    if (U_hat_i > pow((1 + phi), group_index)) {
                         nextLevels[i] = 1;
+                   } else {
+                        nextLevels[i] = 0;
+                        /**
+                         * @todo : flag to point permanent zero
+                        */
                    }
                 }
             }
@@ -149,22 +167,31 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
 
         MPI_Barrier(MPI_COMM_WORLD);
         // update the levels based on the data in nextLevels
-        if (rank == COORDINATOR) {
-            for (int i = 0; i < nextLevels.size(); i++) {
-                if (nextLevels[i] == 1) {
-                    // LDS->L.level_increase(i, LDS->L);
-                    lds->level_increase(i, lds->L);
-                    // levels[r+1].level_increase(i, levels[r].L);
-                    std::cout << "level increased" << std::endl;
-                } else {
-                    // lds->level_decrease(i, lds->L);
-                    std::cout << "level decreased" << std::endl;
-                }
-            }
-        }
+        /**
+         * @todo : nextLevel history, if at round r nextLevel[i] == 0, then 
+         *          the node i doesn't participate in round r+1
+        */
+        // if (rank == COORDINATOR) {
+        //     for (int i = 0; i < nextLevels.size(); i++) {
+        //         std::cout << i << std::endl;
+        //         if (nextLevels[i] == 1) {
+        //             // LDS->L.level_increase(i, LDS->L);
+        //             lds->level_increase(i, lds->L);
+        //             // levels[r+1].level_increase(i, levels[r].L);
+        //             std::cout << "level increased" << std::endl;
+        //         } 
+        //     }
+        // }
 
         // wait until COORDINATOR has computed the next level
-        MPI_Barrier(MPI_COMM_WORLD);
+        // MPI_Barrier(MPI_COMM_WORLD);
+        round_end = std::chrono::high_resolution_clock::now();
+        round_elapsed = round_end - round_start;
+        round_time = round_elapsed.count();
+        if (rank == COORDINATOR) {
+            std::cout << "Round " << r << " | " << number_of_levels - 2 << std::endl;
+            std::cout << "Round time: " << round_time << std::endl;
+        }
     }
     MPI_Barrier(MPI_COMM_WORLD);
     return lds;
@@ -215,6 +242,7 @@ int main(int argc, char** argv) {
     }
      
     if (rank == COORDINATOR) {
+        graph->printDegrees();
         distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, nu, epsilon);
         std::vector<double> estimated_core_numbers = distributed_kcore::estimateCoreNumbers(lds, n, nu);
         std::cout << "Printing Core Numbers" << std::endl;
