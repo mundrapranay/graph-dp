@@ -11,8 +11,8 @@ typedef int intE;
 typedef unsigned int uintE;
 
 namespace distributed_kcore {
-inline double group_degree(size_t group, double epsilon) {
-    return pow(1 + epsilon, group);
+inline double group_degree(size_t group, double phi) {
+    return pow(1 + phi, group);
 }
 
 inline double upper_constant(double delta, bool optimized) {
@@ -122,7 +122,7 @@ struct Level {
 struct LDS {
     size_t n; // number of vertices
     double delta = 9.0;
-    double epsilon = 3.0;
+    double phi = 3.0;
     bool optimized_insertion = false;
     size_t total_work;
     using down_neighbors = std::vector<Level>;
@@ -152,19 +152,19 @@ struct LDS {
                 }
             }
 
-            inline bool upper_invariant(const size_t levels_per_group, double epsilon, double delta, bool optimized) const {
+            inline bool upper_invariant(const size_t levels_per_group, double phi, double delta, bool optimized) const {
                 uintE group = level / levels_per_group;
-                return up.size() <= static_cast<size_t>(upper_constant(delta, optimized) * group_degree(group, epsilon));
+                return up.size() <= static_cast<size_t>(upper_constant(delta, optimized) * group_degree(group, phi));
             } 
 
-            inline bool lower_invariant(const size_t levels_per_group, double epsilon) const {
+            inline bool lower_invariant(const size_t levels_per_group, double phi) const {
                 if (level == 0) {
                     return true;
                 }
                 uintE lower_group = (level - 1) / levels_per_group;
                 auto up_size = up.size();
                 auto prev_level_size = down[level - 1].size();
-                return (up_size + prev_level_size) >= static_cast<size_t>(group_degree(lower_group, epsilon));
+                return (up_size + prev_level_size) >= static_cast<size_t>(group_degree(lower_group, phi));
             }
     };
 
@@ -172,9 +172,9 @@ struct LDS {
     std::vector<LDSVertex> L;
     std::stack<uintE> Dirty;
 
-    LDS(size_t _n, double _eps, double _delta, bool _optimized) : n(_n), epsilon(_eps),
+    LDS(size_t _n, double _eps, double _delta, bool _optimized) : n(_n), phi(_eps),
         delta(_delta), optimized_insertion(_optimized) {
-            levels_per_group = ceil(log(n) / log(1 + epsilon));
+            levels_per_group = ceil(log(n) / log(1 + phi));
             L = std::vector<LDSVertex>(n);
     }
 
@@ -223,67 +223,90 @@ struct LDS {
      * L -> array to access LDS array easily 
     */
     template <class Levels>
-    void level_increase(uintE u, Levels& L) {
-        std::cout << "inside level increased entered" << std::endl;
-        total_work++;
-        uintE level = L[u].level;
-        std::vector<uintE> same_level;
-        auto& up = L[u].up;
-        std::cout << "up ngh size"  << up.size() << std::endl;
-        up.special_iterate([&](std::vector<uintE>::iterator& vec_it,
-        std::unordered_set<uintE>::iterator& set_it) {
-            // std::cout << "inside level increased special iterate" << std::endl;
-        bool use_vec = (vec_it != up.vector.end());
-        uintE ngh = use_vec ? *vec_it : *set_it; //*it;
-        if (L[ngh].level == level) {
-            same_level.emplace_back(ngh);
-            if (use_vec) vec_it = up.vector.erase(vec_it);
-            else set_it = up.set.erase(set_it);
-            // u is still "up" for this ngh, no need to update.
-        } else {
-            if (use_vec) vec_it++;
-            else set_it++;
-            // Must update ngh's accounting of u.
-            if (L[ngh].level > level + 1) {
-            L[ngh].down[level].erase(u);
-            L[ngh].down[level + 1].insert(u);
-            } else {
-            assert(L[ngh].level == level + 1);
-            L[ngh].down[level].erase(u);
-            L[ngh].up.insert(u);
-
-            Dirty.push(ngh);
-            }
-            std::cout << "SHOULDNT BE HERE" << std::endl;
-        }
-        });
-        // We've now split L[u].up into stuff in the same level (before the
-        // update) and stuff in levels >= level + 1. Insert same_level elms
-        // into down.
-        auto& down = L[u].down;
-        down.emplace_back(Level());
-        assert(down.size() == level + 1);  // [0, level)
-        for (const auto& ngh : same_level) {
-        down[level].insert(ngh);
-        }
-        L[u].level++;  // Increase level.
-        std::cout << "inside level increased compeleted" << std::endl;
+    void level_increase_v2(uintE u, Levels& L) {
+        // uintE level = L[u].level;
+        // std::vector<uintE> same_level;
+        L[u].level++;
     }
+    // void level_increase(uintE u, Levels& L) {
+    //     std::cout << "inside level increased entered" << std::endl;
+    //     // total_work++;
+    //     uintE level = L[u].level;
+    //     std::cout << "Current level: " << level << std::endl;
+    //     std::vector<uintE> same_level;
+    //     auto& up = L[u].up;
+    //     std::cout << u << " | up ngh size: "  << up.size() << std::endl;
+    //     up.special_iterate([&](std::vector<uintE>::iterator& vec_it,
+    //     std::unordered_set<uintE>::iterator& set_it) {
+    //         // std::cout << "inside level increased special iterate" << std::endl;
+    //         bool use_vec = (vec_it != up.vector.end());
+    //         uintE ngh = use_vec ? *vec_it : *set_it; //*it;
+            
+    //         if (L[ngh].level == level) {
+    //             if (!L[ngh].up.size() > pow((1 + phi), group_for_level(level))) {
+    //             // if (!L[ngh].upper_invariant(levels_per_group, phi, delta, optimized_insertion)) {
+    //                 // Only vertices that are not moving up from the same level.
+    //                 same_level.emplace_back(ngh);
+    //                 if (use_vec) vec_it = up.vector.erase(vec_it);
+    //                 else set_it = up.set.erase(set_it);
+    //                 std::cout << "SHOULD BE HERE" << std::endl;
+    //             } else {
+    //                 if (use_vec) vec_it++;
+    //                 else set_it++;
+    //             }
+    //             // u is still "up" for this ngh, no need to update.
+    //         } else {
+    //             /**
+    //              * @bug : reaches this else branch becuase if L[ngh].level != level 
+    //              * @bug : had to uncomment to move the iterator forward else if was stuck 
+    //             */
+    //             if (use_vec) vec_it++;
+    //             else set_it++;
+    //             // Must update ngh's accounting of u.
+    //             // if (L[ngh].level > level + 1) {
+    //             // L[ngh].down[level].erase(u);
+    //             // L[ngh].down[level + 1].insert(u);
+    //             // } else {
+    //             // assert(L[ngh].level == level + 1);
+    //             // L[ngh].down[level].erase(u);
+    //             // L[ngh].up.insert(u);
 
-    void fixup() {
-        while (!Dirty.empty()) {
-        uintE u = Dirty.top();
-        Dirty.pop();
-        if (!L[u].upper_invariant(levels_per_group, epsilon, delta, optimized_insertion)) {
-            // Move u to level i+1.
-            level_increase(u, L);
-            Dirty.push(u);  // u might need to move up more levels.
-        } else if (!L[u].lower_invariant(levels_per_group, epsilon)) {
-            level_decrease(u, L);
-            Dirty.push(u);  // u might need to move down more levels.
-        }
-        }
-    }
+    //             // Dirty.push(ngh);
+    //             // }
+    //             // std::cout << "SHOULDNT BE HERE" << std::endl;
+    //             // continue;
+    //         }
+    //     });
+    //     // We've now split L[u].up into stuff in the same level (before the
+    //     // update) and stuff in levels >= level + 1. Insert same_level elms
+    //     // into down.
+    //     auto& down = L[u].down;
+    //     down.emplace_back(Level());
+    //     assert(down.size() == level + 1);  // [0, level)
+    //     for (const auto& ngh : same_level) {
+    //         down[level].insert(ngh);
+    //     }
+    //     L[u].level++;  // Increase level.
+    //     std::cout << "Current level: " << L[u].level << std::endl;
+    //     std::cout << "inside level increased compeleted" << std::endl;
+    // }
+
+    // void fixup() {
+    //     while (!Dirty.empty()) {
+    //     uintE u = Dirty.top();
+    //     Dirty.pop();
+    //     if (!L[u].upper_invariant(levels_per_group, phi, delta, optimized_insertion)) {
+    //         // Move u to level i+1.
+    //         level_increase(u, L);
+    //         Dirty.push(u);  // u might need to move up more levels.
+    //     } 
+        
+    //     // else if (!L[u].lower_invariant(levels_per_group, phi)) {
+    //     //     level_decrease(u, L);
+    //     //     Dirty.push(u);  // u might need to move down more levels.
+    //     // }
+    //     }
+    // }
 
     bool insert_edge(edge_type e) {
         auto[u, v] = e;
@@ -291,31 +314,33 @@ struct LDS {
         auto l_v = L[v].level;
         L[u].insert_neighbor(v, l_v);
         L[v].insert_neighbor(u, l_u);
-
-        Dirty.push(u);
-        Dirty.push(v);
-        fixup();
+        /**
+         * @bug : what are the following calls doing?
+        */
+        // Dirty.push(u);
+        // Dirty.push(v);
+        // fixup();`
         return true;
     }
 
-    bool delete_edge(edge_type e) {
-        auto[u, v] = e;
-        auto l_u = L[u].level;
-        auto l_v = L[v].level;
-        L[u].remove_neighbor(v, l_v);
-        L[v].remove_neighbor(u, l_u);
+    // bool delete_edge(edge_type e) {
+    //     auto[u, v] = e;
+    //     auto l_u = L[u].level;
+    //     auto l_v = L[v].level;
+    //     L[u].remove_neighbor(v, l_v);
+    //     L[v].remove_neighbor(u, l_u);
 
-        Dirty.push(u);
-        Dirty.push(v);
-        fixup();
-        return true;
-    }
+    //     Dirty.push(u);
+    //     Dirty.push(v);
+    //     fixup();
+    //     return true;
+    // }
 
     void check_invariants() {
         bool invs_ok = true;
         for (size_t i = 0; i < n; i++) {
-        bool upper_ok = L[i].upper_invariant(levels_per_group, epsilon, delta, optimized_insertion);
-        bool lower_ok = L[i].lower_invariant(levels_per_group, epsilon);
+        bool upper_ok = L[i].upper_invariant(levels_per_group, phi, delta, optimized_insertion);
+        bool lower_ok = L[i].lower_invariant(levels_per_group, phi);
         assert(upper_ok);
         assert(lower_ok);
         invs_ok &= upper_ok;
@@ -326,14 +351,16 @@ struct LDS {
     // @todo: implement this
     // unintE max_coreness() {
     // }
-
-    uintE core(uintE v) {
-        auto l = L[v].level;
-        uintE group = group_for_level(l);
-        // If l is not the highest level in the group, we drop to the previous group
-        if (l % levels_per_group != levels_per_group - 1 && group != 0) group--;
-        return ceil(group_degree(group, epsilon));
-    }
+    /**
+     * @bug : should this be used?
+    */
+    // uintE core(uintE v) {
+    //     auto l = L[v].level;
+    //     uintE group = group_for_level(l);
+    //     // If l is not the highest level in the group, we drop to the previous group
+    //     if (l % levels_per_group != levels_per_group - 1 && group != 0) group--;
+    //     return ceil(group_degree(group, phi));
+    // }
 
     inline uintE group_for_level(uintE level) const {
         return level / levels_per_group;
@@ -341,7 +368,7 @@ struct LDS {
 
     size_t get_size() {
         size_t size = 0;
-        size += sizeof(delta) + sizeof(epsilon) + sizeof(optimized_insertion)
+        size += sizeof(delta) + sizeof(phi) + sizeof(optimized_insertion)
             + sizeof(levels_per_group) + sizeof(n);
 
         for (size_t i = 0; i < n; i++) {

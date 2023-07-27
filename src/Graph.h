@@ -61,15 +61,16 @@ class Graph {
                     continue;
                 }
                 std::vector<std::string> values = splitString(line, ' ');
-                std::vector<int> neighbors;
+                std::vector<int> neighbors1;
+                std::vector<int> neighbors2;
                 // to ensure that its zero indexed
                 int vertex = std::stoi(values[0]);
                 int ngh = std::stoi(values[1]);
                 if (adjacenyList.find(vertex) == adjacenyList.end()) {
-                    adjacenyList[vertex] = neighbors;
+                    adjacenyList[vertex] = neighbors1;
                 }
                 if (adjacenyList.find(ngh) == adjacenyList.end()) {
-                    adjacenyList[ngh] = neighbors;
+                    adjacenyList[ngh] = neighbors2;
                 }
                 adjacenyList[vertex].push_back(ngh);
                 adjacenyList[ngh].push_back(vertex);
@@ -84,6 +85,14 @@ class Graph {
 
         size_t getGraphSize() {
             return graphSize;
+        }
+
+        int sumAdjList() {
+            int sum = 0;
+            for (auto it : adjacenyList) {
+                sum += it.second.size();
+            }
+            return sum;
         }
 
         void printDegrees() {

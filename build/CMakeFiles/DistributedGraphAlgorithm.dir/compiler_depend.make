@@ -48,6 +48,7 @@ CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o: /home/ubuntu/graph-dp/src/
   /usr/include/c++/11/bits/memoryfwd.h \
   /usr/include/c++/11/bits/move.h \
   /usr/include/c++/11/bits/nested_exception.h \
+  /usr/include/c++/11/bits/node_handle.h \
   /usr/include/c++/11/bits/ostream.tcc \
   /usr/include/c++/11/bits/ostream_insert.h \
   /usr/include/c++/11/bits/parse_numbers.h \
@@ -55,8 +56,11 @@ CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o: /home/ubuntu/graph-dp/src/
   /usr/include/c++/11/bits/predefined_ops.h \
   /usr/include/c++/11/bits/ptr_traits.h \
   /usr/include/c++/11/bits/range_access.h \
+  /usr/include/c++/11/bits/refwrap.h \
+  /usr/include/c++/11/bits/specfun.h \
   /usr/include/c++/11/bits/sstream.tcc \
   /usr/include/c++/11/bits/std_abs.h \
+  /usr/include/c++/11/bits/std_function.h \
   /usr/include/c++/11/bits/stl_algo.h \
   /usr/include/c++/11/bits/stl_algobase.h \
   /usr/include/c++/11/bits/stl_bvector.h \
@@ -67,14 +71,18 @@ CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o: /home/ubuntu/graph-dp/src/
   /usr/include/c++/11/bits/stl_iterator.h \
   /usr/include/c++/11/bits/stl_iterator_base_funcs.h \
   /usr/include/c++/11/bits/stl_iterator_base_types.h \
+  /usr/include/c++/11/bits/stl_multiset.h \
   /usr/include/c++/11/bits/stl_pair.h \
   /usr/include/c++/11/bits/stl_relops.h \
+  /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_stack.h \
   /usr/include/c++/11/bits/stl_tempbuf.h \
+  /usr/include/c++/11/bits/stl_tree.h \
   /usr/include/c++/11/bits/stl_uninitialized.h \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/streambuf.tcc \
   /usr/include/c++/11/bits/streambuf_iterator.h \
+  /usr/include/c++/11/bits/string_view.tcc \
   /usr/include/c++/11/bits/stringfwd.h \
   /usr/include/c++/11/bits/uniform_int_dist.h \
   /usr/include/c++/11/bits/unordered_map.h \
@@ -105,6 +113,7 @@ CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o: /home/ubuntu/graph-dp/src/
   /usr/include/c++/11/ext/string_conversions.h \
   /usr/include/c++/11/ext/type_traits.h \
   /usr/include/c++/11/fstream \
+  /usr/include/c++/11/functional \
   /usr/include/c++/11/initializer_list \
   /usr/include/c++/11/ios \
   /usr/include/c++/11/iosfwd \
@@ -114,14 +123,31 @@ CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o: /home/ubuntu/graph-dp/src/
   /usr/include/c++/11/math.h \
   /usr/include/c++/11/new \
   /usr/include/c++/11/ostream \
+  /usr/include/c++/11/pstl/execution_defs.h \
+  /usr/include/c++/11/pstl/glue_algorithm_defs.h \
+  /usr/include/c++/11/pstl/pstl_config.h \
   /usr/include/c++/11/ratio \
+  /usr/include/c++/11/set \
   /usr/include/c++/11/sstream \
   /usr/include/c++/11/stack \
   /usr/include/c++/11/stdexcept \
   /usr/include/c++/11/stdlib.h \
   /usr/include/c++/11/streambuf \
   /usr/include/c++/11/string \
+  /usr/include/c++/11/string_view \
   /usr/include/c++/11/system_error \
+  /usr/include/c++/11/tr1/bessel_function.tcc \
+  /usr/include/c++/11/tr1/beta_function.tcc \
+  /usr/include/c++/11/tr1/ell_integral.tcc \
+  /usr/include/c++/11/tr1/exp_integral.tcc \
+  /usr/include/c++/11/tr1/gamma.tcc \
+  /usr/include/c++/11/tr1/hypergeometric.tcc \
+  /usr/include/c++/11/tr1/legendre_function.tcc \
+  /usr/include/c++/11/tr1/modified_bessel_func.tcc \
+  /usr/include/c++/11/tr1/poly_hermite.tcc \
+  /usr/include/c++/11/tr1/poly_laguerre.tcc \
+  /usr/include/c++/11/tr1/riemann_zeta.tcc \
+  /usr/include/c++/11/tr1/special_function_util.h \
   /usr/include/c++/11/tuple \
   /usr/include/c++/11/type_traits \
   /usr/include/c++/11/typeinfo \
@@ -264,33 +290,53 @@ DistributedGraphAlgorithm: /lib/x86_64-linux-gnu/libc.so.6 \
   CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o
 
 
-CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o:
-
 /usr/local/lib/libopen-pal.so.40:
 
-/usr/include/c++/11/cctype:
-
-/usr/include/c++/11/streambuf:
-
-/usr/include/c++/11/bits/functexcept.h:
-
-/usr/include/c++/11/stdlib.h:
+/usr/lib/x86_64-linux-gnu/libc_nonshared.a:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/libstdc++.so:
 
-/usr/include/c++/11/sstream:
+/usr/lib/gcc/x86_64-linux-gnu/11/libgcc_s.so:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/crtendS.o:
+
+/usr/lib/x86_64-linux-gnu/libgcc_s.so.1:
+
+/usr/lib/x86_64-linux-gnu/libc.so:
+
+/usr/lib/x86_64-linux-gnu/Scrt1.o:
+
+/lib/x86_64-linux-gnu/libm.so.6:
+
+/lib/x86_64-linux-gnu/libc.so.6:
+
+/usr/local/include/mpi_portable_platform.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h:
+
+/usr/include/x86_64-linux-gnu/sys/select.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/time_t.h:
 
 /usr/include/c++/11/algorithm:
 
 /usr/include/c++/11/backward/binders.h:
 
+/lib64/ld-linux-x86-64.so.2:
+
+/usr/include/c++/11/bits/deque.tcc:
+
 /usr/include/c++/11/ratio:
 
 /usr/include/c++/11/ext/type_traits.h:
 
-/usr/include/c++/11/exception:
+/usr/local/include/mpi.h:
 
-/usr/lib/x86_64-linux-gnu/libc.so:
+/usr/include/x86_64-linux-gnu/sys/types.h:
+
+/usr/include/c++/11/ext/aligned_buffer.h:
+
+/usr/include/c++/11/exception:
 
 /usr/include/c++/11/deque:
 
@@ -298,15 +344,39 @@ CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o:
 
 /usr/include/c++/11/math.h:
 
+/usr/lib/x86_64-linux-gnu/crtn.o:
+
+/usr/include/x86_64-linux-gnu/bits/waitflags.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/stdarg.h:
+
+/usr/include/c++/11/debug/assertions.h:
+
 /usr/include/c++/11/cstdlib:
 
 /usr/include/c++/11/bits/stl_iterator_base_types.h:
 
 /usr/include/assert.h:
 
+/usr/include/c++/11/tr1/poly_laguerre.tcc:
+
 /usr/include/c++/11/cstdio:
 
+/usr/include/x86_64-linux-gnu/bits/wordsize.h:
+
+/usr/include/c++/11/chrono:
+
+/usr/include/c++/11/cctype:
+
+/usr/local/lib/libmpi.so:
+
+/usr/include/c++/11/unordered_map:
+
 /usr/include/c++/11/cassert:
+
+/usr/lib/x86_64-linux-gnu/libm.so:
+
+/usr/include/c++/11/bits/stl_algo.h:
 
 /usr/include/x86_64-linux-gnu/bits/math-vector.h:
 
@@ -324,21 +394,21 @@ CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o:
 
 /usr/include/c++/11/bits/streambuf.tcc:
 
+/usr/include/c++/11/tr1/bessel_function.tcc:
+
 /usr/include/c++/11/bits/stl_vector.h:
 
 /usr/include/c++/11/system_error:
 
 /usr/include/c++/11/istream:
 
-/usr/include/c++/11/bits/stl_tempbuf.h:
+/usr/include/c++/11/bits/stl_set.h:
 
 /usr/include/c++/11/ext/new_allocator.h:
 
 /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h:
 
 /usr/include/c++/11/bits/stl_uninitialized.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h:
 
 /usr/include/c++/11/ext/atomicity.h:
 
@@ -354,17 +424,27 @@ CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o:
 
 /usr/include/c++/11/bits/stl_construct.h:
 
+/usr/include/c++/11/tr1/exp_integral.tcc:
+
+/usr/include/c++/11/bits/stl_multiset.h:
+
 /usr/include/c++/11/bits/cxxabi_forced.h:
 
 /usr/include/c++/11/fstream:
-
-/usr/lib/x86_64-linux-gnu/libgcc_s.so.1:
 
 /usr/include/c++/11/ctime:
 
 /usr/include/x86_64-linux-gnu/bits/time64.h:
 
+/usr/include/c++/11/bits/locale_classes.tcc:
+
 /usr/include/c++/11/limits:
+
+/usr/include/c++/11/bits/stl_tempbuf.h:
+
+/usr/include/c++/11/bits/std_function.h:
+
+/usr/include/c++/11/pstl/pstl_config.h:
 
 /usr/include/c++/11/new:
 
@@ -378,13 +458,29 @@ CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o:
 
 /usr/include/c++/11/bits/localefwd.h:
 
+/usr/include/c++/11/tr1/hypergeometric.tcc:
+
 /usr/include/c++/11/bits/char_traits.h:
 
 /usr/include/asm-generic/errno-base.h:
 
+/usr/include/c++/11/iosfwd:
+
+/usr/include/c++/11/initializer_list:
+
+/usr/include/c++/11/bits/stl_algobase.h:
+
+/usr/include/c++/11/cwchar:
+
+/usr/include/c++/11/bits/basic_string.tcc:
+
 /usr/include/c++/11/bits/uniform_int_dist.h:
 
 /usr/include/c++/11/bits/basic_ios.h:
+
+/usr/include/c++/11/bits/allocator.h:
+
+/usr/include/c++/11/cmath:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/c++allocator.h:
 
@@ -394,13 +490,17 @@ CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o:
 
 /home/ubuntu/graph-dp/src/KCore.cpp:
 
+/usr/include/c++/11/tr1/modified_bessel_func.tcc:
+
 /usr/include/x86_64-linux-gnu/bits/endianness.h:
 
 /usr/include/c++/11/bits/stl_iterator_base_funcs.h:
 
 /usr/include/c++/11/bits/cpp_type_traits.h:
 
-/usr/include/errno.h:
+/lib/x86_64-linux-gnu/libz.so.1:
+
+/usr/include/pthread.h:
 
 /usr/include/c++/11/ext/numeric_traits.h:
 
@@ -416,45 +516,19 @@ CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o:
 
 /usr/include/alloca.h:
 
-/usr/include/c++/11/iosfwd:
-
-/usr/include/c++/11/initializer_list:
-
-/usr/include/c++/11/bits/basic_string.tcc:
-
-/usr/lib/x86_64-linux-gnu/Scrt1.o:
-
-/usr/include/c++/11/bits/stl_algobase.h:
-
-/usr/include/c++/11/cwchar:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h:
-
 /usr/include/c++/11/bits/fstream.tcc:
-
-/usr/include/c++/11/stack:
-
-/usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
 
 /usr/include/c++/11/bits/stl_heap.h:
 
 /usr/include/c++/11/bits/std_abs.h:
 
-/usr/include/c++/11/stdexcept:
-
 /usr/include/c++/11/clocale:
 
 /usr/include/c++/11/bits/ostream.tcc:
 
-/usr/include/c++/11/array:
-
 /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h:
 
 /usr/include/c++/11/bits/locale_facets.tcc:
-
-/usr/include/x86_64-linux-gnu/bits/types/sigset_t.h:
-
-/usr/include/c++/11/bits/concept_check.h:
 
 /usr/include/c++/11/bits/exception_ptr.h:
 
@@ -466,31 +540,51 @@ CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o:
 
 /usr/include/asm-generic/errno.h:
 
-/usr/include/c++/11/string:
+/usr/include/c++/11/tr1/ell_integral.tcc:
 
-/usr/include/c++/11/cmath:
+/usr/include/c++/11/bits/stl_tree.h:
 
-/usr/include/c++/11/bits/allocator.h:
+/usr/lib/x86_64-linux-gnu/crti.o:
 
-/usr/include/c++/11/type_traits:
+/usr/include/c++/11/tuple:
 
 /usr/include/x86_64-linux-gnu/sys/single_threaded.h:
 
+/usr/include/c++/11/type_traits:
+
+/usr/include/c++/11/tr1/poly_hermite.tcc:
+
 /usr/include/c++/11/bits/unordered_set.h:
+
+/usr/include/c++/11/bits/functexcept.h:
+
+/usr/include/c++/11/streambuf:
+
+/usr/include/c++/11/bits/concept_check.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/sigset_t.h:
+
+/usr/include/c++/11/bits/string_view.tcc:
 
 /usr/include/c++/11/ostream:
 
-/usr/include/c++/11/bits/hashtable.h:
+/usr/include/c++/11/bits/refwrap.h:
 
-/usr/local/include/mpi_portable_platform.h:
+CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o:
 
-/usr/include/c++/11/bits/algorithmfwd.h:
-
-/usr/include/c++/11/bits/invoke.h:
+/usr/include/c++/11/set:
 
 /usr/include/c++/11/bits/ios_base.h:
 
 /usr/include/x86_64-linux-gnu/bits/fp-logb.h:
+
+/usr/include/c++/11/bits/hashtable.h:
+
+/usr/include/c++/11/pstl/execution_defs.h:
+
+/usr/include/c++/11/bits/algorithmfwd.h:
+
+/usr/include/c++/11/bits/invoke.h:
 
 /usr/include/c++/11/bits/stl_relops.h:
 
@@ -508,9 +602,13 @@ CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o:
 
 /usr/include/c++/11/bits/nested_exception.h:
 
-/home/ubuntu/graph-dp/src/Graph.h:
+/usr/include/c++/11/iostream:
 
-/usr/lib/gcc/x86_64-linux-gnu/11/libgcc_s.so:
+/usr/include/x86_64-linux-gnu/bits/fp-fast.h:
+
+/usr/include/c++/11/bits/node_handle.h:
+
+/home/ubuntu/graph-dp/src/Graph.h:
 
 /usr/local/lib/libopen-rte.so.40:
 
@@ -519,6 +617,8 @@ CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o:
 /usr/include/x86_64-linux-gnu/gnu/stubs.h:
 
 /usr/include/c++/11/bits/stl_deque.h:
+
+/usr/include/c++/11/tr1/special_function_util.h:
 
 /usr/include/c++/11/cstdint:
 
@@ -530,11 +630,41 @@ CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o:
 
 /usr/include/c++/11/bits/exception.h:
 
-/usr/include/c++/11/bits/locale_classes.tcc:
+/usr/include/c++/11/bits/specfun.h:
 
-/usr/include/c++/11/iostream:
+/usr/include/c++/11/sstream:
 
-/usr/include/x86_64-linux-gnu/bits/fp-fast.h:
+/usr/include/c++/11/stack:
+
+/usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
+
+/usr/include/c++/11/pstl/glue_algorithm_defs.h:
+
+/usr/include/c++/11/stdexcept:
+
+/usr/include/c++/11/stdlib.h:
+
+/usr/include/c++/11/string:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o:
+
+/usr/include/c++/11/bits/ostream_insert.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h:
+
+/usr/include/c++/11/array:
+
+/usr/include/c++/11/tr1/beta_function.tcc:
+
+/usr/include/c++/11/tr1/riemann_zeta.tcc:
+
+/usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h:
+
+/usr/include/c++/11/typeinfo:
+
+/usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h:
+
+/usr/include/errno.h:
 
 /usr/include/c++/11/vector:
 
@@ -545,6 +675,8 @@ CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o:
 /usr/include/features-time64.h:
 
 /usr/include/features.h:
+
+/usr/include/c++/11/functional:
 
 /usr/include/linux/errno.h:
 
@@ -570,9 +702,19 @@ CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o:
 
 /usr/include/stdio.h:
 
+/lib/x86_64-linux-gnu/libmvec.so.1:
+
+/usr/include/stdlib.h:
+
 /usr/include/x86_64-linux-gnu/bits/setjmp.h:
 
 /usr/include/time.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/libgcc.a:
+
+/usr/include/sched.h:
+
+/usr/include/wctype.h:
 
 /usr/include/x86_64-linux-gnu/bits/errno.h:
 
@@ -600,15 +742,13 @@ CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o:
 
 /usr/include/x86_64-linux-gnu/bits/iscanonical.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h:
-
 /usr/lib/gcc/x86_64-linux-gnu/11/include/stddef.h:
 
+/usr/include/c++/11/string_view:
+
+/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h:
+
 /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h:
-
-/usr/include/c++/11/tuple:
-
-/usr/lib/x86_64-linux-gnu/crti.o:
 
 /usr/include/x86_64-linux-gnu/bits/locale.h:
 
@@ -630,19 +770,9 @@ CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o:
 
 /usr/include/x86_64-linux-gnu/bits/sched.h:
 
-/lib/x86_64-linux-gnu/libc.so.6:
-
 /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:
 
 /usr/include/x86_64-linux-gnu/bits/types.h:
-
-/usr/include/x86_64-linux-gnu/sys/select.h:
-
-/usr/include/sched.h:
-
-/usr/include/wctype.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/libgcc.a:
 
 /usr/include/x86_64-linux-gnu/bits/timex.h:
 
@@ -664,10 +794,6 @@ CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h:
 
-/usr/include/c++/11/typeinfo:
-
-/usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h:
-
 /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/clock_t.h:
@@ -684,10 +810,6 @@ CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o:
 
 /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h:
 
-/usr/include/c++/11/unordered_map:
-
-/usr/local/lib/libmpi.so:
-
 /usr/include/c++/11/bits/stl_bvector.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h:
@@ -698,25 +820,17 @@ CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/time_t.h:
-
-/usr/include/c++/11/bits/deque.tcc:
-
-/lib64/ld-linux-x86-64.so.2:
-
 /usr/include/x86_64-linux-gnu/bits/types/timer_t.h:
 
 /usr/include/c++/11/bits/predefined_ops.h:
 
 /usr/include/x86_64-linux-gnu/bits/typesizes.h:
 
-/usr/include/c++/11/chrono:
-
-/usr/include/x86_64-linux-gnu/bits/wordsize.h:
-
 /usr/include/x86_64-linux-gnu/c++/11/bits/atomic_word.h:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h:
+
+/usr/include/c++/11/tr1/legendre_function.tcc:
 
 /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h:
 
@@ -742,44 +856,8 @@ CMakeFiles/DistributedGraphAlgorithm.dir/KCore.cpp.o:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h:
 
+/usr/include/c++/11/tr1/gamma.tcc:
+
 /usr/include/x86_64-linux-gnu/gnu/stubs-64.h:
 
 /usr/include/x86_64-linux-gnu/sys/cdefs.h:
-
-/usr/include/c++/11/ext/aligned_buffer.h:
-
-/usr/local/include/mpi.h:
-
-/usr/include/x86_64-linux-gnu/sys/types.h:
-
-/usr/include/c++/11/debug/assertions.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/stdarg.h:
-
-/lib/x86_64-linux-gnu/libm.so.6:
-
-/usr/include/stdlib.h:
-
-/lib/x86_64-linux-gnu/libmvec.so.1:
-
-/usr/include/pthread.h:
-
-/lib/x86_64-linux-gnu/libz.so.1:
-
-/usr/include/x86_64-linux-gnu/bits/waitflags.h:
-
-/usr/lib/x86_64-linux-gnu/crtn.o:
-
-/usr/include/c++/11/bits/stl_algo.h:
-
-/usr/lib/x86_64-linux-gnu/libm.so:
-
-/usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h:
-
-/usr/include/c++/11/bits/ostream_insert.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/crtendS.o:
-
-/usr/lib/x86_64-linux-gnu/libc_nonshared.a:

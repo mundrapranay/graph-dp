@@ -7,6 +7,7 @@
 #include <mpi.h>
 #include <vector>
 #include <string>
+#include <set>
 #include <unordered_map>
 #include <chrono>
 #include "LDS.h"
@@ -48,14 +49,15 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
          * track of level and all other info (adjacency list)
         */
         lds = new LDS(n, phi, delta, false);
-        std::unordered_map<int, std::vector<int>>::iterator it;
-        for (it = adjacencyList.begin(); it != adjacencyList.end(); it++) {
-            int node = it->first;
-            std::vector<int> nghs = it->second;
-            for (int &i: nghs) {
-                lds->L[node].insert_neighbor(i, 0);
-            }
-        }
+        // std::unordered_map<int, std::vector<int>>::iterator it;
+        // for (it = adjacencyList.begin(); it != adjacencyList.end(); it++) {
+        //     int node = it->first;
+        //     std::vector<int> nghs = it->second;
+        //     for (int &i: nghs) {
+        //         // lds->L[node].insert_neighbor(i, 0);
+        //         // lds->insert_edge(std::make_pair(node, i));
+        //     }
+        // }
     }
     /**
      * @todo:
@@ -65,6 +67,8 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
      *         - Levels Class from EdgeOrientation/ParallelLDS/LDS.h copy to LDS.h 
     */
     MPI_Barrier(MPI_COMM_WORLD);
+    std::vector<int> permanentZeros(n, 1);
+
     for (int r = 0; r < number_of_levels - 1; r++) {
         std::chrono::time_point<std::chrono::high_resolution_clock> round_start, round_end;
 	    std::chrono::duration<double> round_elapsed;
@@ -72,15 +76,17 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
         // each node either releases 1 or 0 and the coordinator updates the level accordingly
         // nextLevels stores this information
         round_start = std::chrono::high_resolution_clock::now();
-        std::vector<int> currentLevels(n, 0);
+        std::vector<int> currentLevels(n);
         std::vector<int> nextLevels(n, 0);
         int group_index; 
         if (rank == COORDINATOR) {
             for (int node = 0; node < n; node++) {
                 currentLevels[node] = lds->get_level(node);
+                // std::cout << "Coordinator node: " << node << " currentLevel: " << currentLevels[node] << std::endl;
             }
-            MPI_Bcast(currentLevels.data(), currentLevels.size(), MPI_INT, COORDINATOR, MPI_COMM_WORLD);
-            std::cout << "Broadcasted current levels of size: " << currentLevels.size() << std::endl;
+            // MPI_Bcast(currentLevels.data(), currentLevels.size(), MPI_INT, COORDINATOR, MPI_COMM_WORLD);
+            // MPI_Barrier(MPI_COMM_WORLD);
+            // std::cout << "Broadcasted current levels of size: " << currentLevels.size() << std::endl;
             group_index = lds->group_for_level(r);
             // distribute the task based on the num_workers
             // calculate the data size to send to workers
@@ -95,28 +101,34 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
                 MPI_Send(&offset, 1, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 MPI_Send(&workLoad, 1, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 MPI_Send(&group_index, 1, MPI_INT, p, mytype, MPI_COMM_WORLD);
-                MPI_Send(&nextLevels[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD);
+                MPI_Send(&currentLevels[0], currentLevels.size(), MPI_INT, p, mytype, MPI_COMM_WORLD);
+                // MPI_Send(&nextLevels[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 offset += workLoad;
             }
-            std::cout << "Sent from Master" << std::endl;
-
+            // std::cout << "Sent from Master" << std::endl;
             // receive results from workers
             for (p = 1; p <= numworkers; p++) {
                 mytype = FROM_WORKER + p;
                 MPI_Recv(&offset, 1, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
                 MPI_Recv(&workLoad, 1, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
                 MPI_Recv(&nextLevels[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
+                MPI_Recv(&permanentZeros[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
+                // MPI_Recv(&recv_nextLevels[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
             }
-            std::cout << "Received at Master" << std::endl;
-            std::cout<< "NextLevles Len: " << nextLevels.size() << std::endl;
-
+            // std::cout << "Received at Master" << std::endl;
+            // std::cout<< "NextLevles Len: " << nextLevels.size() << std::endl;
+            /**
+             * @todo : nextLevel history, if at round r nextLevel[i] == 0, then 
+             *          the node i doesn't participate in round r+1
+            */
+            // update the levels based on the data in nextLevels
             for (int i = 0; i < nextLevels.size(); i++) {
-                std::cout << i << std::endl;
-                if (nextLevels[i] == 1) {
+                // std::cout << i << std::endl;
+                if (nextLevels[i] == 1 && permanentZeros[i] != 0) {
                     // LDS->L.level_increase(i, LDS->L);
-                    lds->level_increase(i, lds->L);
+                    lds->level_increase_v2(i, lds->L);
                     // levels[r+1].level_increase(i, levels[r].L);
-                    std::cout << "level increased" << std::endl;
+                    // std::cout << "level increased" << std::endl;
                 } 
             }
         } else {
@@ -125,17 +137,17 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
             MPI_Recv(&offset, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             MPI_Recv(&workLoad, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             MPI_Recv(&group_index, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
-            MPI_Recv(&nextLevels[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
-            std::cout << "Received at Worker: " << rank << std::endl;
-            std::cout << "Received at Worker: " << rank << " size of currentLevels: " << currentLevels.size() << std::endl;
+            MPI_Recv(&currentLevels[0], currentLevels.size(), MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
+            // MPI_Recv(&nextLevels[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
+            // std::cout << "Received at Worker: " << rank << std::endl;
+            // std::cout << "Received at Worker: " << rank << " size of currentLevels: " << currentLevels.size() << std::endl;
             // perform computation
             int end_node = offset + workLoad;
             for (int i = offset; i < end_node; i++) {
+                // std::cout << "Worker " << rank << " node: " << i << " currentLevel: " << currentLevels[i] << std::endl;
                 if (currentLevels[i] == r) {
                    int U_i = 0;
-                //    std::cout << "Inside Loop Worker: " << rank << std::endl;
                    for (auto ngh : adjacencyList[i]) {
-                        // std::cout << "Worker: " << rank << " NGH: " << ngh << std::endl;
                         if (currentLevels[ngh] == r) {
                             U_i += 1;
                         }
@@ -145,10 +157,12 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
                      * @todo: make sure the base of log is correct
                     */
                    int U_hat_i = U_i;
+                //    std::cout << "Worker " << rank << " node: " << i << " U_hat_i: " << U_hat_i << "AdjListSize: " << adjacencyList[i].size() << std::endl;
                    if (U_hat_i > pow((1 + phi), group_index)) {
                         nextLevels[i] = 1;
                    } else {
-                        nextLevels[i] = 0;
+                        // nextLevels[i] = 0;
+                        permanentZeros[i] = 0;
                         /**
                          * @todo : flag to point permanent zero
                         */
@@ -161,16 +175,12 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
             MPI_Send(&offset, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             MPI_Send(&workLoad, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             MPI_Send(&nextLevels[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
+            MPI_Send(&permanentZeros[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             std::cout << "Sent from Worker: " << rank << std::endl;
 
         }
 
         MPI_Barrier(MPI_COMM_WORLD);
-        // update the levels based on the data in nextLevels
-        /**
-         * @todo : nextLevel history, if at round r nextLevel[i] == 0, then 
-         *          the node i doesn't participate in round r+1
-        */
         // if (rank == COORDINATOR) {
         //     for (int i = 0; i < nextLevels.size(); i++) {
         //         std::cout << i << std::endl;
@@ -206,7 +216,7 @@ std::vector<double> estimateCoreNumbers(LDS* lds, int n, double nu) {
     double second_term = 1.0 + phi;
     for (int i = 0; i < n; i++) {
         double frac_denom = 4 * ceil(log_a_to_base_b(n, second_term));
-        std::cout << i  << " : " << lds->get_level(i) << std::endl;
+        // std::cout << i  << " : " << lds->get_level(i) << std::endl;
         int frac_numer = lds->get_level(i) + 1;
         int power = std::max(int(floor(frac_numer / frac_denom)) - 1, 0);
         coreNumbers[i] = first_term * pow(second_term, power);
@@ -223,7 +233,7 @@ int main(int argc, char** argv) {
     // std::string file_loc = argv[1];
     // double nu = std::stod(argv[2]);
     // double epsilon = std::stod(argv[3]);
-    std::string file_loc = "dblp_0_index";
+    std::string file_loc = "dblp_0_index_v2";
     double nu = 0.9;
     double epsilon = 0.5;
     distributed_kcore::Graph *graph = new distributed_kcore::Graph(file_loc);
@@ -242,7 +252,8 @@ int main(int argc, char** argv) {
     }
      
     if (rank == COORDINATOR) {
-        graph->printDegrees();
+        // graph->printDegrees();
+        // std::cout << "AdjListSum: " << graph->sumAdjList() << std::endl;
         distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, nu, epsilon);
         std::vector<double> estimated_core_numbers = distributed_kcore::estimateCoreNumbers(lds, n, nu);
         std::cout << "Printing Core Numbers" << std::endl;
