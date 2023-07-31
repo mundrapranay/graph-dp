@@ -31,7 +31,22 @@ def preprocess_data():
     out.close()
 
 
+def core_numbers_distribution():
+    f = open('zhang_dblp_phi05_n17.txt', 'r')
+    lines = f.readlines()
+    del lines[-1]
+    f.close()
+    lines = [line.strip().split(':') for line in lines]
+    core_numbers = []
+    for line in lines:
+        cn = float(line[1].strip())
+        core_numbers.append(cn)
+    
+    print('Max Core Number: {0}'.format(max(core_numbers)))
+
+
 
 if __name__ == '__main__':
     # load_graph()
-    preprocess_data()
+    # preprocess_data()
+    core_numbers_distribution()

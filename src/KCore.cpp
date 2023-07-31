@@ -32,7 +32,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
     double lambda = (2/9) * (2 * nu - 5);
     double delta = 9.0;
     int n = graph->getGraphSize();
-    std::cout << "graph size: " << n << std::endl;
+    // std::cout << "graph size: " << n << std::endl;
     int number_of_levels = ceil(4 * pow(log_a_to_base_b(n, 1 + phi), 2) - 1);
     int numworkers = nprocs - 1;
     int chunk = n / numworkers;
@@ -154,10 +154,10 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
         round_end = std::chrono::high_resolution_clock::now();
         round_elapsed = round_end - round_start;
         round_time = round_elapsed.count();
-        if (rank == COORDINATOR) {
-            std::cout << "Round " << r << " | " << number_of_levels - 2 << std::endl;
-            std::cout << "Round time: " << round_time << std::endl;
-        }
+        // if (rank == COORDINATOR) {
+        //     std::cout << "Round " << r << " | " << number_of_levels - 2 << std::endl;
+        //     std::cout << "Round time: " << round_time << std::endl;
+        // }
     }
     MPI_Barrier(MPI_COMM_WORLD);
     return lds;
@@ -180,6 +180,21 @@ std::vector<double> estimateCoreNumbers(LDS* lds, int n, double nu) {
     return coreNumbers;
 }
 
+std::vector<double> EstimateCoreNumebers_v2(LDS* lds, int n, double nu) {
+    std::vector<double> coreNumbers(n);
+    double phi = 0.5;
+    double lambda = (2.0 / 9.0) * (2.0 * nu - 5.0);
+    double two_plus_lambda = 2.0 + lambda;
+    double one_plus_phi = 1.0 + phi;
+    for (int i = 0; i < n ; i++) {
+        double frac_numerator = lds->get_level(i) + 1.0;
+        double frac_denom = ceil(log_a_to_base_b(n, one_plus_phi));
+        double power = std::max(floor(frac_numerator / frac_denom) - 1.0, 0.0);
+        coreNumbers[i] = two_plus_lambda * pow(one_plus_phi, power);
+    }
+    return coreNumbers;
+}
+
 
 } // end of namespace distributed_kcore
 
@@ -188,7 +203,7 @@ int main(int argc, char** argv) {
     // std::string file_loc = argv[1];
     // double nu = std::stod(argv[2]);
     // double epsilon = std::stod(argv[3]);
-    std::string file_loc = "dblp_0_index_v2";
+    std::string file_loc = "zhang_dblp";
     double nu = 0.9;
     double epsilon = 0.5;
     distributed_kcore::Graph *graph = new distributed_kcore::Graph(file_loc);
@@ -209,12 +224,21 @@ int main(int argc, char** argv) {
     if (rank == COORDINATOR) {
         // graph->printDegrees();
         // std::cout << "AdjListSum: " << graph->sumAdjList() << std::endl;
+        std::chrono::time_point<std::chrono::high_resolution_clock> algo_start, algo_end;
+	    std::chrono::duration<double> algo_elapsed;
+        double algo_time = 0.0;
+        algo_start = std::chrono::high_resolution_clock::now();
         distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, nu, epsilon);
-        std::vector<double> estimated_core_numbers = distributed_kcore::estimateCoreNumbers(lds, n, nu);
-        std::cout << "Printing Core Numbers" << std::endl;
+        // std::vector<double> estimated_core_numbers = distributed_kcore::estimateCoreNumbers(lds, n, nu);
+        std::vector<double> estimated_core_numbers = distributed_kcore::EstimateCoreNumebers_v2(lds, n, nu);
+        algo_end = std::chrono::high_resolution_clock::now();
+        algo_elapsed = algo_end - algo_start;
+        // std::cout << "Printing Core Numbers" << std::endl;
         for (int i = 0; i < n; i++) {
             std::cout<< i << " : " << estimated_core_numbers[i] << std::endl;
         }
+        algo_time = algo_elapsed.count();
+        std::cout << "Algorithm Time: " << algo_time << std::endl;
     } else {
         distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, nu, epsilon);
     }
