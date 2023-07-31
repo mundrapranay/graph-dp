@@ -1,5 +1,6 @@
 from collections import defaultdict
-
+import matplotlib.pyplot as plt 
+import numpy as np
 
 def load_graph():
     f = open('dblp_0_index', 'r')
@@ -32,17 +33,42 @@ def preprocess_data():
 
 
 def core_numbers_distribution():
-    f = open('zhang_dblp_phi05_n17.txt', 'r')
+    f = open('dblp_cores', 'r')
     lines = f.readlines()
-    del lines[-1]
+    # del lines[-1]
     f.close()
-    lines = [line.strip().split(':') for line in lines]
+    lines = [line.strip().split(' ') for line in lines]
     core_numbers = []
     for line in lines:
         cn = float(line[1].strip())
         core_numbers.append(cn)
-    
+
     print('Max Core Number: {0}'.format(max(core_numbers)))
+
+    f = open('zhang_dblp_phi05_n17_corrected.txt', 'r')
+    lines = f.readlines()
+    del lines[-1]
+    f.close()
+    lines = [line.strip().split(':') for line in lines]
+    estimated_core_numbers = []
+    for line in lines:
+        cn = float(line[1].strip())
+        estimated_core_numbers.append(cn)
+    
+    print('Max Approximated Core Number: {0}'.format(max(estimated_core_numbers)))
+    # x = np.arange(len(core_numbers))
+    # approximation = [s - t for s,t in zip(core_numbers, estimated_core_numbers)]
+    # for a in approximation:
+    #     print(a)
+    # # plt.plot(x, core_numbers, '-', label='Core Numbers')
+    # plt.plot(x, approximation, '-', label='Approximation')
+    # plt.legend()
+    # # plt.tight_layout()
+    # plt.show()
+    # plt.savefig('./dblp_core_plot.png')
+    # plt.cla()
+    # plt.clf()
+    # print('Max Core Number: {0}'.format(max(core_numbers)))
 
 
 

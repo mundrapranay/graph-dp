@@ -57,7 +57,7 @@ struct LDS {
     }
 
     inline uintE group_for_level(uintE level) const {
-        return level / levels_per_group;
+        return floor(level / levels_per_group);
     }
 };
 } // end of namespace distributed_kcore

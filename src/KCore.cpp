@@ -33,7 +33,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
     double delta = 9.0;
     int n = graph->getGraphSize();
     // std::cout << "graph size: " << n << std::endl;
-    int number_of_levels = ceil(4 * pow(log_a_to_base_b(n, 1 + phi), 2) - 1);
+    int number_of_levels = ceil(4 * pow(log_a_to_base_b(n, 1 + phi), 2));
     int numworkers = nprocs - 1;
     int chunk = n / numworkers;
     int extra = n % numworkers;
@@ -48,7 +48,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
     MPI_Barrier(MPI_COMM_WORLD);
     std::vector<int> permanentZeros(n, 1);
 
-    for (int r = 0; r < number_of_levels - 1; r++) {
+    for (int r = 0; r < number_of_levels - 2; r++) {
         std::chrono::time_point<std::chrono::high_resolution_clock> round_start, round_end;
 	    std::chrono::duration<double> round_elapsed;
         double round_time = 0.0;
@@ -171,7 +171,7 @@ std::vector<double> estimateCoreNumbers(LDS* lds, int n, double nu) {
     double first_term = 2.0 + lambda;
     double second_term = 1.0 + phi;
     for (int i = 0; i < n; i++) {
-        double frac_denom = 4 * ceil(log_a_to_base_b(n, second_term));
+        double frac_denom = ceil(log_a_to_base_b(n, second_term));
         int frac_numer = lds->get_level(i) + 1;
         int power = std::max(int(floor(frac_numer / frac_denom)) - 1, 0);
         coreNumbers[i] = first_term * pow(second_term, power);
