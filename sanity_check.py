@@ -45,7 +45,7 @@ def core_numbers_distribution():
 
     print('Max Core Number: {0}'.format(max(core_numbers)))
 
-    f = open('zhang_dblp_phi05_n17_corrected.txt', 'r')
+    f = open('zhang_dblp_phi05_n17_corrected_v2.txt', 'r')
     lines = f.readlines()
     del lines[-1]
     f.close()

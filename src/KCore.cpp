@@ -27,7 +27,7 @@ int log_a_to_base_b(int a, double b) {
     return log2(a) / log2(b);
 }
 
-LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon) {
+LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon, int levels_per_group) {
     double phi = 0.5;
     double lambda = (2/9) * (2 * nu - 5);
     double delta = 9.0;
@@ -43,7 +43,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
     LDS *lds;
 
     if (rank == COORDINATOR) {
-        lds = new LDS(n, phi, delta, false);
+        lds = new LDS(n, phi, delta, levels_per_group, false);
     }
     MPI_Barrier(MPI_COMM_WORLD);
     std::vector<int> permanentZeros(n, 1);
@@ -163,24 +163,8 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
     return lds;
 }
 
-std::vector<double> estimateCoreNumbers(LDS* lds, int n, double nu) {
-    // std::cout << "Computing Core Numbers"  << std::endl;
-    std::vector<double> coreNumbers(n);
-    double phi = 0.5;
-    double lambda = (2/9) * (2 * nu - 5);
-    double first_term = 2.0 + lambda;
-    double second_term = 1.0 + phi;
-    for (int i = 0; i < n; i++) {
-        double frac_denom = ceil(log_a_to_base_b(n, second_term));
-        int frac_numer = lds->get_level(i) + 1;
-        int power = std::max(int(floor(frac_numer / frac_denom)) - 1, 0);
-        coreNumbers[i] = first_term * pow(second_term, power);
-    }
-
-    return coreNumbers;
-}
-
-std::vector<double> EstimateCoreNumebers_v2(LDS* lds, int n, double nu) {
+// Computing Approximate Core Numbers
+std::vector<double> estimateCoreNumbers(LDS* lds, int n, double nu, double levels_per_group) {
     std::vector<double> coreNumbers(n);
     double phi = 0.5;
     double lambda = (2.0 / 9.0) * (2.0 * nu - 5.0);
@@ -188,8 +172,7 @@ std::vector<double> EstimateCoreNumebers_v2(LDS* lds, int n, double nu) {
     double one_plus_phi = 1.0 + phi;
     for (int i = 0; i < n ; i++) {
         double frac_numerator = lds->get_level(i) + 1.0;
-        double frac_denom = ceil(log_a_to_base_b(n, one_plus_phi));
-        double power = std::max(floor(frac_numerator / frac_denom) - 1.0, 0.0);
+        double power = std::max(floor(frac_numerator / levels_per_group) - 1.0, 0.0);
         coreNumbers[i] = two_plus_lambda * pow(one_plus_phi, power);
     }
     return coreNumbers;
@@ -206,8 +189,11 @@ int main(int argc, char** argv) {
     std::string file_loc = "zhang_dblp";
     double nu = 0.9;
     double epsilon = 0.5;
+    double phi = 0.5;
     distributed_kcore::Graph *graph = new distributed_kcore::Graph(file_loc);
     int n = graph->getGraphSize();
+    double one_plus_phi = 1.0 + phi;
+    double levels_per_group = ceil(distributed_kcore::log_a_to_base_b(n, one_plus_phi));
 
     
     MPI_Init(&argc, &argv);
@@ -228,9 +214,8 @@ int main(int argc, char** argv) {
 	    std::chrono::duration<double> algo_elapsed;
         double algo_time = 0.0;
         algo_start = std::chrono::high_resolution_clock::now();
-        distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, nu, epsilon);
-        // std::vector<double> estimated_core_numbers = distributed_kcore::estimateCoreNumbers(lds, n, nu);
-        std::vector<double> estimated_core_numbers = distributed_kcore::EstimateCoreNumebers_v2(lds, n, nu);
+        distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, nu, epsilon, static_cast<int>(levels_per_group));
+        std::vector<double> estimated_core_numbers = distributed_kcore::estimateCoreNumbers(lds, n, nu, levels_per_group);
         algo_end = std::chrono::high_resolution_clock::now();
         algo_elapsed = algo_end - algo_start;
         // std::cout << "Printing Core Numbers" << std::endl;
@@ -240,7 +225,7 @@ int main(int argc, char** argv) {
         algo_time = algo_elapsed.count();
         std::cout << "Algorithm Time: " << algo_time << std::endl;
     } else {
-        distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, nu, epsilon);
+        distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, nu, epsilon, static_cast<int>(levels_per_group));
     }
     
     MPI_Finalize();

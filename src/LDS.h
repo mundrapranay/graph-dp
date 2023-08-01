@@ -37,9 +37,9 @@ struct LDS {
     size_t levels_per_group; // number of inner-levels per group. O(\log n) many
     std::vector<LDSVertex> L;
 
-    LDS(size_t _n, double _eps, double _delta, bool _optimized) : n(_n), phi(_eps),
-        delta(_delta), optimized_insertion(_optimized) {
-            levels_per_group = ceil(log(n) / log(1 + phi));
+    LDS(size_t _n, double _eps, double _delta, int _levels_per_group, bool _optimized) : n(_n), phi(_eps),
+        delta(_delta), levels_per_group(_levels_per_group), optimized_insertion(_optimized) {
+            // levels_per_group = ceil(log(n) / log(1 + phi));
             L = std::vector<LDSVertex>(n);
     }
 
