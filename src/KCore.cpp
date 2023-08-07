@@ -64,8 +64,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 currentLevels[node] = lds->get_level(node);
             }
             group_index = lds->group_for_level(r);
-            // distribute the task based on the num_workers
-            // calculate the data size to send to workers
+
             /**
              * @todo: figure out offset value so that each worker 
              *        can decide the nodes to work on.
@@ -78,10 +77,9 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 MPI_Send(&workLoad, 1, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 MPI_Send(&group_index, 1, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 MPI_Send(&currentLevels[0], currentLevels.size(), MPI_INT, p, mytype, MPI_COMM_WORLD);
-                // MPI_Send(&nextLevels[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 offset += workLoad;
             }
-            // std::cout << "Sent from Master" << std::endl;
+
             // receive results from workers
             for (p = 1; p <= numworkers; p++) {
                 mytype = FROM_WORKER + p;
@@ -89,22 +87,12 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 MPI_Recv(&workLoad, 1, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
                 MPI_Recv(&nextLevels[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
                 MPI_Recv(&permanentZeros[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
-                // MPI_Recv(&recv_nextLevels[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
             }
-            // std::cout << "Received at Master" << std::endl;
-            // std::cout<< "NextLevles Len: " << nextLevels.size() << std::endl;
-            /**
-             * @todo : nextLevel history, if at round r nextLevel[i] == 0, then 
-             *          the node i doesn't participate in round r+1
-            */
+
             // update the levels based on the data in nextLevels
             for (int i = 0; i < nextLevels.size(); i++) {
-                // std::cout << i << std::endl;
                 if (nextLevels[i] == 1 && permanentZeros[i] != 0) {
-                    // LDS->L.level_increase(i, LDS->L);
                     lds->level_increase_v2(i, lds->L);
-                    // levels[r+1].level_increase(i, levels[r].L);
-                    // std::cout << "level increased" << std::endl;
                 } 
             }
         } else {
@@ -125,22 +113,15 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                             U_i += 1;
                         }
                    }
-                   /**
-                     * @todo: add google-dp library to sample from Geometric Distribution
-                    */
+
                    double lambda = epsilon / (2.0 * rounds_param);
                    GeometricDistribution* geom = new GeometricDistribution(lambda);
                    int noise = geom->Sample();
-                //    std::cout << "Noise: " << noise << std::endl;
                    int U_hat_i = U_i + noise;
                    if (U_hat_i > pow((1 + phi), group_index)) {
                         nextLevels[i] = 1;
                    } else {
-                        // nextLevels[i] = 0;
                         permanentZeros[i] = 0;
-                        /**
-                         * @todo : flag to point permanent zero
-                        */
                    }
                 }
             }
@@ -151,7 +132,6 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             MPI_Send(&workLoad, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             MPI_Send(&nextLevels[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             MPI_Send(&permanentZeros[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
-            // std::cout << "Sent from Worker: " << rank << std::endl;
 
         }
 
@@ -187,9 +167,6 @@ std::vector<double> estimateCoreNumbers(LDS* lds, int n, double eta, double phi,
 
 int main(int argc, char** argv) {
 
-    // std::string file_loc = argv[1];
-    // double eta = std::stod(argv[2]);
-    // double epsilon = std::stod(argv[3]);
     std::string file_loc = argv[1];
     double eta = std::stod(argv[2]);
     double epsilon = std::stod(argv[3]);
