@@ -14,8 +14,6 @@
 #include "Graph.h"
 #include "distributions.h"
 
-// using namespace std;
-// using namespace LDS;
 #define COORDINATOR 0 
 #define FROM_MASTER 1
 #define FROM_WORKER 2
