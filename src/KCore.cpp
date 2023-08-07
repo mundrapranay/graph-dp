@@ -104,7 +104,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             // perform computation
             int end_node = offset + workLoad;
             for (int i = offset; i < end_node; i++) {
-                if (currentLevels[i] == r) {
+                if (currentLevels[i] == r && permanentZeros[i] != 0) {
                    int U_i = 0;
                    for (auto ngh : adjacencyList[i]) {
                         if (currentLevels[ngh] == r) {
