@@ -33,7 +33,8 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
     double delta = 9.0;
     int n = graph->getGraphSize();
     // std::cout << "graph size: " << n << std::endl;
-    int number_of_levels = ceil(4 * pow(log_a_to_base_b(n, 1 + phi), 2));
+    double rounds_param = ceil(4.0 * pow(log_a_to_base_b(n, 1.0 + phi), 1.5));
+    int number_of_rounds = static_cast<int>(rounds_param);
     int numworkers = nprocs - 1;
     int chunk = n / numworkers;
     int extra = n % numworkers;
@@ -48,7 +49,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
     MPI_Barrier(MPI_COMM_WORLD);
     std::vector<int> permanentZeros(n, 1);
 
-    for (int r = 0; r < number_of_levels - 2; r++) {
+    for (int r = 0; r < number_of_rounds - 2; r++) {
         std::chrono::time_point<std::chrono::high_resolution_clock> round_start, round_end;
 	    std::chrono::duration<double> round_elapsed;
         double round_time = 0.0;
@@ -127,10 +128,10 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                    /**
                      * @todo: add google-dp library to sample from Geometric Distribution
                     */
-                   double lambda = epsilon / (8 * pow(log_a_to_base_b(n, 1.0 + phi), 2));
+                   double lambda = epsilon / (2.0 * rounds_param);
                    GeometricDistribution* geom = new GeometricDistribution(lambda);
                    int noise = geom->Sample();
-                   std::cout << "Noise: " << noise << std::endl;
+                //    std::cout << "Noise: " << noise << std::endl;
                    int U_hat_i = U_i + noise;
                    if (U_hat_i > pow((1 + phi), group_index)) {
                         nextLevels[i] = 1;
@@ -197,6 +198,7 @@ int main(int argc, char** argv) {
     int n = graph->getGraphSize();
     double one_plus_phi = 1.0 + phi;
     double levels_per_group = ceil(distributed_kcore::log_a_to_base_b(n, one_plus_phi));
+    // double levels_per_group = 15.0;
 
     
     MPI_Init(&argc, &argv);

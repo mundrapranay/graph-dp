@@ -1,6 +1,7 @@
 from collections import defaultdict
 import matplotlib.pyplot as plt 
 import numpy as np
+import statistics
 
 def load_graph():
     f = open('dblp_0_index', 'r')
@@ -32,6 +33,19 @@ def preprocess_data():
     out.close()
 
 
+def get_max_approx_index(pairs):
+    # Define a custom key function to extract the 'approx' value from each pair
+    def get_approx(pair):
+        return pair[1]
+
+    # Find the pair with the maximum 'approx' value using the custom key function
+    max_pair = max(pairs, key=get_approx)
+
+    # Find the index of the max_pair in the original list
+    max_index = pairs.index(max_pair)
+
+    return max_index
+
 def core_numbers_distribution():
     f = open('dblp_cores', 'r')
     lines = f.readlines()
@@ -45,7 +59,7 @@ def core_numbers_distribution():
 
     print('Max Core Number: {0}'.format(max(core_numbers)))
 
-    f = open('zhang_dblp_eat09_epsilon05_phi05_n17.txt', 'r')
+    f = open('zhang_dblp_eta09_epsilon0.5_phi05_n17_rounds_lpg_2.txt', 'r')
     lines = f.readlines()
     del lines[-1]
     f.close()
@@ -57,7 +71,11 @@ def core_numbers_distribution():
     
     print('Max Approximated Core Number: {0}'.format(max(estimated_core_numbers)))
     # x = np.arange(len(core_numbers))
-    # approximation = [s - t for s,t in zip(core_numbers, estimated_core_numbers)]
+    approximation = [((s, t), (float(max(s,t)) / min(s, t))) for s,t in zip(core_numbers, estimated_core_numbers)]
+    # print('Average Approximation: {0}'.format(statistics.mean(approximation)))
+    max_index = get_max_approx_index(approximation)
+    print('Maximum Approximation Core Numbers: {0}, {1}'.format(approximation[max_index][0], approximation[max_index][1]))
+    # print('Minimum Approximation: {0}'.format(min(approximation)))
     # for a in approximation:
     #     print(a)
     # # plt.plot(x, core_numbers, '-', label='Core Numbers')

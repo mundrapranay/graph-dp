@@ -167,44 +167,44 @@ static constexpr double kBinomialBound = (double)(1LL << 57);
 class GeometricDistribution {
  public:
     GeometricDistribution(double lambda) {
-        lambda_ = lambda;
+      lambda_ = lambda;
     }
 
     double GetUniformDouble() {
-        return UniformDouble();
+      return UniformDouble();
     }
 
     int64_t Sample() {
-        if (lambda_ == std::numeric_limits<double>::infinity()) {
-            return 0;
-        }
+      if (lambda_ == std::numeric_limits<double>::infinity()) {
+          return 0;
+      }
 
-        if (GetUniformDouble() >
-            -1.0 * std::expm1(-1.0 * lambda_ * std::numeric_limits<int64_t>::max())) {
-            return std::numeric_limits<int64_t>::max();
-        }
+      if (GetUniformDouble() >
+          -1.0 * std::expm1(-1.0 * lambda_ * std::numeric_limits<int64_t>::max())) {
+          return std::numeric_limits<int64_t>::max();
+      }
 
-        // Performs a binary search for the sample over the range of possible output
-        // values. At each step we split the remaining range in two and pick the left
-        // or right side proportional to the probability that the output falls within
-        // that range, ending when we have only a single possible sample remaining.
-        int64_t lo = 0;
-        int64_t hi = std::numeric_limits<int64_t>::max();
-        while (hi - lo > 1) {
-            int64_t mid =
-                lo - static_cast<int64_t>(std::floor(
-                        (std::log(0.5) + std::log1p(std::exp(lambda_ * (lo - hi)))) /
-                        lambda_));
-            mid = std::min(std::max(mid, lo + 1), hi - 1);
+      // Performs a binary search for the sample over the range of possible output
+      // values. At each step we split the remaining range in two and pick the left
+      // or right side proportional to the probability that the output falls within
+      // that range, ending when we have only a single possible sample remaining.
+      int64_t lo = 0;
+      int64_t hi = std::numeric_limits<int64_t>::max();
+      while (hi - lo > 1) {
+          int64_t mid =
+              lo - static_cast<int64_t>(std::floor(
+                      (std::log(0.5) + std::log1p(std::exp(lambda_ * (lo - hi)))) /
+                      lambda_));
+          mid = std::min(std::max(mid, lo + 1), hi - 1);
 
-            double q = std::expm1(lambda_ * (lo - mid)) / std::expm1(lambda_ * (lo - hi));
-            if (GetUniformDouble() <= q) {
+          double q = std::expm1(lambda_ * (lo - mid)) / std::expm1(lambda_ * (lo - hi));
+          if (GetUniformDouble() <= q) {
             hi = mid;
-            } else {
+          } else {
             lo = mid;
-            }
-        }
-        return hi - 1;
+          }
+      }
+      return hi - 1;
     }
 
 
