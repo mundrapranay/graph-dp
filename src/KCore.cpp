@@ -12,6 +12,7 @@
 #include <chrono>
 #include "LDS.h"
 #include "Graph.h"
+#include "distributions.h"
 
 // using namespace std;
 // using namespace LDS;
@@ -19,7 +20,7 @@
 #define FROM_MASTER 1
 #define FROM_WORKER 2
 
-namespace distributed_kcore{
+namespace distributed_kcore {
 
 
 int log_a_to_base_b(int a, double b) {
@@ -27,9 +28,8 @@ int log_a_to_base_b(int a, double b) {
     return log2(a) / log2(b);
 }
 
-LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon, int levels_per_group) {
-    double phi = 0.5;
-    double lambda = (2/9) * (2 * nu - 5);
+LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilon, double phi, int levels_per_group) {
+    double lambda = (2/9) * (2 * eta - 5);
     double delta = 9.0;
     int n = graph->getGraphSize();
     // std::cout << "graph size: " << n << std::endl;
@@ -127,7 +127,11 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
                    /**
                      * @todo: add google-dp library to sample from Geometric Distribution
                     */
-                   int U_hat_i = U_i;
+                   double lambda = epsilon / (8 * pow(log_a_to_base_b(n, 1.0 + phi), 2));
+                   GeometricDistribution* geom = new GeometricDistribution(lambda);
+                   int noise = geom->Sample();
+                   std::cout << "Noise: " << noise << std::endl;
+                   int U_hat_i = U_i + noise;
                    if (U_hat_i > pow((1 + phi), group_index)) {
                         nextLevels[i] = 1;
                    } else {
@@ -164,10 +168,9 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double nu, double epsilon
 }
 
 // Computing Approximate Core Numbers
-std::vector<double> estimateCoreNumbers(LDS* lds, int n, double nu, double levels_per_group) {
+std::vector<double> estimateCoreNumbers(LDS* lds, int n, double eta, double phi, double levels_per_group) {
     std::vector<double> coreNumbers(n);
-    double phi = 0.5;
-    double lambda = (2.0 / 9.0) * (2.0 * nu - 5.0);
+    double lambda = (2.0 / 9.0) * (2.0 * eta - 5.0);
     double two_plus_lambda = 2.0 + lambda;
     double one_plus_phi = 1.0 + phi;
     for (int i = 0; i < n ; i++) {
@@ -184,12 +187,12 @@ std::vector<double> estimateCoreNumbers(LDS* lds, int n, double nu, double level
 int main(int argc, char** argv) {
 
     // std::string file_loc = argv[1];
-    // double nu = std::stod(argv[2]);
+    // double eta = std::stod(argv[2]);
     // double epsilon = std::stod(argv[3]);
-    std::string file_loc = "zhang_dblp";
-    double nu = 0.9;
-    double epsilon = 0.5;
-    double phi = 0.5;
+    std::string file_loc = argv[1];
+    double eta = std::stod(argv[2]);
+    double epsilon = std::stod(argv[3]);
+    double phi = std::stod(argv[4]);
     distributed_kcore::Graph *graph = new distributed_kcore::Graph(file_loc);
     int n = graph->getGraphSize();
     double one_plus_phi = 1.0 + phi;
@@ -214,8 +217,8 @@ int main(int argc, char** argv) {
 	    std::chrono::duration<double> algo_elapsed;
         double algo_time = 0.0;
         algo_start = std::chrono::high_resolution_clock::now();
-        distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, nu, epsilon, static_cast<int>(levels_per_group));
-        std::vector<double> estimated_core_numbers = distributed_kcore::estimateCoreNumbers(lds, n, nu, levels_per_group);
+        distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, eta, epsilon, phi, static_cast<int>(levels_per_group));
+        std::vector<double> estimated_core_numbers = distributed_kcore::estimateCoreNumbers(lds, n, eta, phi, levels_per_group);
         algo_end = std::chrono::high_resolution_clock::now();
         algo_elapsed = algo_end - algo_start;
         // std::cout << "Printing Core Numbers" << std::endl;
@@ -225,7 +228,7 @@ int main(int argc, char** argv) {
         algo_time = algo_elapsed.count();
         std::cout << "Algorithm Time: " << algo_time << std::endl;
     } else {
-        distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, nu, epsilon, static_cast<int>(levels_per_group));
+        distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, eta, epsilon, phi, static_cast<int>(levels_per_group));
     }
     
     MPI_Finalize();

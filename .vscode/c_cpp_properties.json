@@ -4,8 +4,9 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/opt/homebrew/Cellar/open-mpi/4.1.5/include",
-                "${workspaceFolder}/parlaylib/include"
+                "/usr/local/lib/libmpi.so",
+                "${workspaceFolder}/parlaylib/include",
+                "${workspaceFolder}/src/abseil-cpp"
             ],
             "defines": [],
             "macFrameworkPath": [

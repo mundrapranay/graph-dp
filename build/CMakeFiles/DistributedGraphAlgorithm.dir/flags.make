@@ -4,7 +4,7 @@
 # compile CXX with mpicxx
 CXX_DEFINES = 
 
-CXX_INCLUDES = 
+CXX_INCLUDES = -I/home/ubuntu/graph-dp/src/abseil-cpp
 
 CXX_FLAGS = -std=gnu++17
 
