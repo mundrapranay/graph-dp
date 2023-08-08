@@ -2,6 +2,9 @@ from collections import defaultdict
 import matplotlib.pyplot as plt 
 import numpy as np
 import statistics
+import pandas as pd
+import seaborn as sns
+
 
 def load_graph():
     f = open('dblp_0_index', 'r')
@@ -70,8 +73,13 @@ def core_numbers_distribution():
         estimated_core_numbers.append(cn)
     
     print('Max Approximated Core Number: {0}'.format(max(estimated_core_numbers)))
-    # x = np.arange(len(core_numbers))
+    x = np.arange(len(core_numbers))
     approximation = [((s, t), (float(max(s,t)) / min(s, t))) for s,t in zip(core_numbers, estimated_core_numbers)]
+    approximation_factor = np.array([float(max(s,t)) / min(s, t) for s,t in zip(core_numbers, estimated_core_numbers)])
+    df = pd.DataFrame(approximation_factor, columns=['Approximation Factor'])
+    # print(df.head())
+
+
     # print('Average Approximation: {0}'.format(statistics.mean(approximation)))
     max_index = get_max_approx_index(approximation)
     print('Maximum Approximation Core Numbers: {0}, {1}'.format(approximation[max_index][0], approximation[max_index][1]))
@@ -79,14 +87,16 @@ def core_numbers_distribution():
     # for a in approximation:
     #     print(a)
     # # plt.plot(x, core_numbers, '-', label='Core Numbers')
-    # plt.plot(x, approximation, '-', label='Approximation')
-    # plt.legend()
-    # # plt.tight_layout()
+    # plt.plot(x, approximation_factor, 'o', label='Approximation Factor')
+    # plt.xscale('log')
+    sns.displot(df, x="Approximation Factor", kind="kde")
+    plt.legend()
+    plt.tight_layout()
     # plt.show()
-    # plt.savefig('./dblp_core_plot.png')
+    plt.savefig('./zhang_dblp_approxfactor_wothreshold.png')
     # plt.cla()
     # plt.clf()
-    # print('Max Core Number: {0}'.format(max(core_numbers)))
+    # # print('Max Core Number: {0}'.format(max(core_numbers)))
 
 
 
