@@ -46,11 +46,13 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
     if (rank == COORDINATOR) {
         lds = new LDS(n, phi, delta, levels_per_group, false);
         GeometricDistribution* geomThreshold = new GeometricDistribution(epsilon * factor);
+        // std::cout << "Cutoff Thresholds: " << std::endl;
         for (auto it : adjacencyList) {
             int node = it.first;
             int noisedDegree = it.second.size() + geomThreshold->Sample();
             int numberOfRounds = ceil(log_a_to_base_b(noisedDegree, 1.0 + phi)) * levels_per_group;
             roundThresholds[node] = numberOfRounds;
+            // std::cout << node << " : " << numberOfRounds << std::endl;
         }
     }
     MPI_Barrier(MPI_COMM_WORLD);
