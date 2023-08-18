@@ -49,6 +49,9 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         // std::cout << "Cutoff Thresholds: " << std::endl;
         for (auto it : adjacencyList) {
             int node = it.first;
+            /**
+             * @todo: subtract a fixed value from noisedDegree 
+            */
             int noisedDegree = it.second.size() + geomThreshold->Sample();
             int numberOfRounds = ceil(log_a_to_base_b(noisedDegree, 1.0 + phi)) * levels_per_group;
             roundThresholds[node] = numberOfRounds;
@@ -189,6 +192,9 @@ int main(int argc, char** argv) {
     int n = graph->getGraphSize();
     double one_plus_phi = 1.0 + phi;
     double levels_per_group = ceil(distributed_kcore::log_a_to_base_b(n, one_plus_phi));
+    /**
+     * @todo: try different factor scales to see the affect on the max error. 
+    */
     double factor = 0.5;
     // double levels_per_group = 15.0;
 
