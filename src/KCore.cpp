@@ -26,7 +26,7 @@ int log_a_to_base_b(int a, double b) {
     return log2(a) / log2(b);
 }
 
-LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilon, double phi, int levels_per_group, double factor) {
+LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilon, double phi, int levels_per_group, double factor, int bias) {
     double lambda = (2/9) * (2 * eta - 5);
     double delta = 9.0;
     int n = graph->getGraphSize();
@@ -49,10 +49,10 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         // std::cout << "Cutoff Thresholds: " << std::endl;
         for (auto it : adjacencyList) {
             int node = it.first;
-            /**
-             * @todo: subtract a fixed value from noisedDegree 
-            */
             int noisedDegree = it.second.size() + geomThreshold->Sample();
+            if (bias == 1) {
+                noisedDegree -= log_a_to_base_b(n, 1.0 + phi);
+            }
             int numberOfRounds = ceil(log_a_to_base_b(noisedDegree, 1.0 + phi)) * levels_per_group;
             roundThresholds[node] = numberOfRounds;
             // std::cout << node << " : " << numberOfRounds << std::endl;
@@ -156,10 +156,10 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         round_end = std::chrono::high_resolution_clock::now();
         round_elapsed = round_end - round_start;
         round_time = round_elapsed.count();
-        // if (rank == COORDINATOR) {
-        //     std::cout << "Round " << r << " | " << number_of_levels - 2 << std::endl;
-        //     std::cout << "Round time: " << round_time << std::endl;
-        // }
+        if (rank == COORDINATOR) {
+            std::cout << "Round " << r << " | " << number_of_rounds - 2 << std::endl;
+            std::cout << "Round time: " << round_time << std::endl;
+        }
     }
     MPI_Barrier(MPI_COMM_WORLD);
     return lds;
@@ -188,14 +188,28 @@ int main(int argc, char** argv) {
     double eta = std::stod(argv[2]);
     double epsilon = std::stod(argv[3]);
     double phi = std::stod(argv[4]);
+    /**
+     * @todo: change graph such that each processor only reads and maintains 
+     *        adjacency list related to its nodes. 
+    */
     distributed_kcore::Graph *graph = new distributed_kcore::Graph(file_loc);
     int n = graph->getGraphSize();
     double one_plus_phi = 1.0 + phi;
     double levels_per_group = ceil(distributed_kcore::log_a_to_base_b(n, one_plus_phi));
-    /**
-     * @todo: try different factor scales to see the affect on the max error. 
-    */
-    double factor = 0.5;
+    int factor_id = std::stoi(argv[5]);
+    double factor;
+    if (factor_id == 0) {
+        factor = 1.0 / 4.0;
+    } else if (factor_id == 1) {
+        factor = 1.0 / 3.0;
+    } else if (factor_id == 2) {
+        factor = 1.0 / 2.0;
+    } else if (factor_id == 3) {
+        factor = 2.0 / 3.0;
+    } else {
+        factor = 3.0 / 4.0;
+    }
+    int bias = std::stoi(argv[6]);
     // double levels_per_group = 15.0;
 
     
@@ -217,7 +231,7 @@ int main(int argc, char** argv) {
 	    std::chrono::duration<double> algo_elapsed;
         double algo_time = 0.0;
         algo_start = std::chrono::high_resolution_clock::now();
-        distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, eta, epsilon, phi, static_cast<int>(levels_per_group), factor);
+        distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, eta, epsilon, phi, static_cast<int>(levels_per_group), factor, bias);
         std::vector<double> estimated_core_numbers = distributed_kcore::estimateCoreNumbers(lds, n, eta, phi, levels_per_group);
         algo_end = std::chrono::high_resolution_clock::now();
         algo_elapsed = algo_end - algo_start;
@@ -228,7 +242,7 @@ int main(int argc, char** argv) {
         algo_time = algo_elapsed.count();
         std::cout << "Algorithm Time: " << algo_time << std::endl;
     } else {
-        distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, eta, epsilon, phi, static_cast<int>(levels_per_group), factor);
+        distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, eta, epsilon, phi, static_cast<int>(levels_per_group), factor, bias);
     }
     
     MPI_Finalize();
