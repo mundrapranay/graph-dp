@@ -7,7 +7,7 @@ import seaborn as sns
 
 
 def load_graph(node_id):
-    f = open('zhang_dblp', 'r')
+    f = open('./graphs/hua_youtube_insertion_edges', 'r')
     lines = f.readlines()
     del lines[0]
     lines = [line.strip() for line in lines]
@@ -22,7 +22,8 @@ def load_graph(node_id):
     
     # for k,v in data.items():
     #     print('Node: {0} | AdjacencyListSize: {1}'.format(k, len(v)))
-    print(len(data[node_id]))
+    # print(len(data[node_id]))
+    print(len(data))
         
 
 
@@ -123,7 +124,7 @@ def cutoff_thresholds():
 
 
 if __name__ == '__main__':
-    # load_graph(274467)
+    load_graph(274467)
     # preprocess_data()
     # core_numbers_distribution()
-    cutoff_thresholds()
+    # cutoff_thresholds()

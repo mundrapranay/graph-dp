@@ -13,6 +13,7 @@ namespace distributed_kcore{
 class Graph {
     private:
         std::unordered_map<int, std::vector<int>> adjacenyList;
+        std::unordered_map<int, int> nodeDegrees;
         size_t graphSize = 0;
 
         std::vector<std::string> splitString(const std::string& line, char del) {
@@ -34,15 +35,7 @@ class Graph {
                 return;
             }
             std::string line;
-            bool firstLine = true;
             while (std::getline(file, line)) {
-                /**
-                 * @note: hua_*_insertion_edges don't have the first line problem
-                */
-                // if (firstLine) {
-                //     firstLine = false;
-                //     continue;
-                // }
                 std::vector<std::string> values = splitString(line, ' ');
                 std::vector<int> neighbors1;
                 std::vector<int> neighbors2;
@@ -50,13 +43,17 @@ class Graph {
                 int vertex = std::stoi(values[0]);
                 int ngh = std::stoi(values[1]);
                 if (adjacenyList.find(vertex) == adjacenyList.end()) {
-                    adjacenyList[vertex] = neighbors1;
+                    // adjacenyList[vertex] = neighbors1;
+                    nodeDegrees[vertex] = 0;
                 }
                 if (adjacenyList.find(ngh) == adjacenyList.end()) {
-                    adjacenyList[ngh] = neighbors2;
+                    // adjacenyList[ngh] = neighbors2;
+                    nodeDegrees[ngh] = 0;
                 }
-                adjacenyList[vertex].push_back(ngh);
-                adjacenyList[ngh].push_back(vertex);
+                // adjacenyList[vertex].push_back(ngh);
+                // adjacenyList[ngh].push_back(vertex);
+                nodeDegrees[vertex]++;
+                nodeDegrees[ngh]++;
             }
             file.close();
             graphSize = adjacenyList.size();   
@@ -65,42 +62,48 @@ class Graph {
         Graph(const std::string& filename, int offset, int workLoad) {
             std::ifstream file(filename);
             std::set<int> workingNodes;
-            
+            int end_node = offset + workLoad;
+            for (int i = offset; i < end_node; i++) {
+                workingNodes.insert(i);
+            }
+
             if (!file.is_open()) {
                 std::cerr << "Failed to open file: " << filename << std::endl;
                 return;
             }
             std::string line;
-            bool firstLine = true;
             while (std::getline(file, line)) {
-                /**
-                 * @note: hua_*_insertion_edges don't have the first line problem
-                */
-                // if (firstLine) {
-                //     firstLine = false;
-                //     continue;
-                // }
                 std::vector<std::string> values = splitString(line, ' ');
                 std::vector<int> neighbors1;
                 std::vector<int> neighbors2;
                 // to ensure that its zero indexed
                 int vertex = std::stoi(values[0]);
                 int ngh = std::stoi(values[1]);
-                if (adjacenyList.find(vertex) == adjacenyList.end()) {
-                    adjacenyList[vertex] = neighbors1;
+                if (workingNodes.find(vertex) != workingNodes.end()) {
+                    if (adjacenyList.find(vertex) == adjacenyList.end()) {
+                        adjacenyList[vertex] = neighbors1;
+                    }
+                    adjacenyList[vertex].push_back(ngh);
                 }
-                if (adjacenyList.find(ngh) == adjacenyList.end()) {
-                    adjacenyList[ngh] = neighbors2;
+
+                if (workingNodes.find(ngh) != workingNodes.end()) {
+                    if (adjacenyList.find(ngh) == adjacenyList.end()) {
+                        adjacenyList[ngh] = neighbors2;
+                    }
+                    adjacenyList[ngh].push_back(vertex);
                 }
-                adjacenyList[vertex].push_back(ngh);
-                adjacenyList[ngh].push_back(vertex);
             }
             file.close();
-            graphSize = adjacenyList.size();   
+            graphSize = adjacenyList.size();
+            workingNodes.clear(); 
         }
 
         std::unordered_map<int, std::vector<int>> getAdjacencyList() {
             return adjacenyList;
+        }
+
+        std::unordered_map<int, int> getNodeDegrees() {
+            return nodeDegrees;
         }
 
         size_t getGraphSize() {
