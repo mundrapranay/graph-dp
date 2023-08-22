@@ -7,7 +7,7 @@ import seaborn as sns
 
 
 def load_graph(node_id):
-    f = open('./graphs/hua_youtube_insertion_edges', 'r')
+    f = open('./graphs/hua_usa', 'r')
     lines = f.readlines()
     del lines[0]
     lines = [line.strip() for line in lines]

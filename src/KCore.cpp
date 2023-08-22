@@ -153,10 +153,10 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         round_end = std::chrono::high_resolution_clock::now();
         round_elapsed = round_end - round_start;
         round_time = round_elapsed.count();
-        if (rank == COORDINATOR) {
-            std::cout << "Round " << r << " | " << number_of_rounds - 2 << std::endl;
-            std::cout << "Round time: " << round_time << std::endl;
-        }
+        // if (rank == COORDINATOR) {
+        //     std::cout << "Round " << r << " | " << number_of_rounds - 2 << std::endl;
+        //     std::cout << "Round time: " << round_time << std::endl;
+        // }
     }
     MPI_Barrier(MPI_COMM_WORLD);
     // free up memory
@@ -191,6 +191,7 @@ int main(int argc, char** argv) {
     double epsilon = std::stod(argv[3]);
     double phi = std::stod(argv[4]);
     distributed_kcore::Graph *graph;
+
     int factor_id = std::stoi(argv[5]);
     double factor;
     if (factor_id == 0) {
@@ -220,17 +221,30 @@ int main(int argc, char** argv) {
     int chunk = n / numworkers;
     int extra = n % numworkers;
 
+    std::vector<double> preprocessing_times;
+    std::chrono::time_point<std::chrono::high_resolution_clock> pp_start, pp_end;
+    std::chrono::duration<double> pp_elapsed;
+    double pp_time = 0.0;
     if (rank  == COORDINATOR) {
+        pp_start = std::chrono::high_resolution_clock::now();
         graph = new distributed_kcore::Graph(file_loc);
+        pp_end = std::chrono::high_resolution_clock::now();
+        pp_elapsed = (pp_end - pp_start);
+        pp_time = pp_elapsed.count();
+        preprocessing_times.push_back(pp_time);
     } else {
-        int offset = 0; 
-        int workLoad = 0;
-        for (int p = 1; p <= numworkers; p++) {
-            workLoad = (p == numworkers) ? chunk + extra : chunk;
-            graph = new distributed_kcore::Graph(file_loc, offset, workLoad);
-            offset += workLoad;
-        }
+        int offset = (rank - 1) * chunk; 
+        int workLoad = (rank == numworkers) ? chunk + extra : chunk;
+        pp_start = std::chrono::high_resolution_clock::now();
+        graph = new distributed_kcore::Graph(file_loc, offset, workLoad);
+        pp_end = std::chrono::high_resolution_clock::now();
+        pp_elapsed = (pp_end - pp_start);
+        pp_time = pp_elapsed.count();
+        preprocessing_times.push_back(pp_time);
     }
+
+    double max_pp_time = *std::max_element(preprocessing_times.begin(), preprocessing_times.end());
+    
 
     if (numProcesses < 2) {
         std::cerr << "Error: At least 2 processes are required." << std::endl;
@@ -240,7 +254,7 @@ int main(int argc, char** argv) {
      
     if (rank == COORDINATOR) {
         // graph->printDegrees();
-        // std::cout << "AdjListSum: " << graph->sumAdjList() << std::endl;
+        std::cout << "Preprocessing Time: " << max_pp_time << std::endl;
         std::chrono::time_point<std::chrono::high_resolution_clock> algo_start, algo_end;
 	    std::chrono::duration<double> algo_elapsed;
         double algo_time = 0.0;
