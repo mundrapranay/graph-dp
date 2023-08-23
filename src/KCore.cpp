@@ -38,7 +38,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
     MPI_Status status;
     LDS *lds;
     std::vector<int> roundThresholds(n, 0);
-    double remaingingBudget = factor != 1.0 ? (1.0 / (1.0 - factor)) : 0.0;
+    double remaingingBudget = (factor != 1.0) ? (1.0 - factor) : 0.0;
 
     if (rank == COORDINATOR) {
         lds = new LDS(n, phi, delta, levels_per_group, false);
@@ -128,7 +128,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                         }
                    }
 
-                   double lambda = epsilon / (remaingingBudget * 2.0 * rounds_param);
+                   double lambda = (epsilon * remaingingBudget) / (2.0 * rounds_param);
                    GeometricDistribution* geom = new GeometricDistribution(lambda);
                    int noise = geom->Sample();
                    int U_hat_i = U_i + noise;
@@ -205,6 +205,7 @@ int main(int argc, char** argv) {
     } else {
         factor = 3.0 / 4.0;
     }
+
     int bias = std::stoi(argv[6]);
     int n = std::stoi(argv[7]);
     double one_plus_phi = 1.0 + phi;
@@ -243,6 +244,7 @@ int main(int argc, char** argv) {
         preprocessing_times.push_back(pp_time);
     }
 
+    MPI_Barrier(MPI_COMM_WORLD);
     double max_pp_time = *std::max_element(preprocessing_times.begin(), preprocessing_times.end());
     
 

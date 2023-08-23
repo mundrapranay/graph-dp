@@ -42,11 +42,13 @@ class Graph {
                 // to ensure that its zero indexed
                 int vertex = std::stoi(values[0]);
                 int ngh = std::stoi(values[1]);
-                if (adjacenyList.find(vertex) == adjacenyList.end()) {
+                // if (adjacenyList.find(vertex) == adjacenyList.end()) {
+                if (nodeDegrees.find(vertex) == nodeDegrees.end()) {
                     // adjacenyList[vertex] = neighbors1;
                     nodeDegrees[vertex] = 0;
                 }
-                if (adjacenyList.find(ngh) == adjacenyList.end()) {
+                // if (adjacenyList.find(ngh) == adjacenyList.end()) {
+                if (nodeDegrees.find(vertex) == nodeDegrees.end()) {
                     // adjacenyList[ngh] = neighbors2;
                     nodeDegrees[ngh] = 0;
                 }

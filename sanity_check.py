@@ -52,7 +52,7 @@ def get_max_approx_index(pairs):
     return max_index
 
 def core_numbers_distribution():
-    f = open('dblp_cores', 'r')
+    f = open('ground_truth/zhang_dblp_cores', 'r')
     lines = f.readlines()
     # del lines[-1]
     f.close()
@@ -64,9 +64,10 @@ def core_numbers_distribution():
 
     print('Max Core Number: {0}'.format(max(core_numbers)))
 
-    f = open('zhang_dblp_eta09_epsilon0.5_phi05_n17_rounds_lpg_thresholding.txt', 'r')
+    f = open('./results_new/graph_zhang_dblp_factor_id_0_bias_1.txt', 'r')
     lines = f.readlines()
     del lines[-1]
+    del lines[0]
     f.close()
     lines = [line.strip().split(':') for line in lines]
     estimated_core_numbers = []
@@ -124,7 +125,7 @@ def cutoff_thresholds():
 
 
 if __name__ == '__main__':
-    load_graph(274467)
+    # load_graph(274467)
     # preprocess_data()
-    # core_numbers_distribution()
+    core_numbers_distribution()
     # cutoff_thresholds()
