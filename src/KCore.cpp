@@ -26,7 +26,7 @@ int log_a_to_base_b(int a, double b) {
     return log2(a) / log2(b);
 }
 
-LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilon, double phi, double lambda, int levels_per_group, double factor, int bias, int n) {
+LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilon, double phi, double lambda, int levels_per_group, double factor, int bias, int bias_factor, int n) {
     double delta = 9.0;
     double rounds_param = ceil(4.0 * pow(log_a_to_base_b(n, 1.0 + phi), 1.5));
     int number_of_rounds = static_cast<int>(rounds_param);
@@ -53,7 +53,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                  * @todo: make this into a parameter : try [1, 50]
                  * @bug: numberOfRounds == 0 code can't handle (makes approx v. v. large)
                 */
-                noisedDegree -= std::min(noisedDegree - 1, 10);
+                noisedDegree -= std::min(noisedDegree - 1, bias_factor);
             }
             int numberOfRounds = ceil(log_a_to_base_b(noisedDegree, 1.0 + phi)) * levels_per_group;
             roundThresholds[node] = numberOfRounds;
@@ -212,7 +212,8 @@ int main(int argc, char** argv) {
     }
 
     int bias = std::stoi(argv[6]);
-    int n = std::stoi(argv[7]);
+    int bias_factor = std::stoi(argv[7]);
+    int n = std::stoi(argv[8]);
     double one_plus_phi = 1.0 + phi;
     double levels_per_group = ceil(distributed_kcore::log_a_to_base_b(n, one_plus_phi));
     double lambda = (2.0 / 9.0) * (2.0 * eta - 5.0);
@@ -266,7 +267,7 @@ int main(int argc, char** argv) {
 	    std::chrono::duration<double> algo_elapsed;
         double algo_time = 0.0;
         algo_start = std::chrono::high_resolution_clock::now();
-        distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, eta, epsilon, phi, lambda, static_cast<int>(levels_per_group), factor, bias, n);
+        distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, eta, epsilon, phi, lambda, static_cast<int>(levels_per_group), factor, bias, bias_factor, n);
         std::vector<double> estimated_core_numbers = distributed_kcore::estimateCoreNumbers(lds, n, eta, phi, lambda, levels_per_group);
         algo_end = std::chrono::high_resolution_clock::now();
         algo_elapsed = algo_end - algo_start;
@@ -277,7 +278,7 @@ int main(int argc, char** argv) {
         algo_time = algo_elapsed.count();
         std::cout << "Algorithm Time: " << algo_time << std::endl;
     } else {
-        distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, eta, epsilon, phi, lambda, static_cast<int>(levels_per_group), factor, bias, n);
+        distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, eta, epsilon, phi, lambda, static_cast<int>(levels_per_group), factor, bias, bias_factor, n);
     }
     
     MPI_Finalize();

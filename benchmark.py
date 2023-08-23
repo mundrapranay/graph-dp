@@ -29,7 +29,8 @@ def run_benchmark():
     # Change directory back to the previous directory
     os.chdir('../')
 
-    graphs = GRAPH_SIZES.keys()
+    # graphs = GRAPH_SIZES.keys()
+    graphs = ['zhang_dblp']
 
     # Specify the number of processes as a command line argument
     num_processes = 17
@@ -37,22 +38,24 @@ def run_benchmark():
     epsilon = 0.5
     phi = 0.5
     for graph in graphs:
-        for bias in [0, 1]:
+        # for bias in [0, 1]:
+        for bias in [1]:
             for factor_id in range(5):
-                cmd = [
-                    'mpirun',
-                    '-np', str(num_processes),
-                    './build/DistributedGraphAlgorithm',
-                    f'./graphs/{graph}',
-                    str(eta), str(epsilon), str(phi),
-                    str(factor_id), str(bias), str(GRAPH_SIZES[graph])
-                ]
-                output_file = f'/home/ubuntu/results_new/graph_{graph}_factor_id_{factor_id}_bias_{bias}.txt'
-                
-                with open(output_file, 'w') as f:
-                    subprocess.run(cmd, stdout=f)
+                for bias_factor in range(1, 51):
+                    cmd = [
+                        'mpirun',
+                        '-np', str(num_processes),
+                        './build/DistributedGraphAlgorithm',
+                        f'./graphs/{graph}',
+                        str(eta), str(epsilon), str(phi),
+                        str(factor_id), str(bias), str(bias_factor), str(GRAPH_SIZES[graph])
+                    ]
+                    output_file = f'/home/ubuntu/results_new/graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor{bias_factor}.txt'
+                    
+                    with open(output_file, 'w') as f:
+                        subprocess.run(cmd, stdout=f)
 
-                print(f'done with graph_{graph}_factor_id_{factor_id}_bias_{bias}')
+                    print(f'done with graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor{bias_factor}')
 
 
 def get_max_approx_index(pairs):
@@ -161,5 +164,5 @@ def plot_benchmark_runs():
 
 
 if __name__ == '__main__':
-    # run_benchmark()
-    plot_benchmark_runs()
+    run_benchmark()
+    # plot_benchmark_runs()
