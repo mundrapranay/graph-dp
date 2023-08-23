@@ -1,0 +1,1389 @@
+graph size: 280
+graph size: 280
+graph size: 280
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Sent from Worker: 1
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+Sent from Worker: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+Sent from Worker: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+Sent from Worker: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+Sent from Worker: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Received at Master
+NextLevles Len: 2
+need to compute
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Sent from Worker: 1
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+Sent from Worker: 1
+NextLevles Len: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+need to compute
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Broadcasted current levels of size: 560
+Sent from Master
+Received at Master
+NextLevles Len: 2
+need to compute
+Received at Worker: 1
+Received at Worker: 1 size of currentLevels: 280
+Sent from Worker: 1
+Received at Worker: 2
+Received at Worker: 2 size of currentLevels: 280
+Sent from Worker: 2

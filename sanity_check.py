@@ -7,7 +7,7 @@ import seaborn as sns
 
 
 def load_graph(node_id):
-    f = open('zhang_dblp', 'r')
+    f = open('./graphs/hua_usa', 'r')
     lines = f.readlines()
     del lines[0]
     lines = [line.strip() for line in lines]
@@ -22,7 +22,8 @@ def load_graph(node_id):
     
     # for k,v in data.items():
     #     print('Node: {0} | AdjacencyListSize: {1}'.format(k, len(v)))
-    print(len(data[node_id]))
+    # print(len(data[node_id]))
+    print(len(data))
         
 
 
@@ -51,7 +52,7 @@ def get_max_approx_index(pairs):
     return max_index
 
 def core_numbers_distribution():
-    f = open('dblp_cores', 'r')
+    f = open('ground_truth/zhang_dblp_cores', 'r')
     lines = f.readlines()
     # del lines[-1]
     f.close()
@@ -63,9 +64,10 @@ def core_numbers_distribution():
 
     print('Max Core Number: {0}'.format(max(core_numbers)))
 
-    f = open('zhang_dblp_eta09_epsilon0.5_phi05_n17_rounds_lpg_thresholding.txt', 'r')
+    f = open('log.txt', 'r')
     lines = f.readlines()
     del lines[-1]
+    del lines[0]
     f.close()
     lines = [line.strip().split(':') for line in lines]
     estimated_core_numbers = []
@@ -125,5 +127,5 @@ def cutoff_thresholds():
 if __name__ == '__main__':
     # load_graph(274467)
     # preprocess_data()
-    # core_numbers_distribution()
-    cutoff_thresholds()
+    core_numbers_distribution()
+    # cutoff_thresholds()
