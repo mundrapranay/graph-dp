@@ -84,7 +84,7 @@ def get_core_numbers(file):
     return estimated_core_numbers, pp_time, algo_time
 
 def get_ground_truth(graph):
-    f = open('ground_truth/{0}_cores'.format(graph), 'r')
+    f = open('/home/ubuntu/ground_truth/{0}_cores'.format(graph), 'r')
     lines = f.readlines()
     f.close()
     lines = [line.strip().split(' ') for line in lines]
@@ -130,9 +130,9 @@ def plot_benchmark_runs():
         
         x = np.arange(len(factors))
         plt.plot(x, unbiased_avg_approx, 'o', label='Unbiased Average Approx Factor')
-        plt.plot(x, biased_avg_approx, 'o', label='Biased Average Approx Factor')
-        plt.plot(x, unbiased_max_approx, 'o', label='Unbiased Max Approx Factor')
-        plt.plot(x, biased_max_approx, 'o', label='Biased Max Approx Factor')
+        plt.plot(x, biased_avg_approx, '^', label='Biased Average Approx Factor')
+        plt.plot(x, unbiased_max_approx, 's', label='Unbiased Max Approx Factor')
+        plt.plot(x, biased_max_approx, '*', label='Biased Max Approx Factor')
         plt.legend()
         plt.xticks(x, factors)
         plt.xlabel('Privacy Budget Distribution')
@@ -161,5 +161,5 @@ def plot_benchmark_runs():
 
 
 if __name__ == '__main__':
-    run_benchmark()
-    # plot_benchmark_runs()
+    # run_benchmark()
+    plot_benchmark_runs()
