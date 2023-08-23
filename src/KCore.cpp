@@ -48,7 +48,12 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             int node = it.first;
             int noisedDegree = it.second + geomThreshold->Sample();
             if (bias == 1) {
-                noisedDegree -= log_a_to_base_b(n, 1.0 + phi);
+                // noisedDegree -= log_a_to_base_b(n, 1.0 + phi);
+                /**
+                 * @todo: make this into a parameter : try [1, 50]
+                 * @bug: numberOfRounds == 0 code can't handle (makes approx v. v. large)
+                */
+                noisedDegree -= std::min(noisedDegree - 1, 10);
             }
             int numberOfRounds = ceil(log_a_to_base_b(noisedDegree, 1.0 + phi)) * levels_per_group;
             roundThresholds[node] = numberOfRounds;
