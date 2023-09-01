@@ -163,6 +163,59 @@ def plot_benchmark_runs():
         plt.clf()
 
 
+def plot_benchmark_runs_biasfactor():
+    graphs = ['zhang_dblp']
+    factors = ['1/4', '1/3', '1/2', '2/3', '3/4']
+    for graph in graphs:
+
+        core_numbers = get_ground_truth(graph)
+        biased_avg_approx = []
+
+        biased_max_approx = []
+
+        biased_algo_time = []
+
+        biased_pp_time = []
+
+        for bias in [1]:
+            for factor_id in range(5):
+                bf_bias_avg_approx = []
+                bf_bias_max_approx = []
+                bf_bias_pp_time = []
+                bf_bias_algo_time = []
+                for bias_factor in range(1, 51):
+                    output_file = f'graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor{bias_factor}.txt'
+                    approx_core_numbers, pp_time, algo_time = get_core_numbers(output_file)
+                    approximation_factor = np.array([float(max(s,t)) / min(s, t) for s,t in zip(core_numbers, approx_core_numbers)])
+                    bf_bias_avg_approx.append(statistics.mean(approximation_factor))
+                    bf_bias_max_approx.append(max(approximation_factor))
+                    bf_bias_pp_time.append(pp_time)
+                    bf_bias_algo_time.append(algo_time)
+
+                biased_avg_approx.append(bf_bias_avg_approx)
+                biased_max_approx.append(bf_bias_max_approx)
+                biased_pp_time.append(bf_bias_pp_time)
+                biased_algo_time.append(bf_bias_algo_time)
+        
+    x = np.arange(len(biased_avg_approx[0]))
+    for i in range(len(factors)):
+        plt.plot(x, biased_avg_approx[i], '-o', label='Average Approx for {0}'.format(factors[i]))
+    
+    for i in range(len(factors)):
+        plt.plot(x, biased_max_approx[i], '-^', label='Max Approx for {0}'.format(factors[i]))
+
+    plt.legend()
+    # plt.xticks(x)
+    plt.xlabel('Bias Subtraction Term')
+    plt.ylabel('Approximation Factor')
+    plt.title(graph.upper())
+    plt.tight_layout()
+    plt.savefig('./figures/{0}_avg_max_approx_factors_bias.png'.format(graph))
+    plt.cla()
+    plt.clf()
+
+
 if __name__ == '__main__':
-    run_benchmark()
+    # run_benchmark()
     # plot_benchmark_runs()
+    plot_benchmark_runs_biasfactor()
