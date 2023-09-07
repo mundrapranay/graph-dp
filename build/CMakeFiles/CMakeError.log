@@ -1,0 +1,61 @@
+Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
+Change Dir: /global/home/users/pmundra/graph-dp/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/global/home/groups/consultsw/sl-7.x86_64/modules/make/4.1.90/bin/gmake -f Makefile cmTC_c3b27/fast && /global/home/groups/consultsw/sl-7.x86_64/modules/make/4.1.90/bin/gmake  -f CMakeFiles/cmTC_c3b27.dir/build.make CMakeFiles/cmTC_c3b27.dir/build
+gmake[1]: Entering directory '/global/home/users/pmundra/graph-dp/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c3b27.dir/src.c.o
+/global/software/sl-7.x86_64/modules/langs/gcc/12.1.0/bin/gcc -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_c3b27.dir/src.c.o -c /global/home/users/pmundra/graph-dp/build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_c3b27
+/global/home/groups/consultsw/sl-7.x86_64/modules/cmake/3.22.0/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c3b27.dir/link.txt --verbose=1
+/global/software/sl-7.x86_64/modules/langs/gcc/12.1.0/bin/gcc CMakeFiles/cmTC_c3b27.dir/src.c.o -o cmTC_c3b27 
+CMakeFiles/cmTC_c3b27.dir/src.c.o: In function `main':
+src.c:(.text+0x2d): undefined reference to `pthread_create'
+src.c:(.text+0x39): undefined reference to `pthread_detach'
+src.c:(.text+0x45): undefined reference to `pthread_cancel'
+src.c:(.text+0x56): undefined reference to `pthread_join'
+src.c:(.text+0x6a): undefined reference to `pthread_atfork'
+collect2: error: ld returned 1 exit status
+gmake[1]: *** [CMakeFiles/cmTC_c3b27.dir/build.make:99: cmTC_c3b27] Error 1
+gmake[1]: Leaving directory '/global/home/users/pmundra/graph-dp/build/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_c3b27/fast] Error 2
+
+
+Source file was:
+#include <pthread.h>
+
+static void* test_func(void* data)
+{
+  return data;
+}
+
+int main(void)
+{
+  pthread_t thread;
+  pthread_create(&thread, NULL, test_func, NULL);
+  pthread_detach(thread);
+  pthread_cancel(thread);
+  pthread_join(thread, NULL);
+  pthread_atfork(NULL, NULL, NULL);
+  pthread_exit(NULL);
+
+  return 0;
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /global/home/users/pmundra/graph-dp/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/global/home/groups/consultsw/sl-7.x86_64/modules/make/4.1.90/bin/gmake -f Makefile cmTC_ac7d5/fast && /global/home/groups/consultsw/sl-7.x86_64/modules/make/4.1.90/bin/gmake  -f CMakeFiles/cmTC_ac7d5.dir/build.make CMakeFiles/cmTC_ac7d5.dir/build
+gmake[1]: Entering directory '/global/home/users/pmundra/graph-dp/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ac7d5.dir/CheckFunctionExists.c.o
+/global/software/sl-7.x86_64/modules/langs/gcc/12.1.0/bin/gcc   -DCHECK_FUNCTION_EXISTS=pthread_create -o CMakeFiles/cmTC_ac7d5.dir/CheckFunctionExists.c.o -c /global/home/groups/consultsw/sl-7.x86_64/modules/cmake/3.22.0/share/cmake-3.22/Modules/CheckFunctionExists.c
+Linking C executable cmTC_ac7d5
+/global/home/groups/consultsw/sl-7.x86_64/modules/cmake/3.22.0/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ac7d5.dir/link.txt --verbose=1
+/global/software/sl-7.x86_64/modules/langs/gcc/12.1.0/bin/gcc  -DCHECK_FUNCTION_EXISTS=pthread_create CMakeFiles/cmTC_ac7d5.dir/CheckFunctionExists.c.o -o cmTC_ac7d5  -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+gmake[1]: *** [CMakeFiles/cmTC_ac7d5.dir/build.make:99: cmTC_ac7d5] Error 1
+gmake[1]: Leaving directory '/global/home/users/pmundra/graph-dp/build/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_ac7d5/fast] Error 2
+
+
+

@@ -4,31 +4,30 @@
 
 
 # Configuration directories and files
-SourceDirectory: /home/ubuntu/graph-dp/src/abseil-cpp
-BuildDirectory: /home/ubuntu/graph-dp/build/abseil-cpp
+SourceDirectory: /global/home/users/pmundra/graph-dp/src/abseil-cpp
+BuildDirectory: /global/home/users/pmundra/graph-dp/build/abseil-cpp
 
 # Where to place the cost data store
 CostDataFile: 
 
 # Site is something like machine.domain, i.e. pragmatic.crd
-Site: local-dp2
+Site: ln003.brc
 
 # Build name is osname-revision-compiler, i.e. Linux-2.4.2-2smp-c++
-BuildName: Linux-c++
+BuildName: Linux-g++
 
 # Subprojects
 LabelsForSubprojects: 
 
 # Submission information
 SubmitURL: http://
-SubmitInactivityTimeout: 
 
 # Dashboard start time
 NightlyStartTime: 00:00:00 EDT
 
 # Commands for the build/test/submit cycle
-ConfigureCommand: "/usr/local/bin/cmake" "/home/ubuntu/graph-dp/src/abseil-cpp"
-MakeCommand: /usr/local/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}"
+ConfigureCommand: "/global/home/groups/consultsw/sl-7.x86_64/modules/cmake/3.22.0/bin/cmake" "/global/home/users/pmundra/graph-dp/src/abseil-cpp"
+MakeCommand: /global/home/groups/consultsw/sl-7.x86_64/modules/cmake/3.22.0/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}"
 DefaultCTestConfigurationType: Release
 
 # version control
@@ -63,8 +62,8 @@ UpdateOptions:
 UpdateType: git
 
 # Compiler info
-Compiler: /usr/bin/c++
-CompilerVersion: 11.4.0
+Compiler: /global/software/sl-7.x86_64/modules/langs/gcc/12.1.0/bin/g++
+CompilerVersion: 12.1.0
 
 # Dynamic analysis (MemCheck)
 PurifyCommand: 
@@ -81,7 +80,7 @@ MemoryCheckCommandOptions:
 MemoryCheckSuppressionFile: 
 
 # Coverage
-CoverageCommand: /usr/bin/gcov
+CoverageCommand: /global/software/sl-7.x86_64/modules/langs/gcc/12.1.0/bin/gcov
 CoverageExtraFlags: -l
 
 # Testing options

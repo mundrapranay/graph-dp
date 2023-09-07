@@ -12,3 +12,4 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(DistributedGraphAlgorithm KCore.cpp Graph.h LDS.h distributions.h)
 target_link_libraries(DistributedGraphAlgorithm ${MPI_CXX_LIBRARIES} OpenSSL::SSL absl::status absl::base absl::synchronization)
+
