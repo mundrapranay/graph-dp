@@ -30,7 +30,7 @@ def run_benchmark():
     os.chdir('../')
 
     # graphs = GRAPH_SIZES.keys()
-    graphs = ['hua_livejournal', 'hua_youtube', 'hua_stackoverflow']
+    graphs = ['hua_livejournal']
     # graphs = ['zhang_dblp']
 
     # Specify the number of processes as a command line argument
@@ -42,7 +42,7 @@ def run_benchmark():
         # for bias in [0, 1]:
         for bias in [1]:
             for factor_id in range(5):
-                for bias_factor in range(1, 51):
+                for bias_factor in range(1, 11):
                     cmd = [
                         'mpirun',
                         '-np', str(num_processes),
