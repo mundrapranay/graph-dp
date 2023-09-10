@@ -58,7 +58,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             // std::cout << node << " : " << numberOfRounds << std::endl;
         }
         nodeDegrees.clear();
-        nodeDegrees.shrink_to_fit();
+        // nodeDegrees.shrink_to_fit();
     }
     MPI_Barrier(MPI_COMM_WORLD);
     std::vector<int> permanentZeros(n, 1);
@@ -166,9 +166,9 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
     MPI_Barrier(MPI_COMM_WORLD);
     // free up memory
     permanentZeros.clear();
-    roundThresholds.clear();
+    // roundThresholds.clear();
     permanentZeros.shrink_to_fit();
-    roundThresholds.shrink_to_fit();
+    // roundThresholds.shrink_to_fit();
 
     return lds;
 }
