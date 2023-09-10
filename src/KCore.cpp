@@ -47,16 +47,26 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         lds = new LDS(n, phi, delta, levels_per_group, false);
         GeometricDistribution* geomThreshold = new GeometricDistribution(epsilon * factor);
         std::unordered_map<int, int> nodeDegrees = graph->getNodeDegrees();
-        for (auto it : nodeDegrees) {
-            int node = it.first;
-            int noisedDegree = it.second + geomThreshold->Sample();
+        // for (auto it : nodeDegrees) {
+        //     int node = it.first;
+        //     int noisedDegree = it.second + geomThreshold->Sample();
+        //     if (bias == 1) {
+        //         noisedDegree -= std::min(noisedDegree - 1, bias_factor);
+        //     }
+        //     // int numberOfRounds = ceil(log_a_to_base_b(noisedDegree, 1.0 + phi)) * levels_per_group;
+        //     int numberOfRounds = ceil(log2(noisedDegree)) * levels_per_group;
+        //     roundThresholds[node] = numberOfRounds;
+        //     // std::cout << node << " : " << numberOfRounds << std::endl;
+        // }
+
+        for (int node = 0; node < n; node++) {
+            int noisedDegree = graph->getNodeDegree(node) + geomThreshold->Sample();
             if (bias == 1) {
                 noisedDegree -= std::min(noisedDegree - 1, bias_factor);
             }
             // int numberOfRounds = ceil(log_a_to_base_b(noisedDegree, 1.0 + phi)) * levels_per_group;
             int numberOfRounds = ceil(log2(noisedDegree)) * levels_per_group;
             roundThresholds[node] = numberOfRounds;
-            // std::cout << node << " : " << numberOfRounds << std::endl;
         }
         nodeDegrees.clear();
     }

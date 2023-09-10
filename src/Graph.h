@@ -112,6 +112,10 @@ class Graph {
             return nodeDegrees;
         }
 
+        int getNodeDegree(int node) {
+            return nodeDegrees[node];
+        }
+
         size_t getGraphSize() {
             return graphSize;
         }
