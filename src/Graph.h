@@ -104,6 +104,10 @@ class Graph {
             return adjacenyList;
         }
 
+        std::vector<int> getNeighbors(int node) {
+            return adjacenyList[node];
+        }
+
         std::unordered_map<int, int> getNodeDegrees() {
             return nodeDegrees;
         }

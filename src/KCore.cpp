@@ -34,10 +34,12 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
     int chunk = n / numworkers;
     int extra = n % numworkers;
     int offset, mytype, workLoad, p;
-    std::unordered_map<int, std::vector<int>> adjacencyList = graph->getAdjacencyList();
+    // std::unordered_map<int, std::vector<int>> adjacencyList = graph->getAdjacencyList();
     MPI_Status status;
     LDS *lds;
-    std::vector<int> roundThresholds(n, 0);
+    if (rank == COORDINATOR) {
+        std::vector<int> roundThresholds(n, 0);
+    }
     double remaingingBudget = (factor != 1.0) ? (1.0 - factor) : 0.0;
 
     if (rank == COORDINATOR) {
@@ -55,6 +57,8 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             roundThresholds[node] = numberOfRounds;
             // std::cout << node << " : " << numberOfRounds << std::endl;
         }
+        nodeDegrees.clear();
+        nodeDegrees.shrink_to_fit();
     }
     MPI_Barrier(MPI_COMM_WORLD);
     std::vector<int> permanentZeros(n, 1);
@@ -123,7 +127,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             for (int i = offset; i < end_node; i++) {
                 if (currentLevels[i] == r && permanentZeros[i] != 0) {
                    int U_i = 0;
-                   for (auto ngh : adjacencyList[i]) {
+                   for (auto ngh : graph->getNeighbors(i)) {
                         if (currentLevels[ngh] == r) {
                             U_i += 1;
                         }
