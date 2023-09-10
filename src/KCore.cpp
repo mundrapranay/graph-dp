@@ -34,7 +34,17 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
     int chunk = n / numworkers;
     int extra = n % numworkers;
     int offset, mytype, workLoad, p;
-    // std::unordered_map<int, std::vector<int>> adjacencyList = graph->getAdjacencyList();
+    int workLoadSize;
+    int offsetValue;
+    // to decide the size of the datastructures for each process
+    if (rank == COORDINATOR) {
+        offsetValue = 0;
+        workLoadSize = n;
+    } else {
+        offsetValue = (rank - 1) * chunk; 
+        workLoadSize = (rank == numworkers) ? chunk + extra : chunk;
+    }
+
     MPI_Status status;
     LDS *lds;
     std::vector<int> roundThresholds(n, 0);
@@ -46,19 +56,6 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
     if (rank == COORDINATOR) {
         lds = new LDS(n, phi, delta, levels_per_group, false);
         GeometricDistribution* geomThreshold = new GeometricDistribution(epsilon * factor);
-        std::unordered_map<int, int> nodeDegrees = graph->getNodeDegrees();
-        // for (auto it : nodeDegrees) {
-        //     int node = it.first;
-        //     int noisedDegree = it.second + geomThreshold->Sample();
-        //     if (bias == 1) {
-        //         noisedDegree -= std::min(noisedDegree - 1, bias_factor);
-        //     }
-        //     // int numberOfRounds = ceil(log_a_to_base_b(noisedDegree, 1.0 + phi)) * levels_per_group;
-        //     int numberOfRounds = ceil(log2(noisedDegree)) * levels_per_group;
-        //     roundThresholds[node] = numberOfRounds;
-        //     // std::cout << node << " : " << numberOfRounds << std::endl;
-        // }
-
         for (int node = 0; node < n; node++) {
             int noisedDegree = graph->getNodeDegree(node) + geomThreshold->Sample();
             if (bias == 1) {
@@ -68,10 +65,10 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             int numberOfRounds = ceil(log2(noisedDegree)) * levels_per_group;
             roundThresholds[node] = numberOfRounds;
         }
-        nodeDegrees.clear();
     }
     MPI_Barrier(MPI_COMM_WORLD);
-    std::vector<int> permanentZeros(n, 1);
+    // std::vector<int> permanentZeros(n, 1);
+    std::vector<int> permanentZeros(workLoadSize, 1);
 
     for (int r = 0; r < number_of_rounds - 2; r++) {
         std::chrono::time_point<std::chrono::high_resolution_clock> round_start, round_end;
@@ -81,7 +78,9 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         // nextLevels stores this information
         round_start = std::chrono::high_resolution_clock::now();
         std::vector<int> currentLevels(n);
-        std::vector<int> nextLevels(n, 0);
+        // std::vector<int> nextLevels(n, 0);
+        // std::vector<int> currentLevels(workLoadSize);
+        std::vector<int> nextLevels(workLoadSize, 0);
         int group_index; 
         if (rank == COORDINATOR) {
             for (int node = 0; node < n; node++) {
@@ -109,6 +108,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             }
 
             // receive results from workers
+            // int offsetValue = 0;
             for (p = 1; p <= numworkers; p++) {
                 mytype = FROM_WORKER + p;
                 MPI_Recv(&offset, 1, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
@@ -130,12 +130,13 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             MPI_Recv(&workLoad, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             MPI_Recv(&group_index, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             MPI_Recv(&currentLevels[0], currentLevels.size(), MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
-            MPI_Recv(&permanentZeros[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
+            // MPI_Recv(&permanentZeros[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
+            MPI_Recv(&permanentZeros[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
 
             // perform computation
             int end_node = offset + workLoad;
             for (int i = offset; i < end_node; i++) {
-                if (currentLevels[i] == r && permanentZeros[i] != 0) {
+                if (currentLevels[i] == r && permanentZeros[i - offset] != 0) {
                    int U_i = 0;
                    for (auto ngh : graph->getNeighbors(i)) {
                         if (currentLevels[ngh] == r) {
@@ -148,9 +149,11 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                    int noise = geom->Sample();
                    int U_hat_i = U_i + noise;
                    if (U_hat_i > pow((1 + phi), group_index)) {
-                        nextLevels[i] = 1;
+                        // nextLevels[i] = 1;
+                        nextLevels[i - offset] = 1;
                    } else {
-                        permanentZeros[i] = 0;
+                        // permanentZeros[i] = 0;
+                        permanentZeros[i - offset] = 0;
                    }
                 }
             }
@@ -159,8 +162,10 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             mytype = FROM_WORKER + rank;
             MPI_Send(&offset, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             MPI_Send(&workLoad, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
-            MPI_Send(&nextLevels[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
-            MPI_Send(&permanentZeros[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
+            // MPI_Send(&nextLevels[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
+            // MPI_Send(&permanentZeros[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
+            MPI_Send(&nextLevels[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
+            MPI_Send(&permanentZeros[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
 
         }
 
