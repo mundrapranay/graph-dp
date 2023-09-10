@@ -37,8 +37,9 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
     // std::unordered_map<int, std::vector<int>> adjacencyList = graph->getAdjacencyList();
     MPI_Status status;
     LDS *lds;
-    if (rank == COORDINATOR) {
-        std::vector<int> roundThresholds(n, 0);
+    std::vector<int> roundThresholds(n, 0);
+    if (rank != COORDINATOR) {
+        roundThresholds.clear();
     }
     double remaingingBudget = (factor != 1.0) ? (1.0 - factor) : 0.0;
 
@@ -58,7 +59,6 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             // std::cout << node << " : " << numberOfRounds << std::endl;
         }
         nodeDegrees.clear();
-        // nodeDegrees.shrink_to_fit();
     }
     MPI_Barrier(MPI_COMM_WORLD);
     std::vector<int> permanentZeros(n, 1);
