@@ -26,11 +26,8 @@ int log_a_to_base_b(int a, double b) {
     return log2(a) / log2(b);
 }
 
-LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilon, double phi, int levels_per_group, double factor, int bias) {
-    double lambda = (2/9) * (2 * eta - 5);
+LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilon, double phi, double lambda, int levels_per_group, double factor, int bias, int bias_factor, int n) {
     double delta = 9.0;
-    int n = graph->getGraphSize();
-    // std::cout << "graph size: " << n << std::endl;
     double rounds_param = ceil(4.0 * pow(log_a_to_base_b(n, 1.0 + phi), 1.5));
     int number_of_rounds = static_cast<int>(rounds_param);
     int numworkers = nprocs - 1;
@@ -41,19 +38,20 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
     MPI_Status status;
     LDS *lds;
     std::vector<int> roundThresholds(n, 0);
-    double remaingingBudget = factor != 1.0 ? (1.0 / (1.0 - factor)) : 0.0;
+    double remaingingBudget = (factor != 1.0) ? (1.0 - factor) : 0.0;
 
     if (rank == COORDINATOR) {
         lds = new LDS(n, phi, delta, levels_per_group, false);
         GeometricDistribution* geomThreshold = new GeometricDistribution(epsilon * factor);
-        // std::cout << "Cutoff Thresholds: " << std::endl;
-        for (auto it : adjacencyList) {
+        std::unordered_map<int, int> nodeDegrees = graph->getNodeDegrees();
+        for (auto it : nodeDegrees) {
             int node = it.first;
-            int noisedDegree = it.second.size() + geomThreshold->Sample();
+            int noisedDegree = it.second + geomThreshold->Sample();
             if (bias == 1) {
-                noisedDegree -= log_a_to_base_b(n, 1.0 + phi);
+                noisedDegree -= std::min(noisedDegree - 1, bias_factor);
             }
-            int numberOfRounds = ceil(log_a_to_base_b(noisedDegree, 1.0 + phi)) * levels_per_group;
+            // int numberOfRounds = ceil(log_a_to_base_b(noisedDegree, 1.0 + phi)) * levels_per_group;
+            int numberOfRounds = ceil(log2(noisedDegree)) * levels_per_group;
             roundThresholds[node] = numberOfRounds;
             // std::cout << node << " : " << numberOfRounds << std::endl;
         }
@@ -131,7 +129,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                         }
                    }
 
-                   double lambda = epsilon / (remaingingBudget * 2.0 * rounds_param);
+                   double lambda = (epsilon * remaingingBudget) / (2.0 * rounds_param);
                    GeometricDistribution* geom = new GeometricDistribution(lambda);
                    int noise = geom->Sample();
                    int U_hat_i = U_i + noise;
@@ -156,19 +154,24 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         round_end = std::chrono::high_resolution_clock::now();
         round_elapsed = round_end - round_start;
         round_time = round_elapsed.count();
-        if (rank == COORDINATOR) {
-            std::cout << "Round " << r << " | " << number_of_rounds - 2 << std::endl;
-            std::cout << "Round time: " << round_time << std::endl;
-        }
+        // if (rank == COORDINATOR) {
+        //     std::cout << "Round " << r << " | " << number_of_rounds - 2 << std::endl;
+        //     std::cout << "Round time: " << round_time << std::endl;
+        // }
     }
     MPI_Barrier(MPI_COMM_WORLD);
+    // free up memory
+    permanentZeros.clear();
+    roundThresholds.clear();
+    permanentZeros.shrink_to_fit();
+    roundThresholds.shrink_to_fit();
+
     return lds;
 }
 
 // Computing Approximate Core Numbers
-std::vector<double> estimateCoreNumbers(LDS* lds, int n, double eta, double phi, double levels_per_group) {
+std::vector<double> estimateCoreNumbers(LDS* lds, int n, double eta, double phi, double lambda, double levels_per_group) {
     std::vector<double> coreNumbers(n);
-    double lambda = (2.0 / 9.0) * (2.0 * eta - 5.0);
     double two_plus_lambda = 2.0 + lambda;
     double one_plus_phi = 1.0 + phi;
     for (int i = 0; i < n ; i++) {
@@ -188,14 +191,8 @@ int main(int argc, char** argv) {
     double eta = std::stod(argv[2]);
     double epsilon = std::stod(argv[3]);
     double phi = std::stod(argv[4]);
-    /**
-     * @todo: change graph such that each processor only reads and maintains 
-     *        adjacency list related to its nodes. 
-    */
-    distributed_kcore::Graph *graph = new distributed_kcore::Graph(file_loc);
-    int n = graph->getGraphSize();
-    double one_plus_phi = 1.0 + phi;
-    double levels_per_group = ceil(distributed_kcore::log_a_to_base_b(n, one_plus_phi));
+    distributed_kcore::Graph *graph;
+
     int factor_id = std::stoi(argv[5]);
     double factor;
     if (factor_id == 0) {
@@ -209,7 +206,13 @@ int main(int argc, char** argv) {
     } else {
         factor = 3.0 / 4.0;
     }
+
     int bias = std::stoi(argv[6]);
+    int bias_factor = std::stoi(argv[7]);
+    int n = std::stoi(argv[8]);
+    double one_plus_phi = 1.0 + phi;
+    double levels_per_group = ceil(distributed_kcore::log_a_to_base_b(n, one_plus_phi));
+    double lambda = (2.0 / 9.0) * (2.0 * eta - 5.0);
     // double levels_per_group = 15.0;
 
     
@@ -217,6 +220,35 @@ int main(int argc, char** argv) {
     int numProcesses, rank;
     MPI_Comm_size(MPI_COMM_WORLD, &numProcesses);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    int numworkers = numProcesses - 1;
+    int chunk = n / numworkers;
+    int extra = n % numworkers;
+
+    std::vector<double> preprocessing_times;
+    std::chrono::time_point<std::chrono::high_resolution_clock> pp_start, pp_end;
+    std::chrono::duration<double> pp_elapsed;
+    double pp_time = 0.0;
+    if (rank  == COORDINATOR) {
+        pp_start = std::chrono::high_resolution_clock::now();
+        graph = new distributed_kcore::Graph(file_loc);
+        pp_end = std::chrono::high_resolution_clock::now();
+        pp_elapsed = (pp_end - pp_start);
+        pp_time = pp_elapsed.count();
+        preprocessing_times.push_back(pp_time);
+    } else {
+        int offset = (rank - 1) * chunk; 
+        int workLoad = (rank == numworkers) ? chunk + extra : chunk;
+        pp_start = std::chrono::high_resolution_clock::now();
+        graph = new distributed_kcore::Graph(file_loc, offset, workLoad);
+        pp_end = std::chrono::high_resolution_clock::now();
+        pp_elapsed = (pp_end - pp_start);
+        pp_time = pp_elapsed.count();
+        preprocessing_times.push_back(pp_time);
+    }
+
+    MPI_Barrier(MPI_COMM_WORLD);
+    double max_pp_time = *std::max_element(preprocessing_times.begin(), preprocessing_times.end());
+    
 
     if (numProcesses < 2) {
         std::cerr << "Error: At least 2 processes are required." << std::endl;
@@ -226,13 +258,13 @@ int main(int argc, char** argv) {
      
     if (rank == COORDINATOR) {
         // graph->printDegrees();
-        // std::cout << "AdjListSum: " << graph->sumAdjList() << std::endl;
+        std::cout << "Preprocessing Time: " << max_pp_time << std::endl;
         std::chrono::time_point<std::chrono::high_resolution_clock> algo_start, algo_end;
 	    std::chrono::duration<double> algo_elapsed;
         double algo_time = 0.0;
         algo_start = std::chrono::high_resolution_clock::now();
-        distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, eta, epsilon, phi, static_cast<int>(levels_per_group), factor, bias);
-        std::vector<double> estimated_core_numbers = distributed_kcore::estimateCoreNumbers(lds, n, eta, phi, levels_per_group);
+        distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, eta, epsilon, phi, lambda, static_cast<int>(levels_per_group), factor, bias, bias_factor, n);
+        std::vector<double> estimated_core_numbers = distributed_kcore::estimateCoreNumbers(lds, n, eta, phi, lambda, levels_per_group);
         algo_end = std::chrono::high_resolution_clock::now();
         algo_elapsed = algo_end - algo_start;
         // std::cout << "Printing Core Numbers" << std::endl;
@@ -242,7 +274,7 @@ int main(int argc, char** argv) {
         algo_time = algo_elapsed.count();
         std::cout << "Algorithm Time: " << algo_time << std::endl;
     } else {
-        distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, eta, epsilon, phi, static_cast<int>(levels_per_group), factor, bias);
+        distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, eta, epsilon, phi, lambda, static_cast<int>(levels_per_group), factor, bias, bias_factor, n);
     }
     
     MPI_Finalize();
