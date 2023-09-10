@@ -35,13 +35,10 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
     int extra = n % numworkers;
     int offset, mytype, workLoad, p;
     int workLoadSize;
-    int offsetValue;
     // to decide the size of the datastructures for each process
     if (rank == COORDINATOR) {
-        offsetValue = 0;
         workLoadSize = n;
     } else {
-        offsetValue = (rank - 1) * chunk; 
         workLoadSize = (rank == numworkers) ? chunk + extra : chunk;
     }
 
@@ -67,7 +64,6 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         }
     }
     MPI_Barrier(MPI_COMM_WORLD);
-    // std::vector<int> permanentZeros(n, 1);
     std::vector<int> permanentZeros(workLoadSize, 1);
 
     for (int r = 0; r < number_of_rounds - 2; r++) {
@@ -78,8 +74,6 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         // nextLevels stores this information
         round_start = std::chrono::high_resolution_clock::now();
         std::vector<int> currentLevels(n);
-        // std::vector<int> nextLevels(n, 0);
-        // std::vector<int> currentLevels(workLoadSize);
         std::vector<int> nextLevels(workLoadSize, 0);
         int group_index; 
         if (rank == COORDINATOR) {
@@ -91,10 +85,6 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             }
             group_index = lds->group_for_level(r);
 
-            /**
-             * @todo: figure out offset value so that each worker 
-             *        can decide the nodes to work on.
-            */
             offset = 0;
             mytype = FROM_MASTER;
             for (p = 1; p <= numworkers; p++) {
@@ -108,7 +98,6 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             }
 
             // receive results from workers
-            // int offsetValue = 0;
             for (p = 1; p <= numworkers; p++) {
                 mytype = FROM_WORKER + p;
                 MPI_Recv(&offset, 1, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
@@ -130,7 +119,6 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             MPI_Recv(&workLoad, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             MPI_Recv(&group_index, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             MPI_Recv(&currentLevels[0], currentLevels.size(), MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
-            // MPI_Recv(&permanentZeros[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             MPI_Recv(&permanentZeros[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
 
             // perform computation
@@ -149,10 +137,8 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                    int noise = geom->Sample();
                    int U_hat_i = U_i + noise;
                    if (U_hat_i > pow((1 + phi), group_index)) {
-                        // nextLevels[i] = 1;
                         nextLevels[i - offset] = 1;
                    } else {
-                        // permanentZeros[i] = 0;
                         permanentZeros[i - offset] = 0;
                    }
                 }
@@ -162,8 +148,6 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             mytype = FROM_WORKER + rank;
             MPI_Send(&offset, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             MPI_Send(&workLoad, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
-            // MPI_Send(&nextLevels[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
-            // MPI_Send(&permanentZeros[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             MPI_Send(&nextLevels[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             MPI_Send(&permanentZeros[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
 

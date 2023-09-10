@@ -42,19 +42,21 @@ def run_benchmark():
         # for bias in [0, 1]:
         for bias in [1]:
             for factor_id in range(5):
-                for bias_factor in range(1, 11):
-                    cmd = [
-                        'mpirun',
-                        '-np', str(num_processes),
-                        './build/DistributedGraphAlgorithm',
-                        f'./graphs/{graph}',
-                        str(eta), str(epsilon), str(phi),
-                        str(factor_id), str(bias), str(bias_factor), str(GRAPH_SIZES[graph])
-                    ]
+                for bias_factor in range(1, 51):
                     output_file = f'/home/ubuntu/results_new/graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_log2.txt'
-                    
-                    with open(output_file, 'w') as f:
-                        subprocess.run(cmd, stdout=f)
+                    if not os.path.exists(output_file):
+                        cmd = [
+                            'mpirun',
+                            '-np', str(num_processes),
+                            './build/DistributedGraphAlgorithm',
+                            f'./graphs/{graph}',
+                            str(eta), str(epsilon), str(phi),
+                            str(factor_id), str(bias), str(bias_factor), str(GRAPH_SIZES[graph])
+                        ]
+                        
+                        
+                        with open(output_file, 'w') as f:
+                            subprocess.run(cmd, stdout=f)
 
                     print(f'done with graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor{bias_factor}')
 
