@@ -41,8 +41,8 @@ def run_benchmark():
     for graph in graphs:
         # for bias in [0, 1]:
         for bias in [1]:
-            for factor_id in range(5):
-                for bias_factor in range(1, 51):
+            for factor_id in range(1, 6):
+                for bias_factor in range(1, 23):
                     output_file = f'/home/ubuntu/results_new/graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_log2.txt'
                     if not os.path.exists(output_file):
                         cmd = [
