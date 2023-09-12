@@ -174,7 +174,7 @@ def plot_benchmark_runs():
 
 
 def plot_benchmark_runs_biasfactor():
-    graphs = ['hua_ctr']
+    graphs = ['hua_livejournal']
     # factors = ['1/4', '1/3', '1/2', '2/3', '3/4']
     factors = ['1/4', '1/3', '1/2']
     for graph in graphs:
@@ -189,12 +189,12 @@ def plot_benchmark_runs_biasfactor():
         biased_pp_time = []
 
         for bias in [1]:
-            for factor_id in range(4):
+            for factor_id in range(5):
                 bf_bias_avg_approx = []
                 bf_bias_max_approx = []
                 bf_bias_pp_time = []
                 bf_bias_algo_time = []
-                for bias_factor in range(1, 31):
+                for bias_factor in range(1, 23):
                     output_file = f'graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_log2.txt'
                     approx_core_numbers, pp_time, algo_time = get_core_numbers(output_file)
                     approximation_factor = np.array([float(max(s,t)) / min(s, t) for s,t in zip(core_numbers, approx_core_numbers)])
@@ -232,6 +232,18 @@ def plot_benchmark_runs_biasfactor():
     plt.title(graph.upper())
     plt.tight_layout()
     plt.savefig('./figures/{0}_max_approx_factors_bias_log2.png'.format(graph))
+    plt.cla()
+    plt.clf()
+
+    for i in range(len(factors)):
+        plt.plot(x, bf_bias_pp_time[i] + bf_bias_algo_time[i], '-*', label='Algorithm Time for {0}'.format(factors[i]))
+    
+    plt.legend()
+    plt.xlabel('Bias Subtraction Term')
+    plt.ylabel('Response Time (seconds)')
+    plt.title(graph.upper())
+    plt.tight_layout()
+    plt.savefig('./figures/{0}_response_time_bias_log2.pnd'.format(graph))
     plt.cla()
     plt.clf()
 
