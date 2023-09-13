@@ -14,7 +14,8 @@ GRAPH_SIZES = {
     'hua_livejournal' : 4846609,
     'hua_stackoverflow' : 2584164,
     'hua_usa' : 23947347,
-    'hua_youtube' : 1138499
+    'hua_youtube' : 1138499,
+    'zhang_orkut' : 117185083
 }
 
 
@@ -30,7 +31,7 @@ def run_benchmark():
     os.chdir('../')
 
     # graphs = GRAPH_SIZES.keys()
-    graphs = ['hua_livejournal']
+    graphs = ['zhang_orkut']
     # graphs = ['zhang_dblp']
 
     # Specify the number of processes as a command line argument
@@ -41,7 +42,7 @@ def run_benchmark():
     for graph in graphs:
         # for bias in [0, 1]:
         for bias in [1]:
-            for factor_id in range(1, 5):
+            for factor_id in range(5):
                 for bias_factor in range(1, 23):
                     output_file = f'/home/ubuntu/results_new/graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_log2.txt'
                     if not os.path.exists(output_file):
@@ -218,7 +219,10 @@ def plot_benchmark_runs_biasfactor():
         
     x = np.arange(len(biased_avg_approx[0]))
     for i in range(len(factors)):
-        plt.plot(x, biased_avg_approx[i], '-o', label='Average Approx for {0}'.format(factors[i]))
+        if i == 1:
+            continue
+        else:
+            plt.plot(x, biased_avg_approx[i], '-o', label='Average Approx for {0}'.format(factors[i]))
 
     plt.legend()
     # plt.xticks(x)
@@ -226,12 +230,15 @@ def plot_benchmark_runs_biasfactor():
     plt.ylabel('Approximation Factor')
     plt.title(graph.upper())
     plt.tight_layout()
-    plt.savefig('./figures/{0}_avg_approx_factors_bias_log2.png'.format(graph))
+    plt.savefig('./figures/{0}_avg_approx_factors_bias_log2_v2.png'.format(graph))
     plt.cla()
     plt.clf()
 
     for i in range(len(factors)):
-        plt.plot(x, biased_max_approx[i], '-^', label='Max Approx for {0}'.format(factors[i]))
+        if i == 1:
+            continue
+        else:
+            plt.plot(x, biased_max_approx[i], '-^', label='Max Approx for {0}'.format(factors[i]))
     
     plt.legend()
     # plt.xticks(x)
@@ -239,11 +246,11 @@ def plot_benchmark_runs_biasfactor():
     plt.ylabel('Approximation Factor')
     plt.title(graph.upper())
     plt.tight_layout()
-    plt.savefig('./figures/{0}_max_approx_factors_bias_log2.png'.format(graph))
+    plt.savefig('./figures/{0}_max_approx_factors_bias_log2_v2.png'.format(graph))
     plt.cla()
     plt.clf()
 
-    for i in range(len(factors)):
+    '''for i in range(len(factors)):
         plt.plot(x, bf_bias_pp_time[i] + bf_bias_algo_time[i], '-*', label='Algorithm Time for {0}'.format(factors[i]))
     
     plt.legend()
@@ -253,10 +260,10 @@ def plot_benchmark_runs_biasfactor():
     plt.tight_layout()
     plt.savefig('./figures/{0}_response_time_bias_log2.pnd'.format(graph))
     plt.cla()
-    plt.clf()
+    plt.clf()'''
 
 
 if __name__ == '__main__':
-    # run_benchmark()
+    run_benchmark()
     # plot_benchmark_runs()
-    plot_benchmark_runs_biasfactor()
+    # plot_benchmark_runs_biasfactor()
