@@ -41,7 +41,7 @@ def run_benchmark():
     for graph in graphs:
         # for bias in [0, 1]:
         for bias in [1]:
-            for factor_id in range(1, 6):
+            for factor_id in range(1, 5):
                 for bias_factor in range(1, 23):
                     output_file = f'/home/ubuntu/results_new/graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_log2.txt'
                     if not os.path.exists(output_file):
@@ -78,7 +78,15 @@ def get_core_numbers(file):
     f = open('/home/ubuntu/results_new/{0}'.format(file), 'r')
     lines = f.readlines()
     pp_time = float((lines[0].strip().split(':'))[1].strip())
-    algo_time = float((lines[-1].strip().split(':'))[1].strip())
+    try:
+        algo_time = float((lines[-1].strip().split(':'))[1].strip())
+    except IndexError:
+        print(file)
+        algo_time = 0
+    except ValueError:
+        print(file)
+        algo_time = 0
+
     del lines[-1]
     del lines[0]
     f.close()
@@ -175,8 +183,8 @@ def plot_benchmark_runs():
 
 def plot_benchmark_runs_biasfactor():
     graphs = ['hua_livejournal']
-    # factors = ['1/4', '1/3', '1/2', '2/3', '3/4']
-    factors = ['1/4', '1/3', '1/2']
+    factors = ['1/4', '1/3', '1/2', '2/3', '3/4']
+    # factors = ['1/4', '1/3', '1/2']
     for graph in graphs:
 
         core_numbers = get_ground_truth(graph)
@@ -194,10 +202,10 @@ def plot_benchmark_runs_biasfactor():
                 bf_bias_max_approx = []
                 bf_bias_pp_time = []
                 bf_bias_algo_time = []
-                for bias_factor in range(1, 23):
+                for bias_factor in range(1, 22):
                     output_file = f'graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_log2.txt'
                     approx_core_numbers, pp_time, algo_time = get_core_numbers(output_file)
-                    approximation_factor = np.array([float(max(s,t)) / min(s, t) for s,t in zip(core_numbers, approx_core_numbers)])
+                    approximation_factor = np.array([float(max(s,t)) / max(1, min(s, t)) for s,t in zip(core_numbers, approx_core_numbers)])
                     bf_bias_avg_approx.append(statistics.mean(approximation_factor))
                     bf_bias_max_approx.append(max(approximation_factor))
                     bf_bias_pp_time.append(pp_time)
@@ -249,6 +257,6 @@ def plot_benchmark_runs_biasfactor():
 
 
 if __name__ == '__main__':
-    run_benchmark()
+    # run_benchmark()
     # plot_benchmark_runs()
-    # plot_benchmark_runs_biasfactor()
+    plot_benchmark_runs_biasfactor()
