@@ -31,7 +31,7 @@ def run_benchmark():
     os.chdir('../')
 
     # graphs = GRAPH_SIZES.keys()
-    graphs = ['zhang_orkut']
+    graphs = ['hua_livejournal']
     # graphs = ['zhang_dblp']
 
     # Specify the number of processes as a command line argument
@@ -43,7 +43,7 @@ def run_benchmark():
         # for bias in [0, 1]:
         for bias in [1]:
             for factor_id in range(5):
-                for bias_factor in range(1, 23):
+                for bias_factor in range(23, 51):
                     output_file = f'/home/ubuntu/results_new/graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_log2.txt'
                     if not os.path.exists(output_file):
                         cmd = [
@@ -250,7 +250,7 @@ def plot_benchmark_runs_biasfactor():
     plt.cla()
     plt.clf()
 
-    '''for i in range(len(factors)):
+    for i in range(len(factors)):
         plt.plot(x, bf_bias_pp_time[i] + bf_bias_algo_time[i], '-*', label='Algorithm Time for {0}'.format(factors[i]))
     
     plt.legend()
@@ -260,10 +260,10 @@ def plot_benchmark_runs_biasfactor():
     plt.tight_layout()
     plt.savefig('./figures/{0}_response_time_bias_log2.pnd'.format(graph))
     plt.cla()
-    plt.clf()'''
+    plt.clf()
 
 
 if __name__ == '__main__':
-    run_benchmark()
+    # run_benchmark()
     # plot_benchmark_runs()
-    # plot_benchmark_runs_biasfactor()
+    plot_benchmark_runs_biasfactor()
