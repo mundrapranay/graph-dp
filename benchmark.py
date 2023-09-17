@@ -203,11 +203,13 @@ def plot_benchmark_runs_biasfactor():
                 bf_bias_max_approx = []
                 bf_bias_pp_time = []
                 bf_bias_algo_time = []
-                for bias_factor in range(1, 22):
+                for bias_factor in range(1, 51):
                     output_file = f'graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_log2.txt'
                     approx_core_numbers, pp_time, algo_time = get_core_numbers(output_file)
                     approximation_factor = np.array([float(max(s,t)) / max(1, min(s, t)) for s,t in zip(core_numbers, approx_core_numbers)])
                     bf_bias_avg_approx.append(statistics.mean(approximation_factor))
+                    if max(approximation_factor) >= 10e3:
+                        print(output_file)
                     bf_bias_max_approx.append(max(approximation_factor))
                     bf_bias_pp_time.append(pp_time)
                     bf_bias_algo_time.append(algo_time)
@@ -230,7 +232,7 @@ def plot_benchmark_runs_biasfactor():
     plt.ylabel('Approximation Factor')
     plt.title(graph.upper())
     plt.tight_layout()
-    plt.savefig('./figures/{0}_avg_approx_factors_bias_log2_v2.png'.format(graph))
+    plt.savefig('./figures/{0}_avg_approx_factors_bias_log2_v3.png'.format(graph))
     plt.cla()
     plt.clf()
 
@@ -246,7 +248,7 @@ def plot_benchmark_runs_biasfactor():
     plt.ylabel('Approximation Factor')
     plt.title(graph.upper())
     plt.tight_layout()
-    plt.savefig('./figures/{0}_max_approx_factors_bias_log2_v2.png'.format(graph))
+    plt.savefig('./figures/{0}_max_approx_factors_bias_log2_v3.png'.format(graph))
     plt.cla()
     plt.clf()
 
