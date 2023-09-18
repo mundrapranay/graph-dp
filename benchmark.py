@@ -43,8 +43,8 @@ def run_benchmark():
     for graph in graphs:
         # for bias in [0, 1]:
         for bias in [1]:
-            for factor_id in range(5):
-                for bias_factor in range(23, 51):
+            for factor_id in range(1):
+                for bias_factor in range(22, 23):
                     output_file = f'/home/ubuntu/results_new/graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_log2.txt'
                     if not os.path.exists(output_file):
                         cmd = [
@@ -222,10 +222,10 @@ def plot_benchmark_runs_biasfactor():
         
     x = np.arange(len(biased_avg_approx[0]))
     for i in range(len(factors)):
-        if i == 0:
+        if i == 6:
             continue
         else:
-            plt.plot(x, biased_avg_approx[i], '-o', label='Average Approx for {0}'.format(factors[i]))
+            plt.plot(x, biased_avg_approx[i], '--o', label='Average Approx for {0}'.format(factors[i]), alpha=0.7)
 
     plt.legend()
     # plt.xticks(x)
@@ -233,15 +233,15 @@ def plot_benchmark_runs_biasfactor():
     plt.ylabel('Approximation Factor')
     plt.title(graph.upper())
     plt.tight_layout()
-    plt.savefig('./figures/{0}_avg_approx_factors_bias_log2_v4.png'.format(graph))
+    plt.savefig('./figures/{0}_avg_approx_factors_bias_log2_final.png'.format(graph))
     plt.cla()
     plt.clf()
 
     for i in range(len(factors)):
-        if i == 0:
+        if i == 6:
             continue
         else:
-            plt.plot(x, biased_max_approx[i], '-^', label='Max Approx for {0}'.format(factors[i]))
+            plt.plot(x, biased_max_approx[i], '--^', label='Max Approx for {0}'.format(factors[i]), alpha=0.7)
     
     plt.legend()
     # plt.xticks(x)
@@ -249,19 +249,19 @@ def plot_benchmark_runs_biasfactor():
     plt.ylabel('Approximation Factor')
     plt.title(graph.upper())
     plt.tight_layout()
-    plt.savefig('./figures/{0}_max_approx_factors_bias_log2_v4.png'.format(graph))
+    plt.savefig('./figures/{0}_max_approx_factors_bias_log2_final.png'.format(graph))
     plt.cla()
     plt.clf()
 
     for i in range(len(factors)):
-        plt.plot(x, list(map(add, biased_pp_time[i], biased_algo_time[i])), '-*', label='Algorithm Time for {0}'.format(factors[i]))
+        plt.plot(x, list(map(add, biased_pp_time[i], biased_algo_time[i])), '--*', label='Algorithm Time for {0}'.format(factors[i]), alpha=0.7)
     
     plt.legend()
     plt.xlabel('Bias Subtraction Term')
     plt.ylabel('Response Time (seconds)')
     plt.title(graph.upper())
     plt.tight_layout()
-    plt.savefig('./figures/{0}_response_time_bias_log2.png'.format(graph))
+    plt.savefig('./figures/{0}_response_time_bias_log2_final.png'.format(graph))
     plt.cla()
     plt.clf()
 
