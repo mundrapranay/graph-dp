@@ -157,10 +157,10 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         round_end = std::chrono::high_resolution_clock::now();
         round_elapsed = round_end - round_start;
         round_time = round_elapsed.count();
-        // if (rank == COORDINATOR) {
-        //     std::cout << "Round " << r << " | " << number_of_rounds - 2 << std::endl;
-        //     std::cout << "Round time: " << round_time << std::endl;
-        // }
+       // if (rank == COORDINATOR) {
+         //    std::cout << "Round " << r << " | " << number_of_rounds - 2 << std::endl;
+           //  std::cout << "Round time: " << round_time << std::endl;
+         //}
     }
     MPI_Barrier(MPI_COMM_WORLD);
     // free up memory

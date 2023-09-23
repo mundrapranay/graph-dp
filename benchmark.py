@@ -16,7 +16,7 @@ GRAPH_SIZES = {
     'hua_stackoverflow' : 2584164,
     'hua_usa' : 23947347,
     'hua_youtube' : 1138499,
-    'zhang_orkut' : 117185083
+    'zhang_orkut' : 3072441
 }
 
 
@@ -32,7 +32,7 @@ def run_benchmark():
     os.chdir('../')
 
     # graphs = GRAPH_SIZES.keys()
-    graphs = ['hua_livejournal']
+    graphs = ['zhang_orkut']
     # graphs = ['zhang_dblp']
 
     # Specify the number of processes as a command line argument
@@ -43,8 +43,8 @@ def run_benchmark():
     for graph in graphs:
         # for bias in [0, 1]:
         for bias in [1]:
-            for factor_id in range(1):
-                for bias_factor in range(22, 23):
+            for factor_id in range(5):
+                for bias_factor in range(1, 51):
                     output_file = f'/home/ubuntu/results_new/graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_log2.txt'
                     if not os.path.exists(output_file):
                         cmd = [
@@ -184,7 +184,7 @@ def plot_benchmark_runs():
 
 
 def plot_benchmark_runs_biasfactor():
-    graphs = ['hua_livejournal']
+    graphs = ['zhang_orkut']
     factors = ['1/4', '1/3', '1/2', '2/3', '3/4']
     # factors = ['1/4', '1/3', '1/2']
     for graph in graphs:
