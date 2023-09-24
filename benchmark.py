@@ -305,11 +305,11 @@ def combine_images(columns, space, images, graph):
         if (i+1) % columns == 0:
             y += height_max + space
             x = 0
-    background.save('./figures/{0}_approx_factors_combined.png'.format(graph))
+    background.save('./figures/{0}_approx_factors_combined_all.png'.format(graph))
 
 if __name__ == '__main__':
     # run_benchmark()
     # plot_benchmark_runs()
     # plot_benchmark_runs_biasfactor()
-    image_list = get_image_files(factor_id=4, bias_factor=10, graph='zhang_orkut')
-    combine_images(10, 20, image_list, 'zhang_orkut')
+    image_list = get_image_files(factor_id=4, bias_factor=50, graph='zhang_orkut')
+    combine_images(50, 20, image_list, 'zhang_orkut')
