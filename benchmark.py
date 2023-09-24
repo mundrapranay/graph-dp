@@ -208,6 +208,16 @@ def plot_benchmark_runs_biasfactor():
                     output_file = f'graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_log2.txt'
                     approx_core_numbers, pp_time, algo_time = get_core_numbers(output_file)
                     approximation_factor = np.array([float(max(s,t)) / max(1, min(s, t)) for s,t in zip(core_numbers, approx_core_numbers)])
+                    approx_x = np.arange(len(approximation_factor))
+                    approximation_factor = sorted(approximation_factor, reverse=True)
+                    plt.plot(approx_x, approximation_factor, '--o')
+                    plt.xlabel('Node IDs')
+                    plt.ylabel('Approximation Factor')
+                    plt.title('{0}_{1}'.format(factors[factor_id], bias_factor))
+                    plt.tight_layout()
+                    plt.savefig('./figures/{0}_approx_factors_factor_id_{1}_bias_{2}'.format(graph, factor_id, bias_factor))
+                    plt.cla()
+                    plt.clf()
                     bf_bias_avg_approx.append(statistics.mean(approximation_factor))
                     if max(approximation_factor) >= 10e3:
                         print(output_file)
