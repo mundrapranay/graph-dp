@@ -276,7 +276,40 @@ def plot_benchmark_runs_biasfactor():
     plt.clf()
 
 
+def get_image_files(factor_id, bias_factor, graph):
+    image_list = []
+    for f in range(factor_id+1):
+        for bias in range(1, bias_factor+1):
+            output_file = './figures/{0}_approx_factors_factor_id_{1}_bias_{2}.png'.format(graph, f, bias)
+            image_list.append(output_file)
+    return image_list
+
+from PIL import Image
+def combine_images(columns, space, images, graph):
+    rows = len(images) // columns
+    if len(images) % columns:
+        rows += 1
+    width_max = max([Image.open(image).width for image in images])
+    height_max = max([Image.open(image).height for image in images])
+    background_width = width_max*columns + (space*columns)-space
+    background_height = height_max*rows + (space*rows)-space
+    background = Image.new('RGBA', (background_width, background_height), (255, 255, 255, 255))
+    x = 0
+    y = 0
+    for i, image in enumerate(images):
+        img = Image.open(image)
+        x_offset = int((width_max-img.width)/2)
+        y_offset = int((height_max-img.height)/2)
+        background.paste(img, (x+x_offset, y+y_offset))
+        x += width_max + space
+        if (i+1) % columns == 0:
+            y += height_max + space
+            x = 0
+    background.save('./figures/{0}_approx_factors_combined.png'.format(graph))
+
 if __name__ == '__main__':
     # run_benchmark()
     # plot_benchmark_runs()
-    plot_benchmark_runs_biasfactor()
+    # plot_benchmark_runs_biasfactor()
+    image_list = get_image_files(factor_id=4, bias_factor=10, graph='zhang_orkut')
+    combine_images(10, 20, image_list, 'zhang_orkut')
