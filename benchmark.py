@@ -307,9 +307,26 @@ def combine_images(columns, space, images, graph):
             x = 0
     background.save('./figures/{0}_approx_factors_combined_all.png'.format(graph))
 
+
+def print_core_data():
+    graphs = ['zhang_orkut']
+    factors = ['1/4', '1/3', '1/2', '2/3', '3/4']
+    for graph in graphs:
+        core_numbers = get_ground_truth(graph)
+        for bias in [1]:
+            for factor_id in range(5):
+                for bias_factor in range(1, 51):
+                    output_file = f'graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_log2.txt'
+                    approx_core_numbers, pp_time, algo_time = get_core_numbers(output_file)
+                    with open('/home/ubuntu/results_new/core_data/{0}'.format(output_file), 'w') as out:
+                        for c, a_c in zip(core_numbers, approx_core_numbers):
+                            out.write("{0},{1}\n".format(c, a_c))
+                    out.close()
+
 if __name__ == '__main__':
     # run_benchmark()
     # plot_benchmark_runs()
     # plot_benchmark_runs_biasfactor()
-    image_list = get_image_files(factor_id=4, bias_factor=50, graph='zhang_orkut')
-    combine_images(50, 20, image_list, 'zhang_orkut')
+    # image_list = get_image_files(factor_id=4, bias_factor=50, graph='zhang_orkut')
+    # combine_images(50, 20, image_list, 'zhang_orkut')
+    print_core_data()
