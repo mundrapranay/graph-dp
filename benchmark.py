@@ -309,7 +309,7 @@ def combine_images(columns, space, images, graph):
 
 
 def print_core_data():
-    graphs = ['zhang_orkut']
+    graphs = ['hua_livejournal']
     factors = ['1/4', '1/3', '1/2', '2/3', '3/4']
     for graph in graphs:
         core_numbers = get_ground_truth(graph)
