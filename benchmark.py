@@ -32,7 +32,7 @@ def run_benchmark():
     os.chdir('../')
 
     # graphs = GRAPH_SIZES.keys()
-    graphs = ['zhang_dblp']
+    graphs = ['zhang_dblp', 'hua_ctr', 'hua_livejournal', 'zhang_orkut']
     # graphs = ['zhang_dblp']
 
     # Specify the number of processes as a command line argument
@@ -44,7 +44,7 @@ def run_benchmark():
         # for bias in [0, 1]:
         for bias in [1]:
             for factor_id in range(5):
-                for bias_factor in range(1, 51):
+                for bias_factor in range(1, 21):
                     output_file = f'/home/ubuntu/results_new/graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_log2.txt'
                     if not os.path.exists(output_file):
                         cmd = [
@@ -184,7 +184,7 @@ def plot_benchmark_runs():
 
 
 def plot_benchmark_runs_biasfactor():
-    graphs = ['zhang_orkut']
+    graphs = ['zhang_dblp', 'hua_ctr', 'hua_livejournal', 'zhang_orkut']
     factors = ['1/4', '1/3', '1/2', '2/3', '3/4']
     # factors = ['1/4', '1/3', '1/2']
     for graph in graphs:
@@ -204,20 +204,20 @@ def plot_benchmark_runs_biasfactor():
                 bf_bias_max_approx = []
                 bf_bias_pp_time = []
                 bf_bias_algo_time = []
-                for bias_factor in range(1, 51):
+                for bias_factor in range(1, 21):
                     output_file = f'graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_log2.txt'
                     approx_core_numbers, pp_time, algo_time = get_core_numbers(output_file)
                     approximation_factor = np.array([float(max(s,t)) / max(1, min(s, t)) for s,t in zip(core_numbers, approx_core_numbers)])
-                    approx_x = np.arange(len(approximation_factor))
-                    approximation_factor = sorted(approximation_factor, reverse=True)
-                    plt.plot(approx_x, approximation_factor, '--o')
-                    plt.xlabel('Node IDs')
-                    plt.ylabel('Approximation Factor')
-                    plt.title('{0}_{1}'.format(factors[factor_id], bias_factor))
-                    plt.tight_layout()
-                    plt.savefig('./figures/{0}_approx_factors_factor_id_{1}_bias_{2}'.format(graph, factor_id, bias_factor))
-                    plt.cla()
-                    plt.clf()
+                    # approx_x = np.arange(len(approximation_factor))
+                    # approximation_factor = sorted(approximation_factor, reverse=True)
+                    # plt.plot(approx_x, approximation_factor, '--o')
+                    # plt.xlabel('Node IDs')
+                    # plt.ylabel('Approximation Factor')
+                    # plt.title('{0}_{1}'.format(factors[factor_id], bias_factor))
+                    # plt.tight_layout()
+                    # plt.savefig('./figures/{0}_approx_factors_factor_id_{1}_bias_{2}'.format(graph, factor_id, bias_factor))
+                    # plt.cla()
+                    # plt.clf()
                     bf_bias_avg_approx.append(statistics.mean(approximation_factor))
                     if max(approximation_factor) >= 10e3:
                         print(output_file)
@@ -243,7 +243,7 @@ def plot_benchmark_runs_biasfactor():
     plt.ylabel('Approximation Factor')
     plt.title(graph.upper())
     plt.tight_layout()
-    plt.savefig('./figures/{0}_avg_approx_factors_bias_log2_final.png'.format(graph))
+    plt.savefig('./figures/{0}_avg_approx_factors_bias_log2_mem_optim.png'.format(graph))
     plt.cla()
     plt.clf()
 
@@ -259,7 +259,7 @@ def plot_benchmark_runs_biasfactor():
     plt.ylabel('Approximation Factor')
     plt.title(graph.upper())
     plt.tight_layout()
-    plt.savefig('./figures/{0}_max_approx_factors_bias_log2_final.png'.format(graph))
+    plt.savefig('./figures/{0}_max_approx_factors_bias_log2_mem_optim.png'.format(graph))
     plt.cla()
     plt.clf()
 
@@ -271,7 +271,7 @@ def plot_benchmark_runs_biasfactor():
     plt.ylabel('Response Time (seconds)')
     plt.title(graph.upper())
     plt.tight_layout()
-    plt.savefig('./figures/{0}_response_time_bias_log2_final.png'.format(graph))
+    plt.savefig('./figures/{0}_response_time_bias_log2_mem_optim.png'.format(graph))
     plt.cla()
     plt.clf()
 
@@ -326,7 +326,7 @@ def print_core_data():
 if __name__ == '__main__':
     run_benchmark()
     # plot_benchmark_runs()
-    # plot_benchmark_runs_biasfactor()
+    plot_benchmark_runs_biasfactor()
     # image_list = get_image_files(factor_id=4, bias_factor=50, graph='zhang_orkut')
     # combine_images(50, 20, image_list, 'zhang_orkut')
     # print_core_data()
