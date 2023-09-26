@@ -80,12 +80,12 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         std::vector<int> node_degrees(workLoadSize, 0);
         int group_index; 
         if (rank == COORDINATOR) {
-            for (int node = 0; node < n; node++) {
-                currentLevels[node] = lds->get_level(node);
-                if (roundThresholds[node] == r) {
-                    permanentZeros[node] = 0;
-                }
-            }
+            // for (int node = 0; node < n; node++) {
+            //     currentLevels[node] = lds->get_level(node);
+            //     if (roundThresholds[node] == r) {
+            //         permanentZeros[node] = 0;
+            //     }
+            // }
             for (auto node : graph->ordered_adjacency_list) {
                 currentLevels.push_back(lds->get_level(node));
                 if (roundThresholds[node] == r) {
@@ -111,6 +111,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 offset += workLoad;
                 prev_node_degree += node_degree_sum;
             }
+            std::cout << "Sent to workers" << std::endl;
 
             // receive results from workers
             for (p = 1; p <= numworkers; p++) {
