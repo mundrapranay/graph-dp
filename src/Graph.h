@@ -30,6 +30,7 @@ class Graph {
 		}
     
     public:
+        std::vector<int> ordered_adjacency_list;
         Graph(const std::string& filename) {
             std::ifstream file(filename);
             if (!file.is_open()) {
@@ -79,11 +80,9 @@ class Graph {
                 int vertex = std::stoi(values[0]);
                 int ngh = std::stoi(values[1]);
                 if (adjacencyList.find(vertex) == adjacencyList.end()) {
-                // if (nodeDegrees.find(vertex) == nodeDegrees.end()) {
                     adjacencyList[vertex] = neighbors1;
                 }
                 if (adjacencyList.find(ngh) == adjacencyList.end()) {
-                // if (nodeDegrees.find(vertex) == nodeDegrees.end()) {
                     adjacencyList[ngh] = neighbors2;
                 }
                 adjacencyList[vertex].push_back(ngh);
@@ -148,6 +147,10 @@ class Graph {
         std::unordered_map<int, int> getNodeDegrees() {
             return nodeDegrees;
         }
+
+        // std::vector<int> getOrderedAdjacencyList() {
+        //     return ordered_adjacency_list;
+        // }
 
         int getNodeDegree(int node) {
             // return nodeDegrees[node];

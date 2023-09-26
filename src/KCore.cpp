@@ -73,12 +73,19 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         // each node either releases 1 or 0 and the coordinator updates the level accordingly
         // nextLevels stores this information
         round_start = std::chrono::high_resolution_clock::now();
-        std::vector<int> currentLevels(n);
+        // std::vector<int> currentLevels(n);
+        std::vector<int> currentLevels;
         std::vector<int> nextLevels(workLoadSize, 0);
         int group_index; 
         if (rank == COORDINATOR) {
             for (int node = 0; node < n; node++) {
                 currentLevels[node] = lds->get_level(node);
+                if (roundThresholds[node] == r) {
+                    permanentZeros[node] = 0;
+                }
+            }
+            for (auto node : graph->ordered_adjacency_list) {
+                currentLevels.push_back(lds->get_level(node));
                 if (roundThresholds[node] == r) {
                     permanentZeros[node] = 0;
                 }
