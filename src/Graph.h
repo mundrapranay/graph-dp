@@ -15,7 +15,7 @@ class Graph {
         std::unordered_map<int, std::vector<int>> adjacencyList;
         std::unordered_map<int, int> nodeDegrees;
         std::vector<int> node_degrees;
-        std::vector<int> ordered_adjacency_list;
+        // std::vector<int> ordered_adjacency_list;
         size_t graphSize = 0;
 
         std::vector<std::string> splitString(const std::string& line, char del) {
