@@ -63,7 +63,7 @@ class Graph {
         }
 
         Graph(const std::string& filename, int n) {
-            node_degrees(n, 0);
+            node_degrees = std::vector<int>(n, 0);
             std::ifstream file(filename);
             if (!file.is_open()) {
                 std::cerr << "Failed to open file: " << filename << std::endl;
@@ -87,8 +87,8 @@ class Graph {
                 }
                 adjacenyList[vertex].push_back(ngh);
                 adjacenyList[ngh].push_back(vertex);
-                node_degrees[vertex]++;
-                nod_degrees[ngh]++;
+                node_degrees[vertex] += 1;
+                node_degrees[ngh] += 1;
             }
             file.close();
             graphSize = adjacenyList.size();   
