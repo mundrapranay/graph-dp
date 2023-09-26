@@ -30,8 +30,8 @@ def run_benchmark():
     os.chdir('../')
 
     # graphs = GRAPH_SIZES.keys()
-    # graphs = ['hua_livejournal', 'hua_youtube', 'hua_stackoverflow']
-    graphs = ['zhang_dblp']
+    graphs = ['zhang_dblp', 'hua_ctr', 'hua_livejournal', 'zhang_orkut']
+    # graphs = ['zhang_dblp']
 
     # Specify the number of processes as a command line argument
     num_processes = 17
@@ -40,21 +40,23 @@ def run_benchmark():
     phi = 0.5
     for graph in graphs:
         # for bias in [0, 1]:
-        for bias in [0]:
-            for factor_id in range(1):
-                for bias_factor in range(1, 2):
-                    cmd = [
-                        'mpirun',
-                        '-np', str(num_processes),
-                        './build/DistributedGraphAlgorithm',
-                        f'./graphs/{graph}',
-                        str(eta), str(epsilon), str(phi),
-                        str(factor_id), str(bias), str(bias_factor), str(GRAPH_SIZES[graph])
-                    ]
-                    output_file = f'/home/ubuntu/results_new/graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_dev_testing.txt'
-                    
-                    with open(output_file, 'w') as f:
-                        subprocess.run(cmd, stdout=f)
+        for bias in [1]:
+            for factor_id in range(5):
+                for bias_factor in range(1, 21):
+                    output_file = f'/home/ubuntu/results_new/graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_log2.txt'
+                    if not os.path.exists(output_file):
+                        cmd = [
+                            'mpirun',
+                            '-np', str(num_processes),
+                            './build/DistributedGraphAlgorithm',
+                            f'./graphs/{graph}',
+                            str(eta), str(epsilon), str(phi),
+                            str(factor_id), str(bias), str(bias_factor), str(GRAPH_SIZES[graph])
+                        ]
+                        
+                        
+                        with open(output_file, 'w') as f:
+                            subprocess.run(cmd, stdout=f)
 
                     print(f'done with graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor{bias_factor}')
 
@@ -172,9 +174,9 @@ def plot_benchmark_runs():
 
 
 def plot_benchmark_runs_biasfactor():
-    graphs = ['hua_ctr']
-    # factors = ['1/4', '1/3', '1/2', '2/3', '3/4']
-    factors = ['1/4', '1/3', '1/2']
+    graphs = ['zhang_dblp', 'hua_ctr', 'hua_livejournal', 'zhang_orkut']
+    factors = ['1/4', '1/3', '1/2', '2/3', '3/4']
+    # factors = ['1/4', '1/3', '1/2']
     for graph in graphs:
 
         core_numbers = get_ground_truth(graph)
@@ -192,10 +194,20 @@ def plot_benchmark_runs_biasfactor():
                 bf_bias_max_approx = []
                 bf_bias_pp_time = []
                 bf_bias_algo_time = []
-                for bias_factor in range(1, 31):
+                for bias_factor in range(1, 21):
                     output_file = f'graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_log2.txt'
                     approx_core_numbers, pp_time, algo_time = get_core_numbers(output_file)
-                    approximation_factor = np.array([float(max(s,t)) / min(s, t) for s,t in zip(core_numbers, approx_core_numbers)])
+                    approximation_factor = np.array([float(max(s,t)) / max(1, min(s, t)) for s,t in zip(core_numbers, approx_core_numbers)])
+                    # approx_x = np.arange(len(approximation_factor))
+                    # approximation_factor = sorted(approximation_factor, reverse=True)
+                    # plt.plot(approx_x, approximation_factor, '--o')
+                    # plt.xlabel('Node IDs')
+                    # plt.ylabel('Approximation Factor')
+                    # plt.title('{0}_{1}'.format(factors[factor_id], bias_factor))
+                    # plt.tight_layout()
+                    # plt.savefig('./figures/{0}_approx_factors_factor_id_{1}_bias_{2}'.format(graph, factor_id, bias_factor))
+                    # plt.cla()
+                    # plt.clf()
                     bf_bias_avg_approx.append(statistics.mean(approximation_factor))
                     bf_bias_max_approx.append(max(approximation_factor))
                     bf_bias_pp_time.append(pp_time)
@@ -216,7 +228,7 @@ def plot_benchmark_runs_biasfactor():
     plt.ylabel('Approximation Factor')
     plt.title(graph.upper())
     plt.tight_layout()
-    plt.savefig('./figures/{0}_avg_approx_factors_bias_log2.png'.format(graph))
+    plt.savefig('./figures/{0}_avg_approx_factors_bias_log2_mem_optim.png'.format(graph))
     plt.cla()
     plt.clf()
 
@@ -229,12 +241,74 @@ def plot_benchmark_runs_biasfactor():
     plt.ylabel('Approximation Factor')
     plt.title(graph.upper())
     plt.tight_layout()
-    plt.savefig('./figures/{0}_max_approx_factors_bias_log2.png'.format(graph))
+    plt.savefig('./figures/{0}_max_approx_factors_bias_log2_mem_optim.png'.format(graph))
+    plt.cla()
+    plt.clf()
+
+    for i in range(len(factors)):
+        plt.plot(x, list(map(add, biased_pp_time[i], biased_algo_time[i])), '--*', label='Algorithm Time for {0}'.format(factors[i]), alpha=0.7)
+    
+    plt.legend()
+    plt.xlabel('Bias Subtraction Term')
+    plt.ylabel('Response Time (seconds)')
+    plt.title(graph.upper())
+    plt.tight_layout()
+    plt.savefig('./figures/{0}_response_time_bias_log2_mem_optim.png'.format(graph))
     plt.cla()
     plt.clf()
 
 
+def get_image_files(factor_id, bias_factor, graph):
+    image_list = []
+    for f in range(factor_id+1):
+        for bias in range(1, bias_factor+1):
+            output_file = './figures/{0}_approx_factors_factor_id_{1}_bias_{2}.png'.format(graph, f, bias)
+            image_list.append(output_file)
+    return image_list
+
+from PIL import Image
+def combine_images(columns, space, images, graph):
+    rows = len(images) // columns
+    if len(images) % columns:
+        rows += 1
+    width_max = max([Image.open(image).width for image in images])
+    height_max = max([Image.open(image).height for image in images])
+    background_width = width_max*columns + (space*columns)-space
+    background_height = height_max*rows + (space*rows)-space
+    background = Image.new('RGBA', (background_width, background_height), (255, 255, 255, 255))
+    x = 0
+    y = 0
+    for i, image in enumerate(images):
+        img = Image.open(image)
+        x_offset = int((width_max-img.width)/2)
+        y_offset = int((height_max-img.height)/2)
+        background.paste(img, (x+x_offset, y+y_offset))
+        x += width_max + space
+        if (i+1) % columns == 0:
+            y += height_max + space
+            x = 0
+    background.save('./figures/{0}_approx_factors_combined_all.png'.format(graph))
+
+
+def print_core_data():
+    graphs = ['hua_livejournal']
+    factors = ['1/4', '1/3', '1/2', '2/3', '3/4']
+    for graph in graphs:
+        core_numbers = get_ground_truth(graph)
+        for bias in [1]:
+            for factor_id in range(5):
+                for bias_factor in range(1, 51):
+                    output_file = f'graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_log2.txt'
+                    approx_core_numbers, pp_time, algo_time = get_core_numbers(output_file)
+                    with open('/home/ubuntu/results_new/core_data/{0}'.format(output_file), 'w') as out:
+                        for c, a_c in zip(core_numbers, approx_core_numbers):
+                            out.write("{0},{1}\n".format(c, a_c))
+                    out.close()
+
 if __name__ == '__main__':
     run_benchmark()
     # plot_benchmark_runs()
-    # plot_benchmark_runs_biasfactor()
+    plot_benchmark_runs_biasfactor()
+    # image_list = get_image_files(factor_id=4, bias_factor=50, graph='zhang_orkut')
+    # combine_images(50, 20, image_list, 'zhang_orkut')
+    # print_core_data()
