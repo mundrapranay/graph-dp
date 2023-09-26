@@ -15,6 +15,7 @@ class Graph {
         std::unordered_map<int, std::vector<int>> adjacenyList;
         std::unordered_map<int, int> nodeDegrees;
         std::vector<int> node_degrees;
+        std::vector<int> ordered_adjacency_list;
         size_t graphSize = 0;
 
         std::vector<std::string> splitString(const std::string& line, char del) {
@@ -91,7 +92,10 @@ class Graph {
                 node_degrees[ngh] += 1;
             }
             file.close();
-            graphSize = adjacenyList.size();   
+            graphSize = adjacenyList.size();
+            for (int node = 0; node < n; node++) {
+                ordered_adjacency_list.insert(ordered_adjacency_list.end(), adjacencyList[node].begin(), adjacencyList[node].end());
+            }   
         }
 
         Graph(const std::string& filename, int offset, int workLoad) {
