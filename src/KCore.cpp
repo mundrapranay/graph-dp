@@ -233,7 +233,8 @@ int main(int argc, char** argv) {
     double pp_time = 0.0;
     if (rank  == COORDINATOR) {
         pp_start = std::chrono::high_resolution_clock::now();
-        graph = new distributed_kcore::Graph(file_loc);
+        // graph = new distributed_kcore::Graph(file_loc);
+        graph = new distributed_kcore::Graph(file_loc, n);
         pp_end = std::chrono::high_resolution_clock::now();
         pp_elapsed = (pp_end - pp_start);
         pp_time = pp_elapsed.count();

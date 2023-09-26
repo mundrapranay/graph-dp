@@ -14,6 +14,7 @@ class Graph {
     private:
         std::unordered_map<int, std::vector<int>> adjacenyList;
         std::unordered_map<int, int> nodeDegrees;
+        std::vector<int> node_degrees;
         size_t graphSize = 0;
 
         std::vector<std::string> splitString(const std::string& line, char del) {
@@ -56,6 +57,38 @@ class Graph {
                 // adjacenyList[ngh].push_back(vertex);
                 nodeDegrees[vertex]++;
                 nodeDegrees[ngh]++;
+            }
+            file.close();
+            graphSize = adjacenyList.size();   
+        }
+
+        Graph(const std::string& filename, int n) {
+            node_degrees(n, 0);
+            std::ifstream file(filename);
+            if (!file.is_open()) {
+                std::cerr << "Failed to open file: " << filename << std::endl;
+                return;
+            }
+            std::string line;
+            while (std::getline(file, line)) {
+                std::vector<std::string> values = splitString(line, ' ');
+                std::vector<int> neighbors1;
+                std::vector<int> neighbors2;
+                // to ensure that its zero indexed
+                int vertex = std::stoi(values[0]);
+                int ngh = std::stoi(values[1]);
+                if (adjacenyList.find(vertex) == adjacenyList.end()) {
+                // if (nodeDegrees.find(vertex) == nodeDegrees.end()) {
+                    adjacenyList[vertex] = neighbors1;
+                }
+                if (adjacenyList.find(ngh) == adjacenyList.end()) {
+                // if (nodeDegrees.find(vertex) == nodeDegrees.end()) {
+                    adjacenyList[ngh] = neighbors2;
+                }
+                adjacenyList[vertex].push_back(ngh);
+                adjacenyList[ngh].push_back(vertex);
+                node_degrees[vertex]++;
+                nod_degrees[ngh]++;
             }
             file.close();
             graphSize = adjacenyList.size();   
@@ -113,7 +146,8 @@ class Graph {
         }
 
         int getNodeDegree(int node) {
-            return nodeDegrees[node];
+            // return nodeDegrees[node];
+            return node_degrees[node];
         }
 
         size_t getGraphSize() {
