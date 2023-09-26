@@ -142,29 +142,50 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             MPI_Recv(&node_degrees[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             // perform computation
             int end_node = offset + workLoad;
-            for (int i = offset; i < end_node; i++) {
-                if (currentLevels[i] == r && permanentZeros[i - offset] != 0) {
-                   int U_i = 0;
-                   for (auto ngh : graph->getNeighbors(i)) {
-                        if (currentLevels[ngh] == r) {
+            // for (int i = offset; i < end_node; i++) {
+            //     if (currentLevels[i] == r && permanentZeros[i - offset] != 0) {
+            //        int U_i = 0;
+            //        for (auto ngh : graph->getNeighbors(i)) {
+            //             if (currentLevels[ngh] == r) {
+            //                 U_i += 1;
+            //             }
+            //        }
+
+            //        double lambda = (epsilon * remaingingBudget) / (2.0 * rounds_param);
+            //        GeometricDistribution* geom = new GeometricDistribution(lambda);
+            //        int noise = geom->Sample();
+            //        int U_hat_i = U_i + noise;
+            //        if (U_hat_i > pow((1 + phi), group_index)) {
+            //             nextLevels[i - offset] = 1;
+            //        } else {
+            //             permanentZeros[i - offset] = 0;
+            //        }
+            //     }
+
+            // }
+            int start = 0;
+            for (int currNode = offset; currNode < end_node; currNode++) {
+                int node_degree = node_degrees[currNode - offset];
+                if (currentLevels[start] == r && permanentZeros[i-offset] != 0) {
+                    start += 1;
+                    int U_i = 0;
+                    for (; start < node_degree + 1; start++) {
+                        if (currentLevels[start] == r) {
                             U_i += 1;
                         }
-                   }
-
-                   double lambda = (epsilon * remaingingBudget) / (2.0 * rounds_param);
-                   GeometricDistribution* geom = new GeometricDistribution(lambda);
-                   int noise = geom->Sample();
-                   int U_hat_i = U_i + noise;
-                   if (U_hat_i > pow((1 + phi), group_index)) {
-                        nextLevels[i - offset] = 1;
-                   } else {
-                        permanentZeros[i - offset] = 0;
-                   }
+                    }
+                    double lambda = (epsilon * remaingingBudget) / (2.0 * rounds_param);
+                    GeometricDistribution* geom = new GeometricDistribution(lambda);
+                    int noise = geom->Sample();
+                    int U_hat_i = U_i + noise;
+                    if (U_hat_i > pow((1 + phi), group_index)) {
+                            nextLevels[currNode - offset] = 1;
+                    } else {
+                            permanentZeros[currNode - offset] = 0;
+                    }
                 }
-
+                start = node_degree + 1;
             }
-
-            // for (int currNode = offset; currNode < end_node; currNode++) {}
 
             // send back the completed data to COORDINATOR
             mytype = FROM_WORKER + rank;
