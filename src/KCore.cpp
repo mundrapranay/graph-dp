@@ -10,6 +10,7 @@
 #include <set>
 #include <unordered_map>
 #include <chrono>
+#include <numeric>
 #include "LDS.h"
 #include "Graph.h"
 #include "distributions.h"
@@ -76,6 +77,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         // std::vector<int> currentLevels(n);
         std::vector<int> currentLevels;
         std::vector<int> nextLevels(workLoadSize, 0);
+        std::vector<int> node_degrees(workLoadSize, 0);
         int group_index; 
         if (rank == COORDINATOR) {
             for (int node = 0; node < n; node++) {
@@ -91,17 +93,23 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 }
             }
             group_index = lds->group_for_level(r);
-
+            node_degrees = graph->getNodeDegreeVector();
             offset = 0;
             mytype = FROM_MASTER;
+            int prev_node_degree = 0;
             for (p = 1; p <= numworkers; p++) {
                 workLoad = (p == numworkers) ? chunk + extra : chunk;
                 MPI_Send(&offset, 1, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 MPI_Send(&workLoad, 1, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 MPI_Send(&group_index, 1, MPI_INT, p, mytype, MPI_COMM_WORLD);
-                MPI_Send(&currentLevels[0], currentLevels.size(), MPI_INT, p, mytype, MPI_COMM_WORLD);
+                int node_degree_sum = std::accumulate(node_degrees.begin()+offset, node_degrees.begin()+offset+workLoad, 0) + workLoad; // as for each we have node, adjacencyList[node]
+                MPI_Send(&node_degree_sum, 1, MPI_INT, p, mytype, MPI_COMM_WORLD);
+                // MPI_Send(&currentLevels[0], currentLevels.size(), MPI_INT, p, mytype, MPI_COMM_WORLD);
+                MPI_Send(&currentLevels[prev_node_degree], node_degree_sum, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 MPI_Send(&permanentZeros[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD);
+                MPI_Send(&node_degrees[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 offset += workLoad;
+                prev_node_degree += node_degree_sum;
             }
 
             // receive results from workers
@@ -121,13 +129,17 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             }
         } else {
             // worker task
+            int node_degree_sum;
             mytype = FROM_MASTER;
             MPI_Recv(&offset, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             MPI_Recv(&workLoad, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             MPI_Recv(&group_index, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
-            MPI_Recv(&currentLevels[0], currentLevels.size(), MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
+            MPI_Recv(&node_degree_sum, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
+            currentLevels.resize(node_degree_sum);
+            // MPI_Recv(&currentLevels[0], currentLevels.size(), MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
+            MPI_Recv(&currentLevels[0], node_degree_sum, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             MPI_Recv(&permanentZeros[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
-
+            MPI_Recv(&node_degrees[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             // perform computation
             int end_node = offset + workLoad;
             for (int i = offset; i < end_node; i++) {
@@ -149,7 +161,10 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                         permanentZeros[i - offset] = 0;
                    }
                 }
+
             }
+
+            // for (int currNode = offset; currNode < end_node; currNode++) {}
 
             // send back the completed data to COORDINATOR
             mytype = FROM_WORKER + rank;

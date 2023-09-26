@@ -93,6 +93,7 @@ class Graph {
             file.close();
             graphSize = adjacencyList.size();
             for (int node = 0; node < n; node++) {
+                ordered_adjacency_list.push_back(node);
                 ordered_adjacency_list.insert(ordered_adjacency_list.end(), adjacencyList[node].begin(), adjacencyList[node].end());
             }   
         }
@@ -146,6 +147,10 @@ class Graph {
 
         std::unordered_map<int, int> getNodeDegrees() {
             return nodeDegrees;
+        }
+
+        std::vector<int> getNodeDegreeVector() {
+            return node_degrees;
         }
 
         // std::vector<int> getOrderedAdjacencyList() {
