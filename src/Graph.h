@@ -12,7 +12,7 @@ namespace distributed_kcore{
 
 class Graph {
     private:
-        std::unordered_map<int, std::vector<int>> adjacenyList;
+        std::unordered_map<int, std::vector<int>> adjacencyList;
         std::unordered_map<int, int> nodeDegrees;
         std::vector<int> node_degrees;
         std::vector<int> ordered_adjacency_list;
@@ -78,21 +78,21 @@ class Graph {
                 // to ensure that its zero indexed
                 int vertex = std::stoi(values[0]);
                 int ngh = std::stoi(values[1]);
-                if (adjacenyList.find(vertex) == adjacenyList.end()) {
+                if (adjacencyList.find(vertex) == adjacencyList.end()) {
                 // if (nodeDegrees.find(vertex) == nodeDegrees.end()) {
-                    adjacenyList[vertex] = neighbors1;
+                    adjacencyList[vertex] = neighbors1;
                 }
-                if (adjacenyList.find(ngh) == adjacenyList.end()) {
+                if (adjacencyList.find(ngh) == adjacencyList.end()) {
                 // if (nodeDegrees.find(vertex) == nodeDegrees.end()) {
-                    adjacenyList[ngh] = neighbors2;
+                    adjacencyList[ngh] = neighbors2;
                 }
-                adjacenyList[vertex].push_back(ngh);
-                adjacenyList[ngh].push_back(vertex);
+                adjacencyList[vertex].push_back(ngh);
+                adjacencyList[ngh].push_back(vertex);
                 node_degrees[vertex] += 1;
                 node_degrees[ngh] += 1;
             }
             file.close();
-            graphSize = adjacenyList.size();
+            graphSize = adjacencyList.size();
             for (int node = 0; node < n; node++) {
                 ordered_adjacency_list.insert(ordered_adjacency_list.end(), adjacencyList[node].begin(), adjacencyList[node].end());
             }   
@@ -119,30 +119,30 @@ class Graph {
                 int vertex = std::stoi(values[0]);
                 int ngh = std::stoi(values[1]);
                 if (workingNodes.find(vertex) != workingNodes.end()) {
-                    if (adjacenyList.find(vertex) == adjacenyList.end()) {
-                        adjacenyList[vertex] = neighbors1;
+                    if (adjacencyList.find(vertex) == adjacencyList.end()) {
+                        adjacencyList[vertex] = neighbors1;
                     }
-                    adjacenyList[vertex].push_back(ngh);
+                    adjacencyList[vertex].push_back(ngh);
                 }
 
                 if (workingNodes.find(ngh) != workingNodes.end()) {
-                    if (adjacenyList.find(ngh) == adjacenyList.end()) {
-                        adjacenyList[ngh] = neighbors2;
+                    if (adjacencyList.find(ngh) == adjacencyList.end()) {
+                        adjacencyList[ngh] = neighbors2;
                     }
-                    adjacenyList[ngh].push_back(vertex);
+                    adjacencyList[ngh].push_back(vertex);
                 }
             }
             file.close();
-            graphSize = adjacenyList.size();
+            graphSize = adjacencyList.size();
             workingNodes.clear(); 
         }
 
         std::unordered_map<int, std::vector<int>> getAdjacencyList() {
-            return adjacenyList;
+            return adjacencyList;
         }
 
         std::vector<int> getNeighbors(int node) {
-            return adjacenyList[node];
+            return adjacencyList[node];
         }
 
         std::unordered_map<int, int> getNodeDegrees() {
@@ -160,7 +160,7 @@ class Graph {
 
         int sumAdjList() {
             int sum = 0;
-            for (auto it : adjacenyList) {
+            for (auto it : adjacencyList) {
                 sum += it.second.size();
             }
             return sum;
@@ -168,7 +168,7 @@ class Graph {
 
         void printDegrees() {
             std::unordered_map<int, std::vector<int>>::iterator it;
-            for (it = adjacenyList.begin(); it != adjacenyList.end(); it++) {
+            for (it = adjacencyList.begin(); it != adjacencyList.end(); it++) {
                 int node = it->first;
                 std::vector<int> nghs = it->second;
                 std::cout << "Node: " << node << " | Degree : " << nghs.size() << std::endl;
