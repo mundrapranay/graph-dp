@@ -95,7 +95,8 @@ class Graph {
             for (int node = 0; node < n; node++) {
                 ordered_adjacency_list.push_back(node);
                 ordered_adjacency_list.insert(ordered_adjacency_list.end(), adjacencyList[node].begin(), adjacencyList[node].end());
-            }   
+            }
+            std::cout << "Read the graph" << std::endl;
         }
 
         Graph(const std::string& filename, int offset, int workLoad) {
