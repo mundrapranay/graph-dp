@@ -60,7 +60,7 @@ class Graph {
                 nodeDegrees[ngh]++;
             }
             file.close();
-            graphSize = adjacenyList.size();   
+            graphSize = adjacencyList.size();   
         }
 
         Graph(const std::string& filename, int n) {
