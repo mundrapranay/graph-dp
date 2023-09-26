@@ -111,8 +111,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 offset += workLoad;
                 prev_node_degree += node_degree_sum;
             }
-            std::cout << "Sent to workers" << std::endl;
-
+            
             // receive results from workers
             for (p = 1; p <= numworkers; p++) {
                 mytype = FROM_WORKER + p;
