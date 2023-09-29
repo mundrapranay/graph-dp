@@ -32,7 +32,7 @@ def run_benchmark():
     os.chdir('../')
 
     # graphs = GRAPH_SIZES.keys()
-    graphs = ['zhang_dblp', 'hua_ctr', 'hua_livejournal', 'zhang_orkut']
+    graphs = ['zhang_dblp', 'zhang_orkut', 'hua_livejournal', 'hua_ctr']
     # graphs = ['zhang_dblp']
 
     # Specify the number of processes as a command line argument
@@ -184,7 +184,7 @@ def plot_benchmark_runs():
 
 
 def plot_benchmark_runs_biasfactor():
-    graphs = ['zhang_dblp', 'hua_ctr', 'hua_livejournal', 'zhang_orkut']
+    graphs = ['zhang_dblp']
     factors = ['1/4', '1/3', '1/2', '2/3', '3/4']
     # factors = ['1/4', '1/3', '1/2']
     for graph in graphs:
@@ -324,7 +324,7 @@ def print_core_data():
                     out.close()
 
 if __name__ == '__main__':
-    run_benchmark()
+    # run_benchmark()
     # plot_benchmark_runs()
     plot_benchmark_runs_biasfactor()
     # image_list = get_image_files(factor_id=4, bias_factor=50, graph='zhang_orkut')
