@@ -170,21 +170,25 @@ class Graph {
             std::cout << "Read the graph | " << filename << std::endl;
             // iterate over adjacency list and 
             // populate the node_degrees and ordered_adjacency_list
-            auto it = adjacencyList.begin();
-            int nodeDegreeSum = std::accumulate(adjacencyList.begin(), adjacencyList.end(), 0, 
+            graphSize += std::accumulate(adjacencyList.begin(), adjacencyList.end(), 0, 
                                 [](int acc, const std::pair<int, std::vector<int>>& pair) {
                                     return acc + pair.second.size();
-                                }) + graphSize;
-            ordered_adjacency_list.resize(nodeDegreeSum);
-            while (it != adjacencyList.end()) {
-                int node = it->first;
-                node_degrees[node - offset] = it->second.size();
-                // this is causing a problem of no mem allocated 
-                ordered_adjacency_list.push_back(node);
-                ordered_adjacency_list.insert(ordered_adjacency_list.end(), adjacencyList[node].begin(), adjacencyList[node].end());
-            }
+                                });
+        }
 
-            std::cout << "Computed OAL | " << filename << std::endl;
+        void computeStats() {
+        auto it = adjacencyList.begin();
+        ordered_adjacency_list.resize(graphSize);
+        while (it != adjacencyList.end()) {
+            int node = it->first;
+            node_degrees[node - offset] = it->second.size();
+            // this is causing a problem of no mem allocated 
+            ordered_adjacency_list.push_back(node);
+            ordered_adjacency_list.insert(ordered_adjacency_list.end(), adjacencyList[node].begin(), adjacencyList[node].end());
+        }
+        adjacencyList.clear();
+
+        std::cout << "Computed OAL | " << filename << std::endl;
         }
 
         std::unordered_map<int, std::vector<int>> getAdjacencyList() {
