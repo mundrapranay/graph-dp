@@ -194,10 +194,10 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             // worker task
 
             // send a request to coordinator to get currentLevels for working nodes
-            int node_degree_sum = graph->ordered_adjacency_list.size();
+            int node_degree_sum = graph->getOrderedAdjacencyList().size();
             mytype = FROM_WORKER + rank;
             MPI_Send(&node_degree_sum, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
-            MPI_Send(&graph->ordered_adjacency_list[0], node_degree_sum, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
+            MPI_Send(&graph->getOrderedAdjacencyList()[0], node_degree_sum, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
 
             currentLevels.resize(node_degree_sum);
             MPI_Recv(&currentLevels[0], node_degree_sum, MPI_INT, COORDINATOR, FROM_MASTER, MPI_COMM_WORLD, &status);

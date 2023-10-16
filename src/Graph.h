@@ -17,6 +17,7 @@ class Graph {
         std::vector<int> node_degrees;
         // std::vector<int> ordered_adjacency_list;
         size_t graphSize = 0;
+        std::vector<int> ordered_adjacency_list;
 
         std::vector<std::string> splitString(const std::string& line, char del) {
 			std::vector<std::string> result;
@@ -30,7 +31,6 @@ class Graph {
 		}
     
     public:
-        std::vector<int> ordered_adjacency_list;
         // Graph(const std::string& filename) {
         //     std::ifstream file(filename);
         //     if (!file.is_open()) {
@@ -173,13 +173,9 @@ class Graph {
             while (it != adjacencyList.end()) {
                 int node = it->first;
                 node_degrees[node - offset] = it->second.size();
-                ordered_adjacency_list.push_back(node);
+                // ordered_adjacency_list.push_back(node);
                 // this is causing a problem of no mem allocated 
-                try{
-                ordered_adjacency_list.insert(ordered_adjacency_list.end(), adjacencyList[node].begin(), adjacencyList[node].end());
-                } catch (const std::exception& e) {
-                    std::cout << filename << " | Exception caught: " << e.what() << std::endl;
-                }
+                // ordered_adjacency_list.insert(ordered_adjacency_list.end(), adjacencyList[node].begin(), adjacencyList[node].end());
             }
 
             std::cout << "Computed OAL | " << filename << std::endl;
@@ -201,9 +197,9 @@ class Graph {
             return node_degrees;
         }
 
-        // std::vector<int> getOrderedAdjacencyList() {
-        //     return ordered_adjacency_list;
-        // }
+        std::vector<int> getOrderedAdjacencyList() {
+            return ordered_adjacency_list;
+        }
 
         int getNodeDegree(int node) {
             // return nodeDegrees[node];
