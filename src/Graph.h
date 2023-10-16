@@ -166,7 +166,7 @@ class Graph {
             file.close();
             graphSize = adjacencyList.size();
             node_degrees = std::vector<int>(graphSize, 0);
-            std::cout << "Read the graph | " << offset << std::endl;
+            std::cout << "Read the graph | " << filename << std::endl;
             // iterate over adjacency list and 
             // populate the node_degrees and ordered_adjacency_list
             auto it = adjacencyList.begin();
@@ -177,7 +177,7 @@ class Graph {
                 ordered_adjacency_list.insert(ordered_adjacency_list.end(), it->second.begin(), it->second.end());
             }
 
-            std::cout << "Computed OAL | " << offset << std::endl;
+            std::cout << "Computed OAL | " << filename << std::endl;
         }
 
         std::unordered_map<int, std::vector<int>> getAdjacencyList() {

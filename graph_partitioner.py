@@ -35,7 +35,8 @@ def partition_graph(graph, n):
         data[n1].append(n2)
         data[n2].append(n1)
     
-    nodes = [i for i in range(GRAPH_SIZES[graph])]
+    # nodes = [i for i in range(GRAPH_SIZES[graph])]
+    nodes = sorted(list(data.keys()))
     chunked_nodes = chunk_into_n(nodes, processes)
 
     graph_directory = './graphs/{0}_partitioned_{1}/'.format(graph, n)
