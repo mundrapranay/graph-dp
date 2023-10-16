@@ -169,13 +169,17 @@ class Graph {
             std::cout << "Read the graph | " << filename << std::endl;
             // iterate over adjacency list and 
             // populate the node_degrees and ordered_adjacency_list
-            // iterate over the adjacency list in sorted order and push back the node degrees
             auto it = adjacencyList.begin();
             while (it != adjacencyList.end()) {
                 int node = it->first;
                 node_degrees[node - offset] = it->second.size();
-                // ordered_adjacency_list.push_back(node);
-                // ordered_adjacency_list.insert(ordered_adjacency_list.end(), adjacencyList[node].begin(), adjacencyList[node].end());
+                ordered_adjacency_list.push_back(node);
+                // this is causing a problem of no mem allocated 
+                try{
+                ordered_adjacency_list.insert(ordered_adjacency_list.end(), adjacencyList[node].begin(), adjacencyList[node].end());
+                } catch (const std::exception& e) {
+                    std::cout << filename << " | Exception caught: " << e.what() << std::endl;
+                }
             }
 
             std::cout << "Computed OAL | " << filename << std::endl;
