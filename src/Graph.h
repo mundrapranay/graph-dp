@@ -169,10 +169,15 @@ class Graph {
             std::cout << "Read the graph | " << filename << std::endl;
             // iterate over adjacency list and 
             // populate the node_degrees and ordered_adjacency_list
+            // iterate over the adjacency list in sorted order and push back the node degrees
             auto it = adjacencyList.begin();
             while (it != adjacencyList.end()) {
                 int node = it->first;
-                node_degrees[node - offset] = it->second.size();
+                try{
+                    node_degrees[node - offset] = it->second.size();
+                } catch (const std::exception& e) {
+                    std::cout << filename << " | Error: " << e.what() << std::endl;
+                }
                 ordered_adjacency_list.push_back(node);
                 ordered_adjacency_list.insert(ordered_adjacency_list.end(), it->second.begin(), it->second.end());
             }
