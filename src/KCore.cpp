@@ -160,7 +160,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             // node_degrees = graph->getNodeDegreeVector();
             offset = 0;
             mytype = FROM_MASTER;
-            int prev_node_degree = 0;
+            // int prev_node_degree = 0;
             for (p = 1; p <= numworkers; p++) {
                 workLoad = (p == numworkers) ? chunk + extra : chunk;
                 MPI_Send(&offset, 1, MPI_INT, p, mytype, MPI_COMM_WORLD);
@@ -173,7 +173,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 MPI_Send(&permanentZeros[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 // MPI_Send(&node_degrees[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 offset += workLoad;
-                prev_node_degree += node_degree_sum;
+                // prev_node_degree += node_degree_sum;
             }
             
             // receive results from workers
