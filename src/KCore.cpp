@@ -48,6 +48,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
     LDS *lds;
     std::vector<int> roundThresholds(n, 0);
     std::vector<int> noised_degrees(workLoadSize, 0);
+    std::vector<int> nodeDegrees;
     if (rank != COORDINATOR) {
         roundThresholds.clear();
     }
@@ -92,7 +93,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         int offset_nd = (rank - 1) * chunk; 
         int workLoad_nd = (rank == numworkers) ? chunk + extra : chunk;
         GeometricDistribution* geomThreshold = new GeometricDistribution(epsilon * factor);
-        std::vector<int> nodeDegrees = graph->getNodeDegreeVector();
+        nodeDegrees = graph->getNodeDegreeVector();
         for (int i = 0; i < nodeDegrees.size(); i++) {
             noised_degrees[i] = nodeDegrees[i] + geomThreshold->Sample();
         }
@@ -102,8 +103,6 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         MPI_Send(&offset_nd, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
         MPI_Send(&workLoad_nd, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
         MPI_Send(&noised_degrees[0], workLoad_nd, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
-        nodeDegrees.clear();
-        nodeDegrees.shrink_to_fit();
     }
 
     noised_degrees.clear();
@@ -210,7 +209,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             // MPI_Recv(&node_degree_sum, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             // currentLevels.resize(node_degree_sum);
             // MPI_Recv(&currentLevels[0], currentLevels.size(), MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
-            MPI_Recv(&currentLevels[0], node_degree_sum, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
+            // MPI_Recv(&currentLevels[0], node_degree_sum, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             MPI_Recv(&permanentZeros[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             // MPI_Recv(&node_degrees[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             // perform computation
@@ -236,10 +235,10 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             //     }
 
             // }
-            std::vector<int> node_degrees = graph->getNodeDegreeVector();
+            // std::vector<int> node_degrees = graph->getNodeDegreeVector();
             int start = 0;
             for (int currNode = offset; currNode < end_node; currNode++) {
-                int node_degree = node_degrees[currNode - offset];
+                int node_degree = nodeDegrees[currNode - offset];
                 if (currentLevels[start] == r && permanentZeros[currNode - offset] != 0) {
                     start += 1;
                     int U_i = 0;
@@ -285,7 +284,8 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
     // roundThresholds.clear();
     permanentZeros.shrink_to_fit();
     // roundThresholds.shrink_to_fit();
-
+    nodeDegrees.clear();
+    nodeDegrees.shrink_to_fit();
     return lds;
 }
 
