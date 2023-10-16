@@ -170,15 +170,15 @@ class Graph {
             std::cout << "Read the graph | " << filename << std::endl;
             // iterate over adjacency list and 
             // populate the node_degrees and ordered_adjacency_list
-            // graphSize += std::accumulate(adjacencyList.begin(), adjacencyList.end(), 0, 
-            //                     [](int acc, const std::pair<int, std::vector<int>>& pair) {
-            //                         return acc + pair.second.size();
-            //                     });
+            graphSize += std::accumulate(adjacencyList.begin(), adjacencyList.end(), 0, 
+                                [](int acc, const std::pair<int, std::vector<int>>& pair) {
+                                    return acc + pair.second.size();
+                                });
         }
 
         void computeStats(const std::string& filename, int offset) {
         auto it = adjacencyList.begin();
-        // ordered_adjacency_list.resize(graphSize);
+        ordered_adjacency_list.resize(graphSize);
         while (it != adjacencyList.end()) {
             int node = it->first;
             node_degrees[node - offset] = it->second.size();
