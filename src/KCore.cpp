@@ -364,7 +364,7 @@ int main(int argc, char** argv) {
         file_loc = file_loc + std::to_string(rank) + ".txt";
         std::cout << rank << " | " << file_loc << std::endl;
         graph = new distributed_kcore::Graph(file_loc, offset);
-        graph->computeStats();
+        graph->computeStats(file_loc, offset);
         pp_end = std::chrono::high_resolution_clock::now();
         pp_elapsed = (pp_end - pp_start);
         pp_time = pp_elapsed.count();

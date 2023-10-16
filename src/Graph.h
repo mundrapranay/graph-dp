@@ -176,7 +176,7 @@ class Graph {
                                 });
         }
 
-        void computeStats() {
+        void computeStats(string filename, int offset) {
         auto it = adjacencyList.begin();
         ordered_adjacency_list.resize(graphSize);
         while (it != adjacencyList.end()) {
