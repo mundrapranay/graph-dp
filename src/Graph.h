@@ -5,6 +5,7 @@
 #include <sstream>
 #include <string>
 #include <set>
+#include <numeric>
 #include <unordered_map>
 
 
@@ -170,13 +171,17 @@ class Graph {
             // iterate over adjacency list and 
             // populate the node_degrees and ordered_adjacency_list
             auto it = adjacencyList.begin();
+            int nodeDegreeSum = std::accumulate(adjacencyList.begin(), adjacencyList.end(), 0, 
+                                [](int acc, const std::pair<int, std::vector<int>>& pair) {
+                                    return acc + pair.second.size();
+                                }) + graphSize;
+            ordered_adjacency_list.resize(nodeDegreeSum);
             while (it != adjacencyList.end()) {
                 int node = it->first;
                 node_degrees[node - offset] = it->second.size();
-                // ordered_adjacency_list.push_back(node);
-                ordered_adjacency_list.push_back(node);
                 // this is causing a problem of no mem allocated 
-                // ordered_adjacency_list.insert(ordered_adjacency_list.end(), adjacencyList[node].begin(), adjacencyList[node].end());
+                ordered_adjacency_list.push_back(node);
+                ordered_adjacency_list.insert(ordered_adjacency_list.end(), adjacencyList[node].begin(), adjacencyList[node].end());
             }
 
             std::cout << "Computed OAL | " << filename << std::endl;
