@@ -63,6 +63,49 @@ def run_benchmark():
                     print(f'done with graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor{bias_factor}')
 
 
+def run_benchmark_partition():
+
+    # Change directory to build/
+    os.chdir('build/')
+
+    # Compile the code using 'make'
+    subprocess.run(['make'])
+
+    # Change directory back to the previous directory
+    os.chdir('../')
+
+    # graphs = GRAPH_SIZES.keys()
+    graphs = ['zhang_dblp']
+    # graphs = ['zhang_dblp']
+
+    # Specify the number of processes as a command line argument
+    num_processes = 17
+    eta = 0.9
+    epsilon = 0.5
+    phi = 0.5
+    for graph in graphs:
+        # for bias in [0, 1]:
+        for bias in [1]:
+            for factor_id in range(5):
+                for bias_factor in range(1, 21):
+                    output_file = f'/home/ubuntu/results_new/graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_partitioned.txt'
+                    if not os.path.exists(output_file):
+                        cmd = [
+                            'mpirun',
+                            '-np', str(num_processes),
+                            './build/DistributedGraphAlgorithm',
+                            f'./graphs/{graph}_partitioned_{num_processes}',
+                            str(eta), str(epsilon), str(phi),
+                            str(factor_id), str(bias), str(bias_factor), str(GRAPH_SIZES[graph])
+                        ]
+                        
+                        
+                        with open(output_file, 'w') as f:
+                            subprocess.run(cmd, stdout=f)
+
+                    print(f'done with graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor{bias_factor}')
+
+
 def get_max_approx_index(pairs):
     # Define a custom key function to extract the 'approx' value from each pair
     def get_approx(pair):
@@ -325,8 +368,9 @@ def print_core_data():
 
 if __name__ == '__main__':
     # run_benchmark()
+    run_benchmark_partition()
     # plot_benchmark_runs()
-    plot_benchmark_runs_biasfactor()
+    # plot_benchmark_runs_biasfactor()
     # image_list = get_image_files(factor_id=4, bias_factor=50, graph='zhang_orkut')
     # combine_images(50, 20, image_list, 'zhang_orkut')
     # print_core_data()

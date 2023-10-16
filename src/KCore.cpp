@@ -47,6 +47,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
     MPI_Status status;
     LDS *lds;
     std::vector<int> roundThresholds(n, 0);
+    std::vector<int> noised_degrees(workLoadSize, 0);
     if (rank != COORDINATOR) {
         roundThresholds.clear();
     }
@@ -55,18 +56,57 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         lds = new LDS(n, phi, delta, levels_per_group, false);
         // e : e * 1/4
         // e * 3/4
-        GeometricDistribution* geomThreshold = new GeometricDistribution(epsilon * factor);
-        for (int node = 0; node < n; node++) {
-            // sent from worker for their nodes : noisedDegree
-            int noisedDegree = graph->getNodeDegree(node) + geomThreshold->Sample();
+        // GeometricDistribution* geomThreshold = new GeometricDistribution(epsilon * factor);
+        // for (int node = 0; node < n; node++) {
+        //     // sent from worker for their nodes : noisedDegree
+        //     int noisedDegree = graph->getNodeDegree(node) + geomThreshold->Sample();
+        //     if (bias == 1) {
+        //         noisedDegree -= std::min(noisedDegree - 1, bias_factor);
+        //     }
+        //     // int numberOfRounds = ceil(log_a_to_base_b(noisedDegree, 1.0 + phi)) * levels_per_group;
+        //     int numberOfRounds = ceil(log2(noisedDegree)) * levels_per_group;
+        //     roundThresholds[node] = numberOfRounds;
+        // }
+        // receive noised degrees from workers
+        int offset_nd, workLoad_nd;
+        for (p = 1; p <= numworkers; p++) {
+            mytype = FROM_WORKER + p;
+            MPI_Recv(&offset_nd, 1, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
+            MPI_Recv(&workLoad_nd, 1, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
+            MPI_Recv(&noised_degrees[offset_nd], workLoad_nd, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
+        }
+
+        for (int i = 0; i < noised_degrees.size(); i++) {
+            int noisedDegree = noised_degrees[i];
             if (bias == 1) {
                 noisedDegree -= std::min(noisedDegree - 1, bias_factor);
             }
             // int numberOfRounds = ceil(log_a_to_base_b(noisedDegree, 1.0 + phi)) * levels_per_group;
             int numberOfRounds = ceil(log2(noisedDegree)) * levels_per_group;
-            roundThresholds[node] = numberOfRounds;
+            roundThresholds[i] = numberOfRounds;
         }
+        
+
+    } else {
+        int offset_nd = (rank - 1) * chunk; 
+        int workLoad_nd = (rank == numworkers) ? chunk + extra : chunk;
+        GeometricDistribution* geomThreshold = new GeometricDistribution(epsilon * factor);
+        std::vector<int> nodeDegrees = graph->getNodeDegreeVector();
+        for (int i = 0; i < nodeDegrees.size(); i++) {
+            noised_degrees[i] = nodeDegrees[i] + geomThreshold->Sample();
+        }
+
+        // send back the noised degrees to COORDINATOR
+        mytype = FROM_WORKER + rank;
+        MPI_Send(&offset_nd, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
+        MPI_Send(&workLoad_nd, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
+        MPI_Send(&noised_degrees[0], workLoad_nd, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
+        nodeDegrees.clear();
+        nodeDegrees.shrink_to_fit();
     }
+
+    noised_degrees.clear();
+    noised_degrees.shrink_to_fit();
     MPI_Barrier(MPI_COMM_WORLD);
     std::vector<int> permanentZeros(workLoadSize, 1);
 
@@ -283,7 +323,7 @@ int main(int argc, char** argv) {
     if (rank  == COORDINATOR) {
         pp_start = std::chrono::high_resolution_clock::now();
         // graph = new distributed_kcore::Graph(file_loc);
-        graph = new distributed_kcore::Graph(file_loc, n);
+        // graph = new distributed_kcore::Graph(file_loc, n);
         pp_end = std::chrono::high_resolution_clock::now();
         pp_elapsed = (pp_end - pp_start);
         pp_time = pp_elapsed.count();
@@ -292,7 +332,8 @@ int main(int argc, char** argv) {
         int offset = (rank - 1) * chunk; 
         int workLoad = (rank == numworkers) ? chunk + extra : chunk;
         pp_start = std::chrono::high_resolution_clock::now();
-        graph = new distributed_kcore::Graph(file_loc, offset, workLoad);
+        // graph = new distributed_kcore::Graph(file_loc, offset, workLoad);
+        graph = new distributed_kcore::Graph(file_loc, offset);
         pp_end = std::chrono::high_resolution_clock::now();
         pp_elapsed = (pp_end - pp_start);
         pp_time = pp_elapsed.count();
