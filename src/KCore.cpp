@@ -29,6 +29,7 @@ int log_a_to_base_b(int a, double b) {
 
 LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilon, double phi, double lambda, int levels_per_group, double factor, int bias, int bias_factor, int n) {
     double delta = 9.0;
+    // change this to min(rounds_param, round_threshold[node]) forall node in graph
     double rounds_param = ceil(4.0 * pow(log_a_to_base_b(n, 1.0 + phi), 1.5));
     int number_of_rounds = static_cast<int>(rounds_param);
     int numworkers = nprocs - 1;
@@ -50,11 +51,13 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         roundThresholds.clear();
     }
     double remaingingBudget = (factor != 1.0) ? (1.0 - factor) : 0.0;
-
     if (rank == COORDINATOR) {
         lds = new LDS(n, phi, delta, levels_per_group, false);
+        // e : e * 1/4
+        // e * 3/4
         GeometricDistribution* geomThreshold = new GeometricDistribution(epsilon * factor);
         for (int node = 0; node < n; node++) {
+            // sent from worker for their nodes : noisedDegree
             int noisedDegree = graph->getNodeDegree(node) + geomThreshold->Sample();
             if (bias == 1) {
                 noisedDegree -= std::min(noisedDegree - 1, bias_factor);
@@ -86,6 +89,9 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             //         permanentZeros[node] = 0;
             //     }
             // }
+            // worker send their node ids
+            // subset of current levels for these ids
+            // send them back
             for (auto node : graph->ordered_adjacency_list) {
                 currentLevels.push_back(lds->get_level(node));
                 if (roundThresholds[node] == r) {
