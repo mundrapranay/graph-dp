@@ -361,6 +361,7 @@ int main(int argc, char** argv) {
         int workLoad = (rank == numworkers) ? chunk + extra : chunk;
         pp_start = std::chrono::high_resolution_clock::now();
         // graph = new distributed_kcore::Graph(file_loc, offset, workLoad);
+        file_loc = + std::to_string(rank) + '.txt';
         graph = new distributed_kcore::Graph(file_loc, offset);
         pp_end = std::chrono::high_resolution_clock::now();
         pp_elapsed = (pp_end - pp_start);

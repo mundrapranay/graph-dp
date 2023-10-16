@@ -86,15 +86,15 @@ def run_benchmark_partition():
     for graph in graphs:
         # for bias in [0, 1]:
         for bias in [1]:
-            for factor_id in range(5):
-                for bias_factor in range(1, 21):
+            for factor_id in range(0):
+                for bias_factor in range(1, 2):
                     output_file = f'/home/ubuntu/results_new/graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_partitioned.txt'
                     if not os.path.exists(output_file):
                         cmd = [
                             'mpirun',
                             '-np', str(num_processes),
                             './build/DistributedGraphAlgorithm',
-                            f'./graphs/{graph}_partitioned_{num_processes}',
+                            f'./graphs/{graph}_partitioned_{num_processes}/',
                             str(eta), str(epsilon), str(phi),
                             str(factor_id), str(bias), str(bias_factor), str(GRAPH_SIZES[graph])
                         ]
