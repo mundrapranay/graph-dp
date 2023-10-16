@@ -146,6 +146,7 @@ class Graph {
                 return;
             }
             std::string line;
+            try{
             while (std::getline(file, line)) {
                 std::vector<std::string> values = splitString(line, ' ');
                 std::vector<int> neighbors1;
@@ -163,6 +164,9 @@ class Graph {
                 // }
                 // adjacencyList[ngh].push_back(vertex);
             }
+            } catch (const std::exception& e) {
+                    std::cout << filename << " | Error: " << e.what() << std::endl;
+                }
             file.close();
             graphSize = adjacencyList.size();
             node_degrees = std::vector<int>(graphSize, 0);
