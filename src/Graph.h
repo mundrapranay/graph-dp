@@ -146,7 +146,6 @@ class Graph {
                 return;
             }
             std::string line;
-            try{
             while (std::getline(file, line)) {
                 std::vector<std::string> values = splitString(line, ' ');
                 std::vector<int> neighbors1;
@@ -164,9 +163,6 @@ class Graph {
                 // }
                 // adjacencyList[ngh].push_back(vertex);
             }
-            } catch (const std::exception& e) {
-                    std::cout << filename << " | Error: " << e.what() << std::endl;
-                }
             file.close();
             graphSize = adjacencyList.size();
             node_degrees = std::vector<int>(graphSize, 0);
@@ -177,13 +173,9 @@ class Graph {
             auto it = adjacencyList.begin();
             while (it != adjacencyList.end()) {
                 int node = it->first;
-                try{
-                    node_degrees[node - offset] = it->second.size();
-                } catch (const std::exception& e) {
-                    std::cout << filename << " | Error: " << e.what() << std::endl;
-                }
+                node_degrees[node - offset] = it->second.size();
                 ordered_adjacency_list.push_back(node);
-                ordered_adjacency_list.insert(ordered_adjacency_list.end(), it->second.begin(), it->second.end());
+                ordered_adjacency_list.insert(ordered_adjacency_list.end(), adjacencyList[node].begin(), adjacencyList[node].end());
             }
 
             std::cout << "Computed OAL | " << filename << std::endl;
