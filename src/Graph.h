@@ -173,7 +173,7 @@ class Graph {
             while (it != adjacencyList.end()) {
                 int node = it->first;
                 node_degrees[node - offset] = it->second.size();
-                // ordered_adjacency_list.push_back(node);
+                ordered_adjacency_list.push_back(node);
                 // this is causing a problem of no mem allocated 
                 // ordered_adjacency_list.insert(ordered_adjacency_list.end(), adjacencyList[node].begin(), adjacencyList[node].end());
             }
