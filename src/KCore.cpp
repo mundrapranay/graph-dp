@@ -256,7 +256,17 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             // std::vector<int> node_degrees = graph->getNodeDegreeVector();
             int start = 0;
             for (int currNode = offset; currNode < end_node; currNode++) {
-                
+                if ((currNode - offset) > nodeDegrees.size()) {
+                    std::cout << "node degree error: " << currNode << std::endl;
+                }
+
+                // if ((currNode - offset) > nodeDegrees.size()) {
+                //     std::cout << "node degree error: " << currNode << std::endl;
+                // }
+
+                // if ((currNode - offset) > nodeDegrees.size()) {
+                //     std::cout << "node degree error: " << currNode << std::endl;
+                // }
                 int node_degree = nodeDegrees[currNode - offset];
                 if (roundThresholds[currNode - offset] == r) {
                     permanentZeros[currNode - offset] = 0;
