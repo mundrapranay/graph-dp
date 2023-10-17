@@ -231,7 +231,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             // perform computation
             std::cout << "Rcvd 2 at worker from master: " << rank << std::endl;
             // int end_node = offset + workLoad;
-            int end_node = (rank - 1) * chunk + workLoadSize;
+            int end_node = (rank == numworkers) ? n : offset + workLoad;
             // for (int i = offset; i < end_node; i++) {
             //     if (currentLevels[i] == r && permanentZeros[i - offset] != 0) {
             //        int U_i = 0;
@@ -256,17 +256,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             // std::vector<int> node_degrees = graph->getNodeDegreeVector();
             int start = 0;
             for (int currNode = offset; currNode < end_node; currNode++) {
-                if ((currNode - offset) > nodeDegrees.size()) {
-                    std::cout << "Node Degrees error" << std::endl;
-                }
-
-                if ((currNode - offset) > roundThresholds.size()) {
-                    std::cout << "Round thresholds error" << std::endl;
-                }
-
-                if ((currNode - offset) > permanentZeros.size()) {
-                    std::cout << "Permanent Zeros error" << std::endl;
-                }
+                
                 int node_degree = nodeDegrees[currNode - offset];
                 if (roundThresholds[currNode - offset] == r) {
                     permanentZeros[currNode - offset] = 0;
@@ -396,6 +386,12 @@ int main(int argc, char** argv) {
         pp_time = pp_elapsed.count();
         preprocessing_times.push_back(pp_time);
     } else {
+        // 100 / 16 : chunk : 6, extra : 4
+        // [0, 6)
+        // [6, 12)
+        // [12, 18)
+        // [96, 100]
+        // [96, 106]
         int offset = (rank - 1) * chunk; 
         int workLoad = (rank == numworkers) ? chunk + extra : chunk;
         pp_start = std::chrono::high_resolution_clock::now();
