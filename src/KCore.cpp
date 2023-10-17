@@ -194,10 +194,11 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             // worker task
 
             // send a request to coordinator to get currentLevels for working nodes
-            int node_degree_sum = graph->getOrderedAdjacencyList().size();
+            std::vector<int> oal = graph->computeOAL();
+            int node_degree_sum = oal.size();
             mytype = FROM_WORKER + rank;
             MPI_Send(&node_degree_sum, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
-            MPI_Send(&graph->getOrderedAdjacencyList()[0], node_degree_sum, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
+            MPI_Send(&oal[0], node_degree_sum, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
 
             currentLevels.resize(node_degree_sum);
             MPI_Recv(&currentLevels[0], node_degree_sum, MPI_INT, COORDINATOR, FROM_MASTER, MPI_COMM_WORLD, &status);
@@ -364,7 +365,7 @@ int main(int argc, char** argv) {
         file_loc = file_loc + std::to_string(rank) + ".txt";
         std::cout << rank << " | " << file_loc << std::endl;
         graph = new distributed_kcore::Graph(file_loc, offset);
-        graph->computeStats(file_loc, offset);
+        // graph->computeStats(file_loc, offset);
         pp_end = std::chrono::high_resolution_clock::now();
         pp_elapsed = (pp_end - pp_start);
         pp_time = pp_elapsed.count();

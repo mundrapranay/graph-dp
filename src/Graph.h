@@ -167,28 +167,33 @@ class Graph {
             file.close();
             graphSize = adjacencyList.size();
             node_degrees = std::vector<int>(graphSize, 0);
-            std::cout << "Read the graph | " << filename << std::endl;
             // iterate over adjacency list and 
             // populate the node_degrees and ordered_adjacency_list
             graphSize += std::accumulate(adjacencyList.begin(), adjacencyList.end(), 0, 
                                 [](int acc, const std::pair<int, std::vector<int>>& pair) {
                                     return acc + pair.second.size();
                                 });
+            auto it = adjacencyList.begin();
+            while (it != adjacencyList.end()) {
+                int node = it->first;
+                node_degrees[node - offset] = it->second.size();
+            }
+            std::cout << "Read the graph | " << filename << std::endl;
         }
 
-        void computeStats(const std::string& filename, int offset) {
-        auto it = adjacencyList.begin();
-        ordered_adjacency_list.resize(graphSize);
-        while (it != adjacencyList.end()) {
-            int node = it->first;
-            node_degrees[node - offset] = it->second.size();
-            // this is causing a problem of no mem allocated 
-            ordered_adjacency_list.push_back(node);
-            ordered_adjacency_list.insert(ordered_adjacency_list.end(), adjacencyList[node].begin(), adjacencyList[node].end());
-        }
-        adjacencyList.clear();
-
-        std::cout << "Computed OAL | " << filename << std::endl;
+        std::vector<int> computeOAL(int offset) {
+            if (ordered_adjacency_list.empty()){
+                auto it = adjacencyList.begin();
+                ordered_adjacency_list.resize(graphSize);
+                while (it != adjacencyList.end()) {
+                    int node = it->first;
+                    ordered_adjacency_list.push_back(node);
+                    ordered_adjacency_list.insert(ordered_adjacency_list.end(), it->second.begin(), it->second.end());
+                }
+                adjacencyList.clear();
+            } 
+            return ordered_adjacency_list;
+            // std::cout << "Computed OAL | " << filename << std::endl;
         }
 
         std::unordered_map<int, std::vector<int>> getAdjacencyList() {
