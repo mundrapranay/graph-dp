@@ -230,7 +230,8 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             // MPI_Recv(&node_degrees[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             // perform computation
             std::cout << "Rcvd 2 at worker from master: " << rank << std::endl;
-            int end_node = offset + workLoad;
+            // int end_node = offset + workLoad;
+            int end_node = (rank - 1) * chunk + workLoadSize;
             // for (int i = offset; i < end_node; i++) {
             //     if (currentLevels[i] == r && permanentZeros[i - offset] != 0) {
             //        int U_i = 0;
@@ -255,11 +256,26 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             // std::vector<int> node_degrees = graph->getNodeDegreeVector();
             int start = 0;
             for (int currNode = offset; currNode < end_node; currNode++) {
+                if ((currNode - offset) > nodeDegrees.size()) {
+                    std::cout << "Node Degrees error" << std::endl;
+                }
+
+                if ((currNode - offset) > roundThresholds.size()) {
+                    std::cout << "Round thresholds error" << std::endl;
+                }
+
+                if ((currNode - offset) > permanentZeros.size()) {
+                    std::cout << "Permanent Zeros error" << std::endl;
+                }
                 int node_degree = nodeDegrees[currNode - offset];
                 if (roundThresholds[currNode - offset] == r) {
                     permanentZeros[currNode - offset] = 0;
                 }
                 // std::cout << "Inside Loop" << std::endl;
+                // [node, al]
+                // [0, 1, 2, 1, 0, 3]
+                // 0 : 2
+                // 1 : 2
                 if (currentLevels[start] == r && permanentZeros[currNode - offset] != 0) {
                     start += 1;
                     int U_i = 0;
