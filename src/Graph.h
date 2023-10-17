@@ -146,6 +146,7 @@ class Graph {
                 std::cerr << "Failed to open file: " << filename << std::endl;
                 return;
             }
+            std::set<int> nodes;
             std::string line;
             while (std::getline(file, line)) {
                 std::vector<std::string> values = splitString(line, ' ');
@@ -156,6 +157,7 @@ class Graph {
                 int ngh = std::stoi(values[1]);
                 if (adjacencyList.find(vertex) == adjacencyList.end()) {
                     adjacencyList[vertex] = neighbors1;
+                    nodes.insert(vertex);
                 }
                 adjacencyList[vertex].push_back(ngh);
 
@@ -173,10 +175,13 @@ class Graph {
                                 [](int acc, const std::pair<int, std::vector<int>>& pair) {
                                     return acc + pair.second.size();
                                 });
-            auto it = adjacencyList.begin();
-            while (it != adjacencyList.end()) {
-                int node = it->first;
-                node_degrees[node - offset] = it->second.size();
+            // auto it = adjacencyList.begin();
+            // while (it != adjacencyList.end()) {
+            //     int node = it->first;
+            //     node_degrees[node - offset] = it->second.size();
+            // }
+            for (int i : nodes) {
+                node_degrees[i - offset] = adjacencyList[i].size();
             }
             std::cout << "Read the graph | " << filename << std::endl;
         }
