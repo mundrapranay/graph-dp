@@ -97,7 +97,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         int workLoad_nd = (rank == numworkers) ? chunk + extra : chunk;
         GeometricDistribution* geomThreshold = new GeometricDistribution(epsilon * factor);
         nodeDegrees = graph->getNodeDegreeVector((rank - 1) * chunk);
-        std::cout << "Computed node degrees: " << rank << std::endl;
+        // std::cout << "Computed node degrees: " << rank << std::endl;
         for (int i = 0; i < nodeDegrees.size(); i++) {
             noised_degrees[i] = nodeDegrees[i] + geomThreshold->Sample();
             if (bias == 1) {
@@ -147,7 +147,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 MPI_Recv(&node_degree_sum, 1, MPI_INT, p, FROM_WORKER + p, MPI_COMM_WORLD, &status);
                 requested_node_ids.resize(node_degree_sum);
                 MPI_Recv(&requested_node_ids[0], node_degree_sum, MPI_INT, p, FROM_WORKER + p, MPI_COMM_WORLD, &status);
-                std::cout << "Received from worker: " << p << std::endl;
+                // std::cout << "Received from worker: " << p << std::endl;
                 for (auto node : requested_node_ids) {
                     currentLevels.push_back(lds->get_level(node));
                     // if (roundThresholds[node] == r) {
@@ -156,7 +156,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 }
 
                 MPI_Send(&currentLevels[0], node_degree_sum, MPI_INT, p, FROM_MASTER, MPI_COMM_WORLD);
-                std::cout << "Sent to worker: " << p << std::endl;
+                // std::cout << "Sent to worker: " << p << std::endl;
                 currentLevels.clear();
             }
 
@@ -182,7 +182,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 // MPI_Send(&currentLevels[prev_node_degree], node_degree_sum, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 MPI_Send(&permanentZeros[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 // MPI_Send(&node_degrees[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD);
-                std::cout << "Sent 2 to worker: " << p << std::endl;
+                // std::cout << "Sent 2 to worker: " << p << std::endl;
                 offset += workLoad;
                 // prev_node_degree += node_degree_sum;
             }
@@ -194,7 +194,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 MPI_Recv(&workLoad, 1, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
                 MPI_Recv(&nextLevels[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
                 MPI_Recv(&permanentZeros[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
-                std::cout << "Received 3 from worker: " << p << std::endl;
+                // std::cout << "Received 3 from worker: " << p << std::endl;
             }
 
             // update the levels based on the data in nextLevels
@@ -212,11 +212,11 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             mytype = FROM_WORKER + rank;
             MPI_Send(&node_degree_sum, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             MPI_Send(&oal[0], node_degree_sum, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
-            std::cout << "Sent to master from worker: " << rank << std::endl;
+            // std::cout << "Sent to master from worker: " << rank << std::endl;
 
             currentLevels.resize(node_degree_sum);
             MPI_Recv(&currentLevels[0], node_degree_sum, MPI_INT, COORDINATOR, FROM_MASTER, MPI_COMM_WORLD, &status);
-            std::cout << "Rcvd at worker from master: " << rank << std::endl;
+            // std::cout << "Rcvd at worker from master: " << rank << std::endl;
 
             mytype = FROM_MASTER;
             MPI_Recv(&offset, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
@@ -229,7 +229,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             MPI_Recv(&permanentZeros[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             // MPI_Recv(&node_degrees[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             // perform computation
-            std::cout << "Rcvd 2 at worker from master: " << rank << std::endl;
+            // std::cout << "Rcvd 2 at worker from master: " << rank << std::endl;
             int end_node = offset + workLoad;
             // int end_node = (rank == numworkers) ? n : offset + workLoad;
             // if (rank == numworkers) {
@@ -260,9 +260,9 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             // std::vector<int> node_degrees = graph->getNodeDegreeVector();
             int start = 0;
             for (int currNode = offset; currNode < end_node; currNode++) {
-                if ((currNode - offset) > nodeDegrees.size()) {
-                    std::cout << "node degree error: " << currNode - offset << std::endl;
-                }
+                // if ((currNode - offset) > nodeDegrees.size()) {
+                //     std::cout << "node degree error: " << currNode - offset << std::endl;
+                // }
 
                 // if ((currNode - offset) > nodeDegrees.size()) {
                 //     std::cout << "node degree error: " << currNode << std::endl;
@@ -301,7 +301,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 start = node_degree + 1;
             }
 
-            std::cout << "Computed Loop" << std::endl;
+            // std::cout << "Computed Loop" << std::endl;
 
             // send back the completed data to COORDINATOR
             mytype = FROM_WORKER + rank;
@@ -309,17 +309,17 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             MPI_Send(&workLoad, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             MPI_Send(&nextLevels[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             MPI_Send(&permanentZeros[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
-            std::cout << "Sent 3 to master from worker: " << rank << std::endl;
+            // std::cout << "Sent 3 to master from worker: " << rank << std::endl;
         }
 
         MPI_Barrier(MPI_COMM_WORLD);
         round_end = std::chrono::high_resolution_clock::now();
         round_elapsed = round_end - round_start;
         round_time = round_elapsed.count();
-       if (rank == COORDINATOR) {
-            std::cout << "Round " << r << " | " << number_of_rounds - 2 << std::endl;
-            std::cout << "Round time: " << round_time << std::endl;
-        }
+    //    if (rank == COORDINATOR) {
+    //         std::cout << "Round " << r << " | " << number_of_rounds - 2 << std::endl;
+    //         std::cout << "Round time: " << round_time << std::endl;
+    //     }
     }
     MPI_Barrier(MPI_COMM_WORLD);
     // free up memory

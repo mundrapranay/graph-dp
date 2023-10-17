@@ -67,5 +67,6 @@ def partition_graph(graph, n):
 
 if __name__ == '__main__':
    partition_graph('zhang_dblp', 17)
+   partition_graph('zhang_orkut', 17)
         
     
