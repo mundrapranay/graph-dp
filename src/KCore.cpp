@@ -230,8 +230,12 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             // MPI_Recv(&node_degrees[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             // perform computation
             std::cout << "Rcvd 2 at worker from master: " << rank << std::endl;
-            // int end_node = offset + workLoad;
+            int end_node = offset + workLoad;
             int end_node = (rank == numworkers) ? n : offset + workLoad;
+            // if (rank == numworkers) {
+            //     end_node = n;
+            //     std::cout << "checked for rank 16" << std::endl;
+            // }
             // for (int i = offset; i < end_node; i++) {
             //     if (currentLevels[i] == r && permanentZeros[i - offset] != 0) {
             //        int U_i = 0;
@@ -257,7 +261,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             int start = 0;
             for (int currNode = offset; currNode < end_node; currNode++) {
                 if ((currNode - offset) > nodeDegrees.size()) {
-                    std::cout << "node degree error: " << currNode << std::endl;
+                    std::cout << "node degree error: " << currNode - offset << std::endl;
                 }
 
                 // if ((currNode - offset) > nodeDegrees.size()) {

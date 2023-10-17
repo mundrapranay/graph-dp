@@ -168,6 +168,7 @@ class Graph {
             }
             file.close();
             graphSize = adjacencyList.size();
+            std::cout << "Nodes | " << graphSize  << " | " << filename << std::endl;
             node_degrees = std::vector<int>(graphSize, 0);
             // iterate over adjacency list and 
             // populate the node_degrees and ordered_adjacency_list
