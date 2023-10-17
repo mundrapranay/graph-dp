@@ -46,11 +46,12 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
 
     MPI_Status status;
     LDS *lds;
-    std::vector<int> roundThresholds(n, 0);
+    std::vector<int> roundThresholds(workLoadSize, 0);
     std::vector<int> noised_degrees(workLoadSize, 0);
     std::vector<int> nodeDegrees;
-    if (rank != COORDINATOR) {
+    if (rank == COORDINATOR) {
         roundThresholds.clear();
+        roundThresholds.shrink_to_fit();
     }
     double remaingingBudget = (factor != 1.0) ? (1.0 - factor) : 0.0;
     if (rank == COORDINATOR) {
@@ -70,23 +71,25 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         // }
 
         // receive noised degrees from workers
-        int offset_nd, workLoad_nd;
-        for (p = 1; p <= numworkers; p++) {
-            mytype = FROM_WORKER + p;
-            MPI_Recv(&offset_nd, 1, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
-            MPI_Recv(&workLoad_nd, 1, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
-            MPI_Recv(&noised_degrees[offset_nd], workLoad_nd, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
-        }
+        // todo: error in receiving
+        // each worker calculates thresholds and then sends to coordinator
+        // int offset_nd, workLoad_nd;
+        // for (p = 1; p <= numworkers; p++) {
+        //     mytype = FROM_WORKER + p;
+        //     MPI_Recv(&offset_nd, 1, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
+        //     MPI_Recv(&workLoad_nd, 1, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
+        //     MPI_Recv(&noised_degrees[offset_nd], workLoad_nd, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
+        // }
 
-        for (int i = 0; i < noised_degrees.size(); i++) {
-            int noisedDegree = noised_degrees[i];
-            if (bias == 1) {
-                noisedDegree -= std::min(noisedDegree - 1, bias_factor);
-            }
-            // int numberOfRounds = ceil(log_a_to_base_b(noisedDegree, 1.0 + phi)) * levels_per_group;
-            int numberOfRounds = ceil(log2(noisedDegree)) * levels_per_group;
-            roundThresholds[i] = numberOfRounds;
-        }
+        // for (int i = 0; i < noised_degrees.size(); i++) {
+        //     int noisedDegree = noised_degrees[i];
+        //     if (bias == 1) {
+        //         noisedDegree -= std::min(noisedDegree - 1, bias_factor);
+        //     }
+        //     // int numberOfRounds = ceil(log_a_to_base_b(noisedDegree, 1.0 + phi)) * levels_per_group;
+        //     int numberOfRounds = ceil(log2(noisedDegree)) * levels_per_group;
+        //     roundThresholds[i] = numberOfRounds;
+        // }
         
 
     } else {
@@ -97,13 +100,18 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         std::cout << "Computed node degrees: " << rank << std::endl;
         for (int i = 0; i < nodeDegrees.size(); i++) {
             noised_degrees[i] = nodeDegrees[i] + geomThreshold->Sample();
+            if (bias == 1) {
+                noised_degrees[i] -= std::min(noised_degrees[i] - 1, bias_factor);
+            }
+            int numberOfRounds = ceil(log2(noised_degrees[i])) * levels_per_group;
+            roundThresholds[i] = numberOfRounds;
         }
 
         // send back the noised degrees to COORDINATOR
-        mytype = FROM_WORKER + rank;
-        MPI_Send(&offset_nd, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
-        MPI_Send(&workLoad_nd, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
-        MPI_Send(&noised_degrees[0], workLoad_nd, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
+        // mytype = FROM_WORKER + rank;
+        // MPI_Send(&offset_nd, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
+        // MPI_Send(&workLoad_nd, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
+        // MPI_Send(&noised_degrees[0], workLoad_nd, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
     }
 
     noised_degrees.clear();
@@ -141,9 +149,9 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 MPI_Recv(&requested_node_ids[0], node_degree_sum, MPI_INT, p, FROM_WORKER + p, MPI_COMM_WORLD, &status);
                 for (auto node : requested_node_ids) {
                     currentLevels.push_back(lds->get_level(node));
-                    if (roundThresholds[node] == r) {
-                        permanentZeros[node] = 0 ;
-                    }
+                    // if (roundThresholds[node] == r) {
+                    //     permanentZeros[node] = 0 ;
+                    // }
                 }
 
                 MPI_Send(&currentLevels[0], node_degree_sum, MPI_INT, p, FROM_MASTER, MPI_COMM_WORLD);
@@ -241,6 +249,9 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             int start = 0;
             for (int currNode = offset; currNode < end_node; currNode++) {
                 int node_degree = nodeDegrees[currNode - offset];
+                if (roundsThreshold[currNode - offset] == r) {
+                    permanentZeros[currNode - offset] = 0;
+                }
                 if (currentLevels[start] == r && permanentZeros[currNode - offset] != 0) {
                     start += 1;
                     int U_i = 0;
