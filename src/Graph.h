@@ -183,7 +183,7 @@ class Graph {
             // for (int i : nodes) {
             //     node_degrees[i - offset] = adjacencyList[i].size();
             // }
-            std::cout << "Read the graph | " << filename << std::endl;
+            std::cout << "Read the graph | " << graphSize  << " | " << filename << std::endl;
         }
 
         std::vector<int> computeOAL(int offset) {
