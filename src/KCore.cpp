@@ -194,6 +194,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 MPI_Recv(&workLoad, 1, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
                 MPI_Recv(&nextLevels[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
                 MPI_Recv(&permanentZeros[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD, &status);
+                std::cout << "Received 3 from worker: " << p << std::endl;
             }
 
             // update the levels based on the data in nextLevels
@@ -258,7 +259,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 if (roundThresholds[currNode - offset] == r) {
                     permanentZeros[currNode - offset] = 0;
                 }
-                std::cout << "Inside Loop" << std::endl;
+                // std::cout << "Inside Loop" << std::endl;
                 if (currentLevels[start] == r && permanentZeros[currNode - offset] != 0) {
                     start += 1;
                     int U_i = 0;
@@ -280,13 +281,15 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 start = node_degree + 1;
             }
 
+            std::cout << "Computed Loop" << std::endl;
+
             // send back the completed data to COORDINATOR
             mytype = FROM_WORKER + rank;
             MPI_Send(&offset, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             MPI_Send(&workLoad, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             MPI_Send(&nextLevels[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             MPI_Send(&permanentZeros[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
-
+            std::cout << "Sent 3 to master from worker: " << rank << std::endl;
         }
 
         MPI_Barrier(MPI_COMM_WORLD);
