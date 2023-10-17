@@ -194,7 +194,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             // worker task
 
             // send a request to coordinator to get currentLevels for working nodes
-            std::vector<int> oal = graph->computeOAL();
+            std::vector<int> oal = graph->computeOAL((rank - 1) * chunk);
             int node_degree_sum = oal.size();
             mytype = FROM_WORKER + rank;
             MPI_Send(&node_degree_sum, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
