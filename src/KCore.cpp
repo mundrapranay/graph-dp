@@ -94,6 +94,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         int workLoad_nd = (rank == numworkers) ? chunk + extra : chunk;
         GeometricDistribution* geomThreshold = new GeometricDistribution(epsilon * factor);
         nodeDegrees = graph->getNodeDegreeVector((rank - 1) * chunk);
+        std::cout << "Computed node degrees: " << rank << std::endl;
         for (int i = 0; i < nodeDegrees.size(); i++) {
             noised_degrees[i] = nodeDegrees[i] + geomThreshold->Sample();
         }
