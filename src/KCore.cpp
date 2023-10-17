@@ -182,6 +182,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 // MPI_Send(&currentLevels[prev_node_degree], node_degree_sum, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 MPI_Send(&permanentZeros[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 // MPI_Send(&node_degrees[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD);
+                std::cout << "Sent 2 to worker: " << p << std::endl;
                 offset += workLoad;
                 // prev_node_degree += node_degree_sum;
             }
@@ -211,9 +212,11 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             MPI_Send(&node_degree_sum, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             MPI_Send(&oal[0], node_degree_sum, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             std::cout << "Sent to master from worker: " << rank << std::endl;
+
             currentLevels.resize(node_degree_sum);
             MPI_Recv(&currentLevels[0], node_degree_sum, MPI_INT, COORDINATOR, FROM_MASTER, MPI_COMM_WORLD, &status);
             std::cout << "Rcvd at worker from master: " << rank << std::endl;
+
             mytype = FROM_MASTER;
             MPI_Recv(&offset, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             MPI_Recv(&workLoad, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
@@ -225,6 +228,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             MPI_Recv(&permanentZeros[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             // MPI_Recv(&node_degrees[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             // perform computation
+            std::cout << "Rcvd 2 at worker from master: " << rank << std::endl;
             int end_node = offset + workLoad;
             // for (int i = offset; i < end_node; i++) {
             //     if (currentLevels[i] == r && permanentZeros[i - offset] != 0) {
@@ -254,6 +258,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 if (roundThresholds[currNode - offset] == r) {
                     permanentZeros[currNode - offset] = 0;
                 }
+                std::cout << "Inside Loop" << std::endl;
                 if (currentLevels[start] == r && permanentZeros[currNode - offset] != 0) {
                     start += 1;
                     int U_i = 0;
