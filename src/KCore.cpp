@@ -93,7 +93,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         int offset_nd = (rank - 1) * chunk; 
         int workLoad_nd = (rank == numworkers) ? chunk + extra : chunk;
         GeometricDistribution* geomThreshold = new GeometricDistribution(epsilon * factor);
-        nodeDegrees = graph->getNodeDegreeVector();
+        nodeDegrees = graph->getNodeDegreeVector((rank - 1) * chunk);
         for (int i = 0; i < nodeDegrees.size(); i++) {
             noised_degrees[i] = nodeDegrees[i] + geomThreshold->Sample();
         }
