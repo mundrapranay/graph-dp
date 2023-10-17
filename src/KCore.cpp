@@ -231,7 +231,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             // perform computation
             std::cout << "Rcvd 2 at worker from master: " << rank << std::endl;
             int end_node = offset + workLoad;
-            int end_node = (rank == numworkers) ? n : offset + workLoad;
+            // int end_node = (rank == numworkers) ? n : offset + workLoad;
             // if (rank == numworkers) {
             //     end_node = n;
             //     std::cout << "checked for rank 16" << std::endl;
