@@ -26,7 +26,7 @@ def calculate_workloads(n, num_process):
     workloads = []
 
     for p in range(1, num_process + 1):
-        workload = chunk + extra if p == num_process else extra
+        workload = chunk + extra if p == num_process else chunk
         node_ids = list(range(offset, offset + workload))
         workloads.append(node_ids)
         offset += workload
