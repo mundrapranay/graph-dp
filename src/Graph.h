@@ -194,6 +194,7 @@ class Graph {
                     int node = it->first;
                     ordered_adjacency_list.push_back(node);
                     ordered_adjacency_list.insert(ordered_adjacency_list.end(), it->second.begin(), it->second.end());
+                    it++;
                 }
                 adjacencyList.clear();
             } 
@@ -218,6 +219,7 @@ class Graph {
             while (it != adjacencyList.end()) {
                 int node = it->first;
                 node_degrees[node - offset] = it->second.size();
+                it++;
             }
             return node_degrees;
         }
