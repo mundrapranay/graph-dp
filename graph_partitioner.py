@@ -19,6 +19,19 @@ def chunk_into_n(lst, n):
   size = ceil(len(lst) / n)
   return [lst[x * size:x * size + size] for x in range(n)]
 
+def calculate_workloads(n, num_process):
+    chunk = n // num_process
+    extra = n % num_process
+    offset = 0
+    workloads = []
+
+    for p in range(1, num_process + 1):
+        workload = chunk + extra if p == num_process else extra
+        node_ids = list(range(offset, offset + workload))
+        workloads.append(node_ids)
+        offset += workload
+
+    return workloads
 
 def partition_graph(graph, n):
     processes = n - 1
@@ -36,8 +49,9 @@ def partition_graph(graph, n):
         data[n2].append(n1)
     
     # nodes = [i for i in range(GRAPH_SIZES[graph])]
-    nodes = sorted(list(data.keys()))
-    chunked_nodes = chunk_into_n(nodes, processes)
+    # nodes = sorted(list(data.keys()))
+    # chunked_nodes = chunk_into_n(nodes, processes)
+    chunked_nodes = calculate_workloads(GRAPH_SIZES[graph], processes)
 
     graph_directory = './graphs/{0}_partitioned_{1}/'.format(graph, n)
     os.makedirs(graph_directory, exist_ok=True)
