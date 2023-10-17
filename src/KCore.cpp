@@ -249,7 +249,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             int start = 0;
             for (int currNode = offset; currNode < end_node; currNode++) {
                 int node_degree = nodeDegrees[currNode - offset];
-                if (roundsThreshold[currNode - offset] == r) {
+                if (roundThresholds[currNode - offset] == r) {
                     permanentZeros[currNode - offset] = 0;
                 }
                 if (currentLevels[start] == r && permanentZeros[currNode - offset] != 0) {
