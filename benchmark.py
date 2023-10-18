@@ -248,7 +248,7 @@ def plot_benchmark_runs_biasfactor():
                 bf_bias_pp_time = []
                 bf_bias_algo_time = []
                 for bias_factor in range(1, 21):
-                    output_file = f'graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_log2.txt'
+                    output_file = f'graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_partitioned.txt'
                     approx_core_numbers, pp_time, algo_time = get_core_numbers(output_file)
                     approximation_factor = np.array([float(max(s,t)) / max(1, min(s, t)) for s,t in zip(core_numbers, approx_core_numbers)])
                     # approx_x = np.arange(len(approximation_factor))
@@ -286,7 +286,7 @@ def plot_benchmark_runs_biasfactor():
     plt.ylabel('Approximation Factor')
     plt.title(graph.upper())
     plt.tight_layout()
-    plt.savefig('./figures/{0}_avg_approx_factors_bias_log2_mem_optim.png'.format(graph))
+    plt.savefig('./figures/{0}_avg_approx_factors_bias_partitioned.png'.format(graph))
     plt.cla()
     plt.clf()
 
@@ -302,7 +302,7 @@ def plot_benchmark_runs_biasfactor():
     plt.ylabel('Approximation Factor')
     plt.title(graph.upper())
     plt.tight_layout()
-    plt.savefig('./figures/{0}_max_approx_factors_bias_log2_mem_optim.png'.format(graph))
+    plt.savefig('./figures/{0}_max_approx_factors_bias_partitioned.png'.format(graph))
     plt.cla()
     plt.clf()
 
@@ -314,7 +314,7 @@ def plot_benchmark_runs_biasfactor():
     plt.ylabel('Response Time (seconds)')
     plt.title(graph.upper())
     plt.tight_layout()
-    plt.savefig('./figures/{0}_response_time_bias_log2_mem_optim.png'.format(graph))
+    plt.savefig('./figures/{0}_response_time_bias_partitioned.png'.format(graph))
     plt.cla()
     plt.clf()
 
@@ -368,9 +368,9 @@ def print_core_data():
 
 if __name__ == '__main__':
     # run_benchmark()
-    run_benchmark_partition()
+    # run_benchmark_partition()
     # plot_benchmark_runs()
-    # plot_benchmark_runs_biasfactor()
+    plot_benchmark_runs_biasfactor()
     # image_list = get_image_files(factor_id=4, bias_factor=50, graph='zhang_orkut')
     # combine_images(50, 20, image_list, 'zhang_orkut')
     # print_core_data()
