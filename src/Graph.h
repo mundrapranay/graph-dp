@@ -180,7 +180,7 @@ class Graph {
                                 [](int acc, const std::pair<int, std::vector<int>>& pair) {
                                     return acc + pair.second.size();
                                 });
-            std::cout << "Partition: " << filename << " | Nodes: " << graphSize  << " | ADL: " << al_size << std::endl;
+            // std::cout << "Partition: " << filename << " | Nodes: " << graphSize  << " | ADL: " << al_size << std::endl;
             graphSize += al_size;
             // auto it = adjacencyList.begin();
             // ordered_adjacency_list.resize(graphSize);
@@ -212,7 +212,7 @@ class Graph {
                 while (it != adjacencyList.end()) {
                     int node = it->first;
                     ordered_adjacency_list.push_back(node);
-                    ordered_adjacency_list.insert(ordered_adjacency_list.end(), it->second.begin(), it->second.end());
+                    ordered_adjacency_list.insert(ordered_adjacency_list.end(), adjacencyList[node].begin(), adjacencyList[node].end());
                     it++;
                 }
                 adjacencyList.clear();
