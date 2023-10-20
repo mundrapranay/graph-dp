@@ -168,14 +168,20 @@ class Graph {
             }
             file.close();
             graphSize = adjacencyList.size();
+            /**
+             * @todo: add sanity check to ensure that the graph and nodes are being read
+             * by printing the graphSize and the size of the adjacency lists being read 
+            */
             // std::cout << "Nodes | " << graphSize  << " | " << filename << std::endl;
             node_degrees = std::vector<int>(graphSize, 0);
             // iterate over adjacency list and 
             // populate the node_degrees and ordered_adjacency_list
-            graphSize += std::accumulate(adjacencyList.begin(), adjacencyList.end(), 0, 
+            int al_size = = std::accumulate(adjacencyList.begin(), adjacencyList.end(), 0, 
                                 [](int acc, const std::pair<int, std::vector<int>>& pair) {
                                     return acc + pair.second.size();
                                 });
+            std::cout << "Partition: " << filename << " | Nodes: " << graphSize  << " | ADL: " << al_size << std::endl;
+            graphSize += al_size;
             // auto it = adjacencyList.begin();
             // ordered_adjacency_list.resize(graphSize);
             // while (it != adjacencyList.end()) {
