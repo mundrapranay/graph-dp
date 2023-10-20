@@ -201,6 +201,8 @@ class Graph {
             if (ordered_adjacency_list.empty()){
                 auto it = adjacencyList.begin();
                 ordered_adjacency_list.resize(graphSize);
+                // [1, 0, 2, 0, 1, 3]
+                // [a, b, c, b, a, d]
                 while (it != adjacencyList.end()) {
                     int node = it->first;
                     ordered_adjacency_list.push_back(node);
