@@ -98,6 +98,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 MPI_Recv(&node_degree_sum, 1, MPI_INT, p, FROM_WORKER + p, MPI_COMM_WORLD, &status);
                 requested_node_ids.resize(node_degree_sum);
                 MPI_Recv(&requested_node_ids[0], node_degree_sum, MPI_INT, p, FROM_WORKER + p, MPI_COMM_WORLD, &status);
+                // check if it's in the same order as requested?
                 for (auto node : requested_node_ids) {
                     currentLevels.push_back(lds->get_level(node));
                 }
@@ -178,7 +179,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                             permanentZeros[currNode - offset] = 0;
                     }
                 }
-                start = node_degree + 1;
+                start += node_degree + 1;
             }
             // send back the completed data to COORDINATOR
             mytype = FROM_WORKER + rank;
