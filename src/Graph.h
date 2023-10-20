@@ -176,7 +176,7 @@ class Graph {
             node_degrees = std::vector<int>(graphSize, 0);
             // iterate over adjacency list and 
             // populate the node_degrees and ordered_adjacency_list
-            int al_size = = std::accumulate(adjacencyList.begin(), adjacencyList.end(), 0, 
+            int al_size = std::accumulate(adjacencyList.begin(), adjacencyList.end(), 0, 
                                 [](int acc, const std::pair<int, std::vector<int>>& pair) {
                                     return acc + pair.second.size();
                                 });
