@@ -75,7 +75,7 @@ def run_benchmark_partition():
     os.chdir('../')
 
     # graphs = GRAPH_SIZES.keys()
-    graphs = ['zhang_dblp', 'zhang_orkut']
+    graphs = ['zhang_dblp']
     # graphs = ['zhang_dblp']
 
     # Specify the number of processes as a command line argument
@@ -88,7 +88,7 @@ def run_benchmark_partition():
         for bias in [1]:
             for factor_id in range(5):
                 for bias_factor in range(1, 21):
-                    output_file = f'/home/ubuntu/results_new/graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_partitioned.txt'
+                    output_file = f'/home/ubuntu/results_new/graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_partitioned_no_noise.txt'
                     if not os.path.exists(output_file):
                         cmd = [
                             'mpirun',
@@ -248,7 +248,7 @@ def plot_benchmark_runs_biasfactor():
                 bf_bias_pp_time = []
                 bf_bias_algo_time = []
                 for bias_factor in range(1, 21):
-                    output_file = f'graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_partitioned.txt'
+                    output_file = f'graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_partitioned_no_noise.txt'
                     approx_core_numbers, pp_time, algo_time = get_core_numbers(output_file)
                     approximation_factor = np.array([float(max(s,t)) / max(1, min(s, t)) for s,t in zip(core_numbers, approx_core_numbers)])
                     # approx_x = np.arange(len(approximation_factor))
@@ -368,7 +368,7 @@ def print_core_data():
 
 if __name__ == '__main__':
     # run_benchmark()
-    # run_benchmark_partition()
+    run_benchmark_partition()
     # plot_benchmark_runs()
     plot_benchmark_runs_biasfactor()
     # image_list = get_image_files(factor_id=4, bias_factor=50, graph='zhang_orkut')
