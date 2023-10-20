@@ -161,9 +161,9 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                     permanentZeros[currNode - offset] = 0;
                 }
                 if (currentLevels[start] == r && permanentZeros[currNode - offset] != 0) {
+                    int end_adl = start + node_degree + 1;
                     start += 1;
                     int U_i = 0;
-                    int end_adl = start + node_degree + 1;
                     for (; start < end_adl; start++) {
                         if (currentLevels[start] == r) {
                             U_i += 1;
