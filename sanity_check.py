@@ -51,7 +51,7 @@ def get_max_approx_index(pairs):
 
     return max_index
 
-def core_numbers_distribution():
+def core_numbers_distribution(filename):
     f = open('ground_truth/zhang_dblp_cores', 'r')
     lines = f.readlines()
     # del lines[-1]
@@ -64,7 +64,7 @@ def core_numbers_distribution():
 
     print('Max Core Number: {0}'.format(max(core_numbers)))
 
-    f = open('log.txt', 'r')
+    f = open(filename, 'r')
     lines = f.readlines()
     del lines[-1]
     del lines[0]
@@ -75,6 +75,7 @@ def core_numbers_distribution():
         cn = float(line[1].strip())
         estimated_core_numbers.append(cn)
     
+    print(filename)
     print('Max Approximated Core Number: {0}'.format(max(estimated_core_numbers)))
     x = np.arange(len(core_numbers))
     approximation = [((s, t), (float(max(s,t)) / min(s, t))) for s,t in zip(core_numbers, estimated_core_numbers)]
@@ -125,7 +126,12 @@ def cutoff_thresholds():
 
 
 if __name__ == '__main__':
-    load_graph(274467)
+    # load_graph(274467)
     # preprocess_data()
+    for bf in range(1, 5):
+        output_file = f'/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_1_bias_factor_{bf}_partitioned_no_noise.txt'
+        core_numbers_distribution(output_file)
+        print()
+        
     # core_numbers_distribution()
     # cutoff_thresholds()

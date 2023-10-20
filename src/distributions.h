@@ -97,14 +97,14 @@ class SecureURBG {
             "return 1 on success, but returned "
         << one_on_success << std::endl;
     }
-    if (printed == 0) {
-       std::cout << "URGB Number" << std::endl;
-       for (size_t i = 0; i < sizeof(buffer_) / sizeof(buffer_[0]); i++) {
-        std::cout << static_cast<int>(buffer_[i]) << " ";
-       }
-       std::cout << std::endl;
-       printed = 1;
-    }
+    // if (printed == 0) {
+    //    std::cout << "URGB Number" << std::endl;
+    //    for (size_t i = 0; i < sizeof(buffer_) / sizeof(buffer_[0]); i++) {
+    //     std::cout << static_cast<int>(buffer_[i]) << " ";
+    //    }
+    //    std::cout << std::endl;
+    //    printed = 1;
+    // }
     current_index_ = 0;
   }
 
