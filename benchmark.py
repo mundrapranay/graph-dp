@@ -75,7 +75,7 @@ def run_benchmark_partition():
     os.chdir('../')
 
     # graphs = GRAPH_SIZES.keys()
-    graphs = ['zhang_dblp']
+    graphs = ['zhang_dblp', 'zhang_orkut']
     # graphs = ['zhang_dblp']
 
     # Specify the number of processes as a command line argument
