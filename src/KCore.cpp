@@ -3,6 +3,12 @@
  * @brief Approximate KCore Distributed Algorithm
 */
 
+/**
+ * @todo: 
+ *      Implement LEDP Denset Subgraph 
+ *      Implement Triangle Counting 
+*/
+
 #include <math.h>
 #include <mpi.h>
 #include <vector>
@@ -28,7 +34,6 @@ int log_a_to_base_b(int a, double b) {
 }
 
 LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilon, double phi, double lambda, int levels_per_group, double factor, int bias, int bias_factor, int n) {
-    double delta = 9.0;
     // change this to min(rounds_param, round_threshold[node]) forall node in graph
     double rounds_param = ceil(4.0 * pow(log_a_to_base_b(n, 1.0 + phi), 1.5));
     int number_of_rounds = static_cast<int>(rounds_param);
@@ -55,13 +60,12 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
     }
     double remaingingBudget = (factor != 1.0) ? (1.0 - factor) : 0.0;
     if (rank == COORDINATOR) {
-        lds = new LDS(n, phi, delta, levels_per_group, false);
+        lds = new LDS(n, phi, levels_per_group, false);
     } else {
         int offset_nd = (rank - 1) * chunk; 
         int workLoad_nd = (rank == numworkers) ? chunk + extra : chunk;
         GeometricDistribution* geomThreshold = new GeometricDistribution(epsilon * factor);
         nodeDegrees = graph->getNodeDegreeVector((rank - 1) * chunk);
-        // std::cout << "Computed node degrees: " << rank << std::endl;
         for (int i = 0; i < nodeDegrees.size(); i++) {
             noised_degrees[i] = nodeDegrees[i];
             noised_degrees[i] = nodeDegrees[i] + geomThreshold->Sample();
@@ -89,16 +93,14 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         std::vector<int> nextLevels(workLoadSize, 0);
         int group_index; 
         if (rank == COORDINATOR) {
-            // worker send their node ids
-            // subset of current levels for these ids
-            // send them back
+
+            // worker send a request for current levels their node ids
             for (p = 1; p <= numworkers; p++) {
                 std::vector<int> requested_node_ids;
                 int node_degree_sum;
                 MPI_Recv(&node_degree_sum, 1, MPI_INT, p, FROM_WORKER + p, MPI_COMM_WORLD, &status);
                 requested_node_ids.resize(node_degree_sum);
                 MPI_Recv(&requested_node_ids[0], node_degree_sum, MPI_INT, p, FROM_WORKER + p, MPI_COMM_WORLD, &status);
-                // check if it's in the same order as requested?
                 for (auto node : requested_node_ids) {
                     currentLevels.push_back(lds->get_level(node));
                 }
@@ -131,7 +133,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             // update the levels based on the data in nextLevels
             for (int i = 0; i < nextLevels.size(); i++) {
                 if (nextLevels[i] == 1 && permanentZeros[i] != 0) {
-                    lds->level_increase_v2(i, lds->L);
+                    lds->level_increase(i, lds->L);
                 } 
             }
         } else {
@@ -162,17 +164,15 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 }
                 if (currentLevels[start] == r && permanentZeros[currNode - offset] != 0) {
                     int end_adl = start + node_degree + 1;
-                    // start += 1;
                     int U_i = 0;
                     for (int adj_start = start + 1; adj_start < end_adl; adj_start++) {
                         if (currentLevels[adj_start] == r) {
                             U_i += 1;
                         }
                     }
-                    double lambda = (epsilon * remaingingBudget) / (2.0 * rounds_param);
-                    GeometricDistribution* geom = new GeometricDistribution(lambda);
+                    double distribution_factor = (epsilon * remaingingBudget) / (2.0 * rounds_param);
+                    GeometricDistribution* geom = new GeometricDistribution(distribution_factor);
                     int noise = geom->Sample();
-                    // int noise = 0;
                     int U_hat_i = U_i + noise;
                     if (U_hat_i > pow((1 + phi), group_index)) {
                             nextLevels[currNode - offset] = 1;
@@ -188,7 +188,6 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             MPI_Send(&workLoad, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             MPI_Send(&nextLevels[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             MPI_Send(&permanentZeros[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
-            // std::cout << "Sent 3 to master from worker: " << rank << std::endl;
         }
 
         MPI_Barrier(MPI_COMM_WORLD);
@@ -225,6 +224,31 @@ std::vector<double> estimateCoreNumbers(LDS* lds, int n, double eta, double phi,
 }
 
 
+// Computing Low Out Degree Ordering
+std::vector<int> lowOutDegreeOrdering(LDS* lds, int n) {
+    std::vector<int> node_levels(n);
+    std::vector<int> ordered_nodes(n);
+
+    for (int i = 0; i < n; i++) {
+        node_levels[i] = lds->get_level(i);
+    }
+
+    // create a vector of indices (0, 1, 2, ..., n-1)
+    std::iota(ordered_nodes.begin(), ordered_nodes.end(), 0);
+
+    // custom comparator to sort
+    auto compareNodes = [&node_levels](int a, int b) {
+        if (node_levels[a] == node_levels[b]) {
+            return a < b; // Break ties using node IDs
+        }
+        return node_levels[a] < node_levels[b];
+    };
+
+    // sort indices based on the custom comparator
+    std::sort(ordered_nodes.begin(), ordered_nodes.end(), compareNodes);
+
+    return ordered_nodes;
+}
 } // end of namespace distributed_kcore
 
 int main(int argc, char** argv) {
@@ -312,6 +336,7 @@ int main(int argc, char** argv) {
         algo_start = std::chrono::high_resolution_clock::now();
         distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, eta, epsilon, phi, lambda, static_cast<int>(levels_per_group), factor, bias, bias_factor, n);
         std::vector<double> estimated_core_numbers = distributed_kcore::estimateCoreNumbers(lds, n, eta, phi, lambda, levels_per_group);
+        std::vector<int> lowOutOrdering = distributed_kcore::lowOutDegreeOrdering(lds, n);
         algo_end = std::chrono::high_resolution_clock::now();
         algo_elapsed = algo_end - algo_start;
         // std::cout << "Printing Core Numbers" << std::endl;

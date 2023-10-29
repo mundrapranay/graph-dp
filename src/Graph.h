@@ -168,47 +168,18 @@ class Graph {
             }
             file.close();
             graphSize = adjacencyList.size();
-            /**
-             * @todo: add sanity check to ensure that the graph and nodes are being read
-             * by printing the graphSize and the size of the adjacency lists being read 
-            */
-            // std::cout << "Nodes | " << graphSize  << " | " << filename << std::endl;
             node_degrees = std::vector<int>(graphSize, 0);
-            // iterate over adjacency list and 
-            // populate the node_degrees and ordered_adjacency_list
             int al_size = std::accumulate(adjacencyList.begin(), adjacencyList.end(), 0, 
                                 [](int acc, const std::pair<int, std::vector<int>>& pair) {
                                     return acc + pair.second.size();
                                 });
-            // std::cout << "Partition: " << filename << " | Nodes: " << graphSize  << " | ADL: " << al_size << std::endl;
             graphSize += al_size;
-            // auto it = adjacencyList.begin();
-            // ordered_adjacency_list.resize(graphSize);
-            // while (it != adjacencyList.end()) {
-            //     int node = it->first;
-            //     node_degrees[node - offset] = it->second.size();
-            //     ordered_adjacency_list.push_back(node);
-            //     ordered_adjacency_list.insert(ordered_adjacency_list.end(), it->second.begin(), it->second.end());
-            //     it++;
-            // }
-            // adjacencyList.clear();
-            // auto it = adjacencyList.begin();
-            // while (it != adjacencyList.end()) {
-            //     int node = it->first;
-            //     node_degrees[node - offset] = it->second.size();
-            // }
-            // for (int i : nodes) {
-            //     node_degrees[i - offset] = adjacencyList[i].size();
-            // }
-            // std::cout << "Read the graph | " << graphSize  << " | " << filename << std::endl;
         }
 
         std::vector<int> computeOAL(int offset) {
             if (ordered_adjacency_list.empty()){
                 auto it = adjacencyList.begin();
                 ordered_adjacency_list.resize(graphSize);
-                // [1, 0, 2, 0, 1, 3]
-                // [a, b, c, b, a, d]
                 while (it != adjacencyList.end()) {
                     int node = it->first;
                     ordered_adjacency_list.push_back(node);
@@ -218,7 +189,6 @@ class Graph {
                 adjacencyList.clear();
             } 
             return ordered_adjacency_list;
-            // std::cout << "Computed OAL | " << filename << std::endl;
         }
 
         std::unordered_map<int, std::vector<int>> getAdjacencyList() {
@@ -228,10 +198,6 @@ class Graph {
         std::vector<int> getNeighbors(int node) {
             return adjacencyList[node];
         }
-
-        // std::unordered_map<int, int> getNodeDegrees() {
-        //     return nodeDegrees;
-        // }
 
         std::vector<int> getNodeDegreeVector(int offset) {
             auto it = adjacencyList.begin();
@@ -254,23 +220,6 @@ class Graph {
 
         size_t getGraphSize() {
             return graphSize;
-        }
-
-        int sumAdjList() {
-            int sum = 0;
-            for (auto it : adjacencyList) {
-                sum += it.second.size();
-            }
-            return sum;
-        }
-
-        void printDegrees() {
-            std::unordered_map<int, std::vector<int>>::iterator it;
-            for (it = adjacencyList.begin(); it != adjacencyList.end(); it++) {
-                int node = it->first;
-                std::vector<int> nghs = it->second;
-                std::cout << "Node: " << node << " | Degree : " << nghs.size() << std::endl;
-            }
         }
 };
 

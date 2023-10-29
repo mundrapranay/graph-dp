@@ -15,17 +15,8 @@ inline double group_degree(size_t group, double phi) {
     return pow(1 + phi, group);
 }
 
-inline double upper_constant(double delta, bool optimized) {
-    if (optimized) {
-        return 1.1;
-    } else {
-        return (2 + static_cast<double>(3) /  delta);
-    }
-}
-
 struct LDS {
     size_t n; // number of vertices
-    double delta = 9.0;
     double phi = 3.0;
     bool optimized_insertion = false;
 
@@ -37,8 +28,7 @@ struct LDS {
     size_t levels_per_group; // number of inner-levels per group. O(\log n) many
     std::vector<LDSVertex> L;
 
-    LDS(size_t _n, double _eps, double _delta, int _levels_per_group, bool _optimized) : n(_n), phi(_eps),
-        delta(_delta), levels_per_group(_levels_per_group), optimized_insertion(_optimized) {
+    LDS(size_t _n, double _eps, double _delta, int _levels_per_group, bool _optimized) : n(_n), phi(_eps), levels_per_group(_levels_per_group), optimized_insertion(_optimized) {
             // levels_per_group = ceil(log(n) / log(1 + phi));
             L = std::vector<LDSVertex>(n);
     }
@@ -52,7 +42,7 @@ struct LDS {
      * L -> array to access LDS array easily 
     */
     template <class Levels>
-    void level_increase_v2(uintE u, Levels& L) {
+    void level_increase(uintE u, Levels& L) {
         L[u].level++;
     }
 
