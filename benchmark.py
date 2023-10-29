@@ -314,7 +314,7 @@ def plot_benchmark_runs_biasfactor():
     plt.ylabel('Response Time (seconds)')
     plt.title(graph.upper())
     plt.tight_layout()
-    plt.savefig('./figures/{0}_response_time_bias_partitioned.png_no_noise'.format(graph))
+    plt.savefig('./figures/{0}_response_time_bias_partitioned_no_noise.png'.format(graph))
     plt.cla()
     plt.clf()
 
