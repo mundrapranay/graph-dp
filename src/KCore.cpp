@@ -68,7 +68,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         nodeDegrees = graph->getNodeDegreeVector((rank - 1) * chunk);
         for (int i = 0; i < nodeDegrees.size(); i++) {
             noised_degrees[i] = nodeDegrees[i];
-            noised_degrees[i] = nodeDegrees[i] + geomThreshold->Sample();
+            // noised_degrees[i] = nodeDegrees[i] + geomThreshold->Sample();
             if (bias == 1) {
                 noised_degrees[i] -= std::min(noised_degrees[i] - 1, bias_factor);
             }
@@ -172,7 +172,8 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                     }
                     double distribution_factor = (epsilon * remaingingBudget) / (2.0 * rounds_param);
                     GeometricDistribution* geom = new GeometricDistribution(distribution_factor);
-                    int noise = geom->Sample();
+                    // int noise = geom->Sample();
+                    int noise = 0;
                     int U_hat_i = U_i + noise;
                     if (U_hat_i > pow((1 + phi), group_index)) {
                             nextLevels[currNode - offset] = 1;
