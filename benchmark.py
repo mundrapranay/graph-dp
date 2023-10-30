@@ -241,7 +241,7 @@ def plot_benchmark_runs_biasfactor():
 
         biased_pp_time = []
 
-        for bias in [0]:
+        for bias in [1]:
             for factor_id in range(5):
                 bf_bias_avg_approx = []
                 bf_bias_max_approx = []
