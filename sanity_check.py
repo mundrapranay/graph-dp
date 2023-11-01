@@ -128,8 +128,8 @@ def cutoff_thresholds():
 if __name__ == '__main__':
     # load_graph(274467)
     # preprocess_data()
-    for bf in range(1, 5):
-        output_file = f'/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_1_bias_factor_{bf}_partitioned_no_noise.txt'
+    for bf in range(1, 2):
+        output_file = f'/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_1_bias_factor_{bf}_partitioned_no_noise_bias_testing.txt'
         core_numbers_distribution(output_file)
         print()
         
