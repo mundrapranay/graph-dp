@@ -64,7 +64,7 @@ def core_numbers_distribution():
 
     print('Max Core Number: {0}'.format(max(core_numbers)))
 
-    f = open('/home/ubuntu/results_new/graph_zhang_dblp_factor_id_1_bias_0_bias_factor_1_dev_testing.txt', 'r')
+    f = open('/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_1_dev_testing.txt', 'r')
     lines = f.readlines()
     del lines[-1]
     del lines[0]
