@@ -214,7 +214,8 @@ int main(int argc, char** argv) {
     int n = std::stoi(argv[8]);
     double one_plus_phi = 1.0 + phi;
     double levels_per_group = ceil(distributed_kcore::log_a_to_base_b(n, one_plus_phi));
-    double lambda = (2.0 / 9.0) * (2.0 * eta - 5.0);
+    // double lambda = (2.0 / 9.0) * (2.0 * eta - 5.0);
+    double lambda = 0.5;
     // double levels_per_group = 15.0;
 
     
