@@ -30,8 +30,8 @@ def run_benchmark():
     os.chdir('../')
 
     # graphs = GRAPH_SIZES.keys()
-    graphs = ['hua_livejournal', 'hua_youtube', 'hua_stackoverflow']
-    # graphs = ['zhang_dblp']
+    # graphs = ['hua_livejournal', 'hua_youtube', 'hua_stackoverflow']
+    graphs = ['zhang_dblp']
 
     # Specify the number of processes as a command line argument
     num_processes = 17
@@ -40,9 +40,9 @@ def run_benchmark():
     phi = 0.5
     for graph in graphs:
         # for bias in [0, 1]:
-        for bias in [1]:
-            for factor_id in range(5):
-                for bias_factor in range(1, 51):
+        for bias in [0]:
+            for factor_id in range(1):
+                for bias_factor in range(1, 2):
                     cmd = [
                         'mpirun',
                         '-np', str(num_processes),
@@ -51,7 +51,7 @@ def run_benchmark():
                         str(eta), str(epsilon), str(phi),
                         str(factor_id), str(bias), str(bias_factor), str(GRAPH_SIZES[graph])
                     ]
-                    output_file = f'/home/ubuntu/results_new/graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_log2.txt'
+                    output_file = f'/home/ubuntu/results_new/graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_dev_testing.txt'
                     
                     with open(output_file, 'w') as f:
                         subprocess.run(cmd, stdout=f)
