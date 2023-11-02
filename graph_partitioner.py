@@ -55,8 +55,10 @@ def partition_graph(graph, n):
 
     graph_directory = './graphs/{0}_partitioned_{1}/'.format(graph, n)
     os.makedirs(graph_directory, exist_ok=True)
+    total_m = 0;
     for i, cn in enumerate(chunked_nodes):
        print("Partition : {0} | Nodes : {1} | ADL : {2}".format(i, len(cn), sum([len(data[n]) for n in cn])))
+       total_m += sum([len(data[n]) for n in cn])
     #    graph_file = graph_directory + '{0}.txt'.format(i + 1)
     #    with open(graph_file, 'w') as out:
     #       for node in cn:
@@ -64,8 +66,8 @@ def partition_graph(graph, n):
     #         for a in adjacency_list:
     #             out.write('{0} {1}\n'.format(node, a))
     #    out.close()
-    
-
+    tota_m_up = sum([len(data[n]) for n in data.keys()])
+    assert(tota_m_up == total_m)
 if __name__ == '__main__':
   partition_graph('zhang_dblp', 17)
 #    partition_graph('zhang_orkut', 17)
