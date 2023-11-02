@@ -64,7 +64,7 @@ def core_numbers_distribution():
 
     print('Max Core Number: {0}'.format(max(core_numbers)))
 
-    f = open('/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_1_dev_testing.txt', 'r')
+    f = open('/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_1_dev_testing_oal.txt', 'r')
     lines = f.readlines()
     del lines[-1]
     del lines[0]
@@ -125,7 +125,7 @@ def cutoff_thresholds():
 
 
 if __name__ == '__main__':
-    load_graph(274467)
+    # load_graph(274467)
     # preprocess_data()
-    # core_numbers_distribution()
+    core_numbers_distribution()
     # cutoff_thresholds()

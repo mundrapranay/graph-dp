@@ -32,8 +32,8 @@ def run_benchmark():
     os.chdir('../')
 
     # graphs = GRAPH_SIZES.keys()
-    graphs = ['zhang_dblp', 'zhang_orkut', 'hua_livejournal', 'hua_ctr']
-    # graphs = ['zhang_dblp']
+    # graphs = ['zhang_dblp', 'zhang_orkut', 'hua_livejournal', 'hua_ctr']
+    graphs = ['zhang_dblp']
 
     # Specify the number of processes as a command line argument
     num_processes = 17
@@ -42,10 +42,10 @@ def run_benchmark():
     phi = 0.5
     for graph in graphs:
         # for bias in [0, 1]:
-        for bias in [1]:
-            for factor_id in range(5):
-                for bias_factor in range(1, 21):
-                    output_file = f'/home/ubuntu/results_new/graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_log2.txt'
+        for bias in [0]:
+            for factor_id in range(1):
+                for bias_factor in range(1, 2):
+                    output_file = f'/home/ubuntu/results_new/graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_dev_testing_oal.txt'
                     if not os.path.exists(output_file):
                         cmd = [
                             'mpirun',
@@ -324,9 +324,9 @@ def print_core_data():
                     out.close()
 
 if __name__ == '__main__':
-    # run_benchmark()
+    run_benchmark()
     # plot_benchmark_runs()
-    plot_benchmark_runs_biasfactor()
+    # plot_benchmark_runs_biasfactor()
     # image_list = get_image_files(factor_id=4, bias_factor=50, graph='zhang_orkut')
     # combine_images(50, 20, image_list, 'zhang_orkut')
     # print_core_data()
