@@ -167,10 +167,10 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             for (int currNode = offset; currNode < end_node; currNode++) {
                 int node_degree = node_degrees[currNode - offset];
                 if (currentLevels[start] == r && permanentZeros[currNode - offset] != 0) {
-                    start += 1;
+                    int adl_end = start + node_degree + 1;
                     int U_i = 0;
-                    for (; start < node_degree + 1; start++) {
-                        if (currentLevels[start] == r) {
+                    for (int adl = start + 1; adl < adl_end; adl++) {
+                        if (currentLevels[adl] == r) {
                             U_i += 1;
                         }
                     }
@@ -184,7 +184,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                             permanentZeros[currNode - offset] = 0;
                     }
                 }
-                start = node_degree + 1;
+                start += node_degree + 1;
             }
 
             // send back the completed data to COORDINATOR
