@@ -10,6 +10,7 @@
 #include <set>
 #include <unordered_map>
 #include <chrono>
+#include <numeric>
 #include "LDS.h"
 #include "Graph.h"
 #include "distributions.h"
@@ -34,31 +35,37 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
     int chunk = n / numworkers;
     int extra = n % numworkers;
     int offset, mytype, workLoad, p;
-    std::unordered_map<int, std::vector<int>> adjacencyList = graph->getAdjacencyList();
+    int workLoadSize;
+    // to decide the size of the datastructures for each process
+    if (rank == COORDINATOR) {
+        workLoadSize = n;
+    } else {
+        workLoadSize = (rank == numworkers) ? chunk + extra : chunk;
+    }
+
     MPI_Status status;
     LDS *lds;
     std::vector<int> roundThresholds(n, 0);
+    if (rank != COORDINATOR) {
+        roundThresholds.clear();
+    }
     double remaingingBudget = (factor != 1.0) ? (1.0 - factor) : 0.0;
 
     if (rank == COORDINATOR) {
         lds = new LDS(n, phi, delta, levels_per_group, false);
         GeometricDistribution* geomThreshold = new GeometricDistribution(epsilon * factor);
-        std::unordered_map<int, int> nodeDegrees = graph->getNodeDegrees();
-        for (auto it : nodeDegrees) {
-            int node = it.first;
-            // int noisedDegree = it.second + geomThreshold->Sample();
-            int noisedDegree = it.second;
+        for (int node = 0; node < n; node++) {
+            int noisedDegree = graph->getNodeDegree(node) + geomThreshold->Sample();
             if (bias == 1) {
                 noisedDegree -= std::min(noisedDegree - 1, bias_factor);
             }
             // int numberOfRounds = ceil(log_a_to_base_b(noisedDegree, 1.0 + phi)) * levels_per_group;
             int numberOfRounds = ceil(log2(noisedDegree)) * levels_per_group;
             roundThresholds[node] = numberOfRounds;
-            // std::cout << node << " : " << numberOfRounds << std::endl;
         }
     }
     MPI_Barrier(MPI_COMM_WORLD);
-    std::vector<int> permanentZeros(n, 1);
+    std::vector<int> permanentZeros(workLoadSize, 1);
 
     for (int r = 0; r < number_of_rounds - 2; r++) {
         std::chrono::time_point<std::chrono::high_resolution_clock> round_start, round_end;
@@ -67,34 +74,44 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         // each node either releases 1 or 0 and the coordinator updates the level accordingly
         // nextLevels stores this information
         round_start = std::chrono::high_resolution_clock::now();
-        std::vector<int> currentLevels(n);
-        std::vector<int> nextLevels(n, 0);
+        // std::vector<int> currentLevels(n);
+        std::vector<int> currentLevels;
+        std::vector<int> nextLevels(workLoadSize, 0);
+        std::vector<int> node_degrees(workLoadSize, 0);
         int group_index; 
         if (rank == COORDINATOR) {
-            for (int node = 0; node < n; node++) {
-                currentLevels[node] = lds->get_level(node);
+            // for (int node = 0; node < n; node++) {
+            //     currentLevels[node] = lds->get_level(node);
+            //     if (roundThresholds[node] == r) {
+            //         permanentZeros[node] = 0;
+            //     }
+            // }
+            for (auto node : graph->ordered_adjacency_list) {
+                currentLevels.push_back(lds->get_level(node));
                 if (roundThresholds[node] == r) {
                     permanentZeros[node] = 0;
                 }
             }
             group_index = lds->group_for_level(r);
-
-            /**
-             * @todo: figure out offset value so that each worker 
-             *        can decide the nodes to work on.
-            */
+            node_degrees = graph->getNodeDegreeVector();
             offset = 0;
             mytype = FROM_MASTER;
+            int prev_node_degree = 0;
             for (p = 1; p <= numworkers; p++) {
                 workLoad = (p == numworkers) ? chunk + extra : chunk;
                 MPI_Send(&offset, 1, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 MPI_Send(&workLoad, 1, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 MPI_Send(&group_index, 1, MPI_INT, p, mytype, MPI_COMM_WORLD);
-                MPI_Send(&currentLevels[0], currentLevels.size(), MPI_INT, p, mytype, MPI_COMM_WORLD);
+                int node_degree_sum = std::accumulate(node_degrees.begin()+offset, node_degrees.begin()+offset+workLoad, 0) + workLoad; // as for each we have node, adjacencyList[node]
+                MPI_Send(&node_degree_sum, 1, MPI_INT, p, mytype, MPI_COMM_WORLD);
+                // MPI_Send(&currentLevels[0], currentLevels.size(), MPI_INT, p, mytype, MPI_COMM_WORLD);
+                MPI_Send(&currentLevels[prev_node_degree], node_degree_sum, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 MPI_Send(&permanentZeros[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD);
+                MPI_Send(&node_degrees[offset], workLoad, MPI_INT, p, mytype, MPI_COMM_WORLD);
                 offset += workLoad;
+                prev_node_degree += node_degree_sum;
             }
-
+            
             // receive results from workers
             for (p = 1; p <= numworkers; p++) {
                 mytype = FROM_WORKER + p;
@@ -112,43 +129,70 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             }
         } else {
             // worker task
+            int node_degree_sum;
             mytype = FROM_MASTER;
             MPI_Recv(&offset, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             MPI_Recv(&workLoad, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             MPI_Recv(&group_index, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
-            MPI_Recv(&currentLevels[0], currentLevels.size(), MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
-            MPI_Recv(&permanentZeros[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
-
+            MPI_Recv(&node_degree_sum, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
+            currentLevels.resize(node_degree_sum);
+            // MPI_Recv(&currentLevels[0], currentLevels.size(), MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
+            MPI_Recv(&currentLevels[0], node_degree_sum, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
+            MPI_Recv(&permanentZeros[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
+            MPI_Recv(&node_degrees[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             // perform computation
             int end_node = offset + workLoad;
-            for (int i = offset; i < end_node; i++) {
-                if (currentLevels[i] == r && permanentZeros[i] != 0) {
-                   int U_i = 0;
-                   for (auto ngh : adjacencyList[i]) {
-                        if (currentLevels[ngh] == r) {
+            // for (int i = offset; i < end_node; i++) {
+            //     if (currentLevels[i] == r && permanentZeros[i - offset] != 0) {
+            //        int U_i = 0;
+            //        for (auto ngh : graph->getNeighbors(i)) {
+            //             if (currentLevels[ngh] == r) {
+            //                 U_i += 1;
+            //             }
+            //        }
+
+            //        double lambda = (epsilon * remaingingBudget) / (2.0 * rounds_param);
+            //        GeometricDistribution* geom = new GeometricDistribution(lambda);
+            //        int noise = geom->Sample();
+            //        int U_hat_i = U_i + noise;
+            //        if (U_hat_i > pow((1 + phi), group_index)) {
+            //             nextLevels[i - offset] = 1;
+            //        } else {
+            //             permanentZeros[i - offset] = 0;
+            //        }
+            //     }
+
+            // }
+            int start = 0;
+            for (int currNode = offset; currNode < end_node; currNode++) {
+                int node_degree = node_degrees[currNode - offset];
+                if (currentLevels[start] == r && permanentZeros[currNode - offset] != 0) {
+                    int adl_end = start + node_degree + 1;
+                    int U_i = 0;
+                    for (int adl = start + 1; adl < adl_end; adl++) {
+                        if (currentLevels[adl] == r) {
                             U_i += 1;
                         }
-                   }
-
-                   double lambda = (epsilon * remaingingBudget) / (2.0 * rounds_param);
-                   GeometricDistribution* geom = new GeometricDistribution(lambda);
-                //    int noise = geom->Sample();
-                    int noise = 0;
-                   int U_hat_i = U_i + noise;
-                   if (U_hat_i > pow((1 + phi), group_index)) {
-                        nextLevels[i] = 1;
-                   } else {
-                        permanentZeros[i] = 0;
-                   }
+                    }
+                    double lambda = (epsilon * remaingingBudget) / (2.0 * rounds_param);
+                    GeometricDistribution* geom = new GeometricDistribution(lambda);
+                    int noise = geom->Sample();
+                    int U_hat_i = U_i + noise;
+                    if (U_hat_i > pow((1 + phi), group_index)) {
+                            nextLevels[currNode - offset] = 1;
+                    } else {
+                            permanentZeros[currNode - offset] = 0;
+                    }
                 }
+                start += node_degree + 1;
             }
 
             // send back the completed data to COORDINATOR
             mytype = FROM_WORKER + rank;
             MPI_Send(&offset, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             MPI_Send(&workLoad, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
-            MPI_Send(&nextLevels[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
-            MPI_Send(&permanentZeros[offset], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
+            MPI_Send(&nextLevels[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
+            MPI_Send(&permanentZeros[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
 
         }
 
@@ -156,17 +200,17 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         round_end = std::chrono::high_resolution_clock::now();
         round_elapsed = round_end - round_start;
         round_time = round_elapsed.count();
-        // if (rank == COORDINATOR) {
-        //     std::cout << "Round " << r << " | " << number_of_rounds - 2 << std::endl;
-        //     std::cout << "Round time: " << round_time << std::endl;
-        // }
+       // if (rank == COORDINATOR) {
+         //    std::cout << "Round " << r << " | " << number_of_rounds - 2 << std::endl;
+           //  std::cout << "Round time: " << round_time << std::endl;
+         //}
     }
     MPI_Barrier(MPI_COMM_WORLD);
     // free up memory
     permanentZeros.clear();
-    roundThresholds.clear();
+    // roundThresholds.clear();
     permanentZeros.shrink_to_fit();
-    roundThresholds.shrink_to_fit();
+    // roundThresholds.shrink_to_fit();
 
     return lds;
 }
@@ -233,7 +277,8 @@ int main(int argc, char** argv) {
     double pp_time = 0.0;
     if (rank  == COORDINATOR) {
         pp_start = std::chrono::high_resolution_clock::now();
-        graph = new distributed_kcore::Graph(file_loc);
+        // graph = new distributed_kcore::Graph(file_loc);
+        graph = new distributed_kcore::Graph(file_loc, n);
         pp_end = std::chrono::high_resolution_clock::now();
         pp_elapsed = (pp_end - pp_start);
         pp_time = pp_elapsed.count();

@@ -1582,3 +1582,108 @@ events:
         
       exitCode: 0
 ...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:4 (find_package)"
+    description: "The MPI test test_mpi for C in mode normal"
+    directories:
+      source: "/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-QQwoP0"
+      binary: "/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-QQwoP0"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_C_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-QQwoP0'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_dceea/fast
+        gmake[1]: Entering directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-QQwoP0'
+        /usr/bin/gmake  -f CMakeFiles/cmTC_dceea.dir/build.make CMakeFiles/cmTC_dceea.dir/build
+        gmake[2]: Entering directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-QQwoP0'
+        Building C object CMakeFiles/cmTC_dceea.dir/test_mpi.c.o
+        /usr/bin/cc    -o CMakeFiles/cmTC_dceea.dir/test_mpi.c.o -c /home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-QQwoP0/test_mpi.c
+        Linking C executable cmTC_dceea
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_dceea.dir/link.txt --verbose=1
+        /usr/bin/cc -Wl,-rpath -Wl,/usr/local/lib -Wl,--enable-new-dtags -Wl,--dependency-file,CMakeFiles/cmTC_dceea.dir/link.d CMakeFiles/cmTC_dceea.dir/test_mpi.c.o -o cmTC_dceea  -Wl,-rpath,/usr/local/lib /usr/local/lib/libmpi.so 
+        gmake[2]: Leaving directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-QQwoP0'
+        gmake[1]: Leaving directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-QQwoP0'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1322 (_MPI_try_staged_settings)"
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1645 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:4 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode normal"
+    directories:
+      source: "/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-osUFGx"
+      binary: "/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-osUFGx"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-osUFGx'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_4b80e/fast
+        gmake[1]: Entering directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-osUFGx'
+        /usr/bin/gmake  -f CMakeFiles/cmTC_4b80e.dir/build.make CMakeFiles/cmTC_4b80e.dir/build
+        gmake[2]: Entering directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-osUFGx'
+        Building CXX object CMakeFiles/cmTC_4b80e.dir/test_mpi.cpp.o
+        /usr/bin/c++    -o CMakeFiles/cmTC_4b80e.dir/test_mpi.cpp.o -c /home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-osUFGx/test_mpi.cpp
+        Linking CXX executable cmTC_4b80e
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4b80e.dir/link.txt --verbose=1
+        /usr/bin/c++ -Wl,-rpath -Wl,/usr/local/lib -Wl,--enable-new-dtags -Wl,--dependency-file,CMakeFiles/cmTC_4b80e.dir/link.d CMakeFiles/cmTC_4b80e.dir/test_mpi.cpp.o -o cmTC_4b80e  -Wl,-rpath,/usr/local/lib /usr/local/lib/libmpi.so 
+        gmake[2]: Leaving directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-osUFGx'
+        gmake[1]: Leaving directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-osUFGx'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1278 (try_compile)"
+      - "/usr/local/share/cmake-3.27/Modules/FindMPI.cmake:1672 (_MPI_try_staged_settings)"
+      - "CMakeLists.txt:4 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode MPICXX"
+    directories:
+      source: "/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-qp8jel"
+      binary: "/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-qp8jel"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_MPICXX"
+      cached: true
+      stdout: |
+        Change Dir: '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-qp8jel'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_c8c6a/fast
+        gmake[1]: Entering directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-qp8jel'
+        /usr/bin/gmake  -f CMakeFiles/cmTC_c8c6a.dir/build.make CMakeFiles/cmTC_c8c6a.dir/build
+        gmake[2]: Entering directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-qp8jel'
+        Building CXX object CMakeFiles/cmTC_c8c6a.dir/test_mpi.cpp.o
+        /usr/bin/c++    -o CMakeFiles/cmTC_c8c6a.dir/test_mpi.cpp.o -c /home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-qp8jel/test_mpi.cpp
+        Linking CXX executable cmTC_c8c6a
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c8c6a.dir/link.txt --verbose=1
+        /usr/bin/c++ -Wl,-rpath -Wl,/usr/local/lib -Wl,--enable-new-dtags -Wl,--dependency-file,CMakeFiles/cmTC_c8c6a.dir/link.d CMakeFiles/cmTC_c8c6a.dir/test_mpi.cpp.o -o cmTC_c8c6a  -Wl,-rpath,/usr/local/lib /usr/local/lib/libmpi.so 
+        gmake[2]: Leaving directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-qp8jel'
+        gmake[1]: Leaving directory '/home/ubuntu/graph-dp/build/CMakeFiles/CMakeScratch/TryCompile-qp8jel'
+        
+      exitCode: 0
+...

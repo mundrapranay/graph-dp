@@ -4,6 +4,7 @@ import argparse
 import numpy as np
 import matplotlib.pyplot as plt 
 import statistics
+from operator import add
 
 
 
@@ -14,7 +15,8 @@ GRAPH_SIZES = {
     'hua_livejournal' : 4846609,
     'hua_stackoverflow' : 2584164,
     'hua_usa' : 23947347,
-    'hua_youtube' : 1138499
+    'hua_youtube' : 1138499,
+    'zhang_orkut' : 3072441
 }
 
 
@@ -30,7 +32,7 @@ def run_benchmark():
     os.chdir('../')
 
     # graphs = GRAPH_SIZES.keys()
-    graphs = ['zhang_dblp', 'hua_ctr', 'hua_livejournal', 'zhang_orkut']
+    graphs = ['zhang_dblp', 'zhang_orkut', 'hua_livejournal', 'hua_ctr']
     # graphs = ['zhang_dblp']
 
     # Specify the number of processes as a command line argument
@@ -78,7 +80,15 @@ def get_core_numbers(file):
     f = open('/home/ubuntu/results_new/{0}'.format(file), 'r')
     lines = f.readlines()
     pp_time = float((lines[0].strip().split(':'))[1].strip())
-    algo_time = float((lines[-1].strip().split(':'))[1].strip())
+    try:
+        algo_time = float((lines[-1].strip().split(':'))[1].strip())
+    except IndexError:
+        print(file)
+        algo_time = 0
+    except ValueError:
+        print(file)
+        algo_time = 0
+
     del lines[-1]
     del lines[0]
     f.close()
@@ -174,7 +184,7 @@ def plot_benchmark_runs():
 
 
 def plot_benchmark_runs_biasfactor():
-    graphs = ['zhang_dblp', 'hua_ctr', 'hua_livejournal', 'zhang_orkut']
+    graphs = ['zhang_dblp']
     factors = ['1/4', '1/3', '1/2', '2/3', '3/4']
     # factors = ['1/4', '1/3', '1/2']
     for graph in graphs:
@@ -189,7 +199,7 @@ def plot_benchmark_runs_biasfactor():
         biased_pp_time = []
 
         for bias in [1]:
-            for factor_id in range(4):
+            for factor_id in range(5):
                 bf_bias_avg_approx = []
                 bf_bias_max_approx = []
                 bf_bias_pp_time = []
@@ -209,6 +219,8 @@ def plot_benchmark_runs_biasfactor():
                     # plt.cla()
                     # plt.clf()
                     bf_bias_avg_approx.append(statistics.mean(approximation_factor))
+                    if max(approximation_factor) >= 10e3:
+                        print(output_file)
                     bf_bias_max_approx.append(max(approximation_factor))
                     bf_bias_pp_time.append(pp_time)
                     bf_bias_algo_time.append(algo_time)
@@ -220,7 +232,10 @@ def plot_benchmark_runs_biasfactor():
         
     x = np.arange(len(biased_avg_approx[0]))
     for i in range(len(factors)):
-        plt.plot(x, biased_avg_approx[i], '-o', label='Average Approx for {0}'.format(factors[i]))
+        if i == 6:
+            continue
+        else:
+            plt.plot(x, biased_avg_approx[i], '--o', label='Average Approx for {0}'.format(factors[i]), alpha=0.7)
 
     plt.legend()
     # plt.xticks(x)
@@ -233,7 +248,10 @@ def plot_benchmark_runs_biasfactor():
     plt.clf()
 
     for i in range(len(factors)):
-        plt.plot(x, biased_max_approx[i], '-^', label='Max Approx for {0}'.format(factors[i]))
+        if i == 6:
+            continue
+        else:
+            plt.plot(x, biased_max_approx[i], '--^', label='Max Approx for {0}'.format(factors[i]), alpha=0.7)
     
     plt.legend()
     # plt.xticks(x)
@@ -306,7 +324,7 @@ def print_core_data():
                     out.close()
 
 if __name__ == '__main__':
-    run_benchmark()
+    # run_benchmark()
     # plot_benchmark_runs()
     plot_benchmark_runs_biasfactor()
     # image_list = get_image_files(factor_id=4, bias_factor=50, graph='zhang_orkut')

@@ -7,7 +7,7 @@ import seaborn as sns
 
 
 def load_graph(node_id):
-    f = open('./graphs/hua_usa', 'r')
+    f = open('./graphs/zhang_orkut', 'r')
     lines = f.readlines()
     del lines[0]
     lines = [line.strip() for line in lines]
@@ -125,7 +125,7 @@ def cutoff_thresholds():
 
 
 if __name__ == '__main__':
-    # load_graph(274467)
+    load_graph(274467)
     # preprocess_data()
-    core_numbers_distribution()
+    # core_numbers_distribution()
     # cutoff_thresholds()
