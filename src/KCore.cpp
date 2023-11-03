@@ -102,6 +102,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 MPI_Recv(&node_degree_sum, 1, MPI_INT, p, FROM_WORKER + p, MPI_COMM_WORLD, &status);
                 requested_node_ids.resize(node_degree_sum);
                 MPI_Recv(&requested_node_ids[0], node_degree_sum, MPI_INT, p, FROM_WORKER + p, MPI_COMM_WORLD, &status);
+                std::cout << "Received from Worker " << p << " Node IDs size: " << requested_node_ids.size() << std::endl;
                 for (auto node : requested_node_ids) {
                     currentLevels.push_back(lds->get_level(node));
                 }
