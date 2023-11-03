@@ -95,6 +95,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         if (rank == COORDINATOR) {
 
             // worker send a request for current levels their node ids
+            int node_degree_sums[numworkers];
             for (p = 1; p <= numworkers; p++) {
                 std::vector<int> requested_node_ids;
                 int node_degree_sum;
@@ -107,7 +108,10 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
 
                 MPI_Send(&currentLevels[0], node_degree_sum, MPI_INT, p, FROM_MASTER, MPI_COMM_WORLD);
                 currentLevels.clear();
+                requested_node_ids.clear();
             }
+
+
 
             group_index = lds->group_for_level(r);
             offset = 0;
