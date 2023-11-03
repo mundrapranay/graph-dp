@@ -169,10 +169,13 @@ class Graph {
             file.close();
             graphSize = adjacencyList.size();
             node_degrees = std::vector<int>(graphSize, 0);
-            int al_size = std::accumulate(adjacencyList.begin(), adjacencyList.end(), 0, 
-                                [](int acc, const std::pair<int, std::vector<int>>& pair) {
-                                    return acc + pair.second.size();
-                                });
+            int al_size = 0;
+            auto it = adjacencyList.begin();
+            while (it != adjacencyList.end()) {
+                al_size += it->second.size();
+                it++;
+            }
+
             graphSize += al_size;
         }
 

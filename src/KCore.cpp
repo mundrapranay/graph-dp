@@ -112,9 +112,9 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 requested_node_ids.clear();
             }
 
-            for (int last_few = currentLevels.size() - 10; last_few < currentLevels.size(); last_few++) {
-                std::cout << "Current Levels at " << last_few << " : " << currentLevels[last_few] << std::endl;
-            }
+            // for (int last_few = currentLevels.size() - 10; last_few < currentLevels.size(); last_few++) {
+            //     std::cout << "Current Levels at " << last_few << " : " << currentLevels[last_few] << std::endl;
+            // }
 
             int current_index = 0;
             for (p = 1; p <= numworkers; p++) {
