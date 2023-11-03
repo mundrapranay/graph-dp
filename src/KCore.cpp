@@ -112,7 +112,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 requested_node_ids.clear();
             }
 
-            for (int last_few = n - 2; last_few < n; last_few++) {
+            for (int last_few = currentLevels.size() - 4; last_few < currentLevels.size(); last_few++) {
                 std::cout << "Current Levels at " << last_few << " : " << currentLevels[last_few] << std::endl;
             }
 
@@ -156,7 +156,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
 
             // send a request to coordinator to get currentLevels for working nodes
             std::vector<int> oal = graph->computeOAL((rank - 1) * chunk);
-            int node_degree_sum = oal.size();
+            int node_degree_sum = oal.size(); // n + m
             mytype = FROM_WORKER + rank;
             MPI_Send(&node_degree_sum, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
             MPI_Send(&oal[0], node_degree_sum, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
