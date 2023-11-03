@@ -370,7 +370,7 @@ if __name__ == '__main__':
     # run_benchmark()
     run_benchmark_partition()
     # plot_benchmark_runs()
-    plot_benchmark_runs_biasfactor()
+    # plot_benchmark_runs_biasfactor()
     # image_list = get_image_files(factor_id=4, bias_factor=50, graph='zhang_orkut')
     # combine_images(50, 20, image_list, 'zhang_orkut')
     # print_core_data()
