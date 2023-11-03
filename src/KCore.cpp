@@ -105,7 +105,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 for (auto node : requested_node_ids) {
                     currentLevels.push_back(lds->get_level(node));
                 }
-                node_degree_sum[p - 1] = node_degree_sum;
+                node_degree_sums [p - 1] = node_degree_sum;
                 // MPI_Send(&currentLevels[0], node_degree_sum, MPI_INT, p, FROM_MASTER, MPI_COMM_WORLD);
                 // currentLevels.clear();
                 requested_node_ids.clear();
