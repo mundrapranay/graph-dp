@@ -145,6 +145,7 @@ def debugger():
     oal_code_nl_dict, oal_code_pz_dict = read_data(files[1])
     assert(len(pt_code_pz_dict) == len(oal_code_pz_dict))
     rounds = list(pt_code_nl_dict.keys())
+    print(f'Total Number of Rounds {rounds}')
     for r in rounds:
         if (pt_code_nl_dict[r] != oal_code_nl_dict[r]):
             print(f'Next Levels Dont Match for Round {r}')
