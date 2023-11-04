@@ -140,7 +140,7 @@ def read_data(filename):
     return next_levels_round, permanent_zeros_round
 
 def debugger():
-    files = ['/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_1_partitioned_no_noise_bias_testing.txt', '/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_1_partitioned_no_noise_no_bias_dev_testing_oal.txt']
+    files = ['/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_1_partitioned_no_noise_bias_testing.txt', '/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_1_no_noise_no_bias_dev_testing_oal.txt']
     pt_code_nl_dict, pt_code_pz_dict = read_data(files[0])
     oal_code_nl_dict, oal_code_pz_dict = read_data(files[1])
     assert(len(pt_code_pz_dict) == len(oal_code_pz_dict))
