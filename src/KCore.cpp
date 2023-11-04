@@ -151,6 +151,18 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                     lds->level_increase(i, lds->L);
                 } 
             }
+            std::cout << "Round: " << r << std::endl;
+            // printing information for debugging
+            for (int i = 0; i < n; i++) {
+                std::cout << nextLevels[i] << " ";
+            }
+            std::cout << std::endl;
+
+            for (int i = 0; i < n; i++) {
+                std::cout << permanentZeros[i] << " ";
+            }
+            std::cout << std::endl;
+
         } else {
             // worker task
 
@@ -346,7 +358,7 @@ int main(int argc, char** argv) {
      
     if (rank == COORDINATOR) {
         // graph->printDegrees();
-        std::cout << "Preprocessing Time: " << max_pp_time << std::endl;
+        // std::cout << "Preprocessing Time: " << max_pp_time << std::endl;
         std::chrono::time_point<std::chrono::high_resolution_clock> algo_start, algo_end;
 	    std::chrono::duration<double> algo_elapsed;
         double algo_time = 0.0;
@@ -357,11 +369,11 @@ int main(int argc, char** argv) {
         algo_end = std::chrono::high_resolution_clock::now();
         algo_elapsed = algo_end - algo_start;
         // std::cout << "Printing Core Numbers" << std::endl;
-        for (int i = 0; i < n; i++) {
-            std::cout<< i << " : " << estimated_core_numbers[i] << std::endl;
-        }
+        // for (int i = 0; i < n; i++) {
+        //     std::cout<< i << " : " << estimated_core_numbers[i] << std::endl;
+        // }
         algo_time = algo_elapsed.count();
-        std::cout << "Algorithm Time: " << algo_time << std::endl;
+        // std::cout << "Algorithm Time: " << algo_time << std::endl;
     } else {
         distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, eta, epsilon, phi, lambda, static_cast<int>(levels_per_group), factor, bias, bias_factor, n);
     }
