@@ -124,14 +124,42 @@ def cutoff_thresholds():
     # plt.savefig('./zhang_dblp_cutoff_threholds_2.png')
     print('Max Cutoff: {0}\t Min Cutoff: {1}\t Average Cutoff: {2}'.format(max(cutoff_threholds), min(cutoff_threholds), statistics.mean(cutoff_threholds)))
 
+def read_data(filename):
+    next_levels_round = {}
+    permanent_zeros_round = {}
+    f = open(filename, 'r')
+    lines = f.readlines()
+    f.close()
+    for i in range(0, len(lines), 3):
+        round_number = int(lines[i].strip().split(":")[1].strip())
+        next_levels_vector = [int(val) for val in lines[i+1].split()]
+        permanent_zeros_vector = [int(val) for val in lines[i+2].split()]
+        next_levels_round[round_number] = next_levels_vector
+        permanent_zeros_round[round_number] = permanent_zeros_vector
+    
+    return next_levels_round, permanent_zeros_round
+
+def debugger():
+    files = ['/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_1_partitioned_no_noise_bias_testing.txt', '/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_1_partitioned_no_noise_bias_dev_testing_oal.txt']
+    pt_code_nl_dict, pt_code_pz_dict = read_data(files[0])
+    oal_code_nl_dict, oal_code_pz_dict = read_data(files[1])
+    assert(len(pt_code_pz_dict) == len(oal_code_pz_dict))
+    rounds = list(pt_code_nl_dict.keys())
+    for r in rounds:
+        if (pt_code_nl_dict[r] != oal_code_nl_dict[r]):
+            print(f'Next Levels Dont Match for Round {r}')
+        
+        if (pt_code_pz_dict[r] != oal_code_pz_dict[r]):
+            print(f'Permanent Zeros Dont Match for Round {r}')
 
 if __name__ == '__main__':
     # load_graph(274467)
     # preprocess_data()
-    for bf in range(1, 2):
-        output_file = f'/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_{bf}_partitioned_no_noise_bias_testing.txt'
-        core_numbers_distribution(output_file)
-        print()
+    # for bf in range(1, 2):
+    #     output_file = f'/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_{bf}_partitioned_no_noise_bias_testing.txt'
+    #     core_numbers_distribution(output_file)
+    #     print()
         
     # core_numbers_distribution()
     # cutoff_thresholds()
+    debugger()
