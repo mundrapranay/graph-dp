@@ -140,8 +140,13 @@ class Graph {
         //     workingNodes.clear(); 
         // }
 
-        Graph(const std::string& filename, int offset) {
+        Graph(const std::string& filename, int offset, int workLoad) {
             std::ifstream file(filename);
+            std::set<int> workingNodes;
+            int end_node = offset + workLoad;
+            for (int i = offset; i < end_node; i++) {
+                workingNodes.insert(i);
+            }
             if (!file.is_open()) {
                 std::cerr << "Failed to open file: " << filename << std::endl;
                 return;
@@ -151,20 +156,33 @@ class Graph {
             while (std::getline(file, line)) {
                 std::vector<std::string> values = splitString(line, ' ');
                 std::vector<int> neighbors1;
-                // std::vector<int> neighbors2;
+                std::vector<int> neighbors2;
                 // to ensure that its zero indexed
                 int vertex = std::stoi(values[0]);
                 int ngh = std::stoi(values[1]);
-                if (adjacencyList.find(vertex) == adjacencyList.end()) {
-                    adjacencyList[vertex] = neighbors1;
-                    // nodes.insert(vertex);
-                }
-                adjacencyList[vertex].push_back(ngh);
-
-                // if (adjacencyList.find(ngh) == adjacencyList.end()) {
-                //     adjacencyList[ngh] = neighbors2;
+                // if (adjacencyList.find(vertex) == adjacencyList.end()) {
+                //     adjacencyList[vertex] = neighbors1;
+                //     // nodes.insert(vertex);
                 // }
-                // adjacencyList[ngh].push_back(vertex);
+                // adjacencyList[vertex].push_back(ngh);
+
+                // // if (adjacencyList.find(ngh) == adjacencyList.end()) {
+                // //     adjacencyList[ngh] = neighbors2;
+                // // }
+                // // adjacencyList[ngh].push_back(vertex);
+                if (workingNodes.find(vertex) != workingNodes.end()) {
+                    if (adjacencyList.find(vertex) == adjacencyList.end()) {
+                        adjacencyList[vertex] = neighbors1;
+                    }
+                    adjacencyList[vertex].push_back(ngh);
+                }
+
+                if (workingNodes.find(ngh) != workingNodes.end()) {
+                    if (adjacencyList.find(ngh) == adjacencyList.end()) {
+                        adjacencyList[ngh] = neighbors2;
+                    }
+                    adjacencyList[ngh].push_back(vertex);
+                }
             }
             file.close();
             graphSize = adjacencyList.size();

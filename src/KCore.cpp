@@ -369,7 +369,7 @@ int main(int argc, char** argv) {
         std::vector<int> lowOutOrdering = distributed_kcore::lowOutDegreeOrdering(lds, n);
         algo_end = std::chrono::high_resolution_clock::now();
         algo_elapsed = algo_end - algo_start;
-        std::cout << "Printing Core Numbers" << std::endl;
+        // std::cout << "Printing Core Numbers" << std::endl;
         for (int i = 0; i < n; i++) {
             std::cout<< i << " : " << estimated_core_numbers[i] << std::endl;
         }
