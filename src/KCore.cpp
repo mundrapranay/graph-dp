@@ -100,12 +100,12 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 std::vector<int> requested_node_ids;
                 int node_degree_sum;
                 MPI_Recv(&node_degree_sum, 1, MPI_INT, p, FROM_WORKER + p, MPI_COMM_WORLD, &status);
-                std::cout << "Node Degree Sum " << node_degree_sum << " for worker " << p << std::endl;
+                // std::cout << "Node Degree Sum " << node_degree_sum << " for worker " << p << std::endl;
                 requested_node_ids.resize(node_degree_sum);
                 MPI_Recv(&requested_node_ids[0], node_degree_sum, MPI_INT, p, FROM_WORKER + p, MPI_COMM_WORLD, &status);
-                std::cout << "Received from Worker " << p << " Node IDs size: " << requested_node_ids.size() << std::endl;
-                for (auto node : requested_node_ids) {
-                    currentLevels.push_back(lds->get_level(node));
+                // std::cout << "Received from Worker " << p << " Node IDs size: " << requested_node_ids.size() << std::endl;
+                for (int node = 0; node < requested_node_ids.size(); node++) {
+                    currentLevels.push_back(lds->get_level(requested_node_ids[node]));
                 }
                 node_degree_sums [p - 1] = node_degree_sum;
                 // MPI_Send(&currentLevels[0], node_degree_sum, MPI_INT, p, FROM_MASTER, MPI_COMM_WORLD);
@@ -359,7 +359,7 @@ int main(int argc, char** argv) {
      
     if (rank == COORDINATOR) {
         // graph->printDegrees();
-        // std::cout << "Preprocessing Time: " << max_pp_time << std::endl;
+        std::cout << "Preprocessing Time: " << max_pp_time << std::endl;
         std::chrono::time_point<std::chrono::high_resolution_clock> algo_start, algo_end;
 	    std::chrono::duration<double> algo_elapsed;
         double algo_time = 0.0;
@@ -369,12 +369,12 @@ int main(int argc, char** argv) {
         std::vector<int> lowOutOrdering = distributed_kcore::lowOutDegreeOrdering(lds, n);
         algo_end = std::chrono::high_resolution_clock::now();
         algo_elapsed = algo_end - algo_start;
-        // std::cout << "Printing Core Numbers" << std::endl;
-        // for (int i = 0; i < n; i++) {
-        //     std::cout<< i << " : " << estimated_core_numbers[i] << std::endl;
-        // }
+        std::cout << "Printing Core Numbers" << std::endl;
+        for (int i = 0; i < n; i++) {
+            std::cout<< i << " : " << estimated_core_numbers[i] << std::endl;
+        }
         algo_time = algo_elapsed.count();
-        // std::cout << "Algorithm Time: " << algo_time << std::endl;
+        std::cout << "Algorithm Time: " << algo_time << std::endl;
     } else {
         distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, eta, epsilon, phi, lambda, static_cast<int>(levels_per_group), factor, bias, bias_factor, n);
     }
