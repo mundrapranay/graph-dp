@@ -168,7 +168,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             // worker task
 
             // send a request to coordinator to get currentLevels for working nodes
-            std::vector<int> oal = graph->computeOAL((rank - 1) * chunk);
+            std::vector<int> oal = graph->computeOAL((rank - 1) * chunk, workLoadSize);
             int node_degree_sum = oal.size(); // n + m
             mytype = FROM_WORKER + rank;
             MPI_Send(&node_degree_sum, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
@@ -339,7 +339,7 @@ int main(int argc, char** argv) {
         // graph = new distributed_kcore::Graph(file_loc, offset, workLoad);
         file_loc = file_loc + std::to_string(rank) + ".txt";
         // std::cout << rank << " | " << file_loc << std::endl;
-        graph = new distributed_kcore::Graph(file_loc, offset, workLoad);
+        graph = new distributed_kcore::Graph(file_loc, offset);
         // graph->computeStats(file_loc, offset);
         pp_end = std::chrono::high_resolution_clock::now();
         pp_elapsed = (pp_end - pp_start);
