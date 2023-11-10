@@ -179,19 +179,18 @@ class Graph {
             graphSize += al_size;
         }
 
-        std::vector<int> computeOAL(int offset, int workLoad) {
+        /**
+         * @todo: Check if OAL is being computed
+        */
+        std::vector<int> computeOAL() {
             if (ordered_adjacency_list.empty()){
-                // auto it = adjacencyList.begin();
+                auto it = adjacencyList.begin();
                 ordered_adjacency_list.resize(graphSize);
-                // while (it != adjacencyList.end()) {
-                //     int node = it->first;
-                //     ordered_adjacency_list.push_back(node);
-                //     ordered_adjacency_list.insert(ordered_adjacency_list.end(), adjacencyList[node].begin(), adjacencyList[node].end());
-                //     it++;
-                // }
-                for (int node = offset; node < offset + workLoad; node++) {
+                while (it != adjacencyList.end()) {
+                    int node = it->first;
                     ordered_adjacency_list.push_back(node);
                     ordered_adjacency_list.insert(ordered_adjacency_list.end(), adjacencyList[node].begin(), adjacencyList[node].end());
+                    it++;
                 }
                 adjacencyList.clear();
             } 

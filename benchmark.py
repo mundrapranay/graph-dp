@@ -76,6 +76,7 @@ def run_benchmark_partition():
 
     # graphs = GRAPH_SIZES.keys()
     graphs = ['zhang_dblp']
+    # ./graphs/
     # graphs = ['zhang_dblp']
 
     # Specify the number of processes as a command line argument

@@ -95,6 +95,9 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         if (rank == COORDINATOR) {
 
             // worker send a request for current levels their node ids
+            /**
+             * @todo: Check if messages are received in order. Use blocking calls 
+            */
             int node_degree_sums[numworkers];
             for (p = 1; p <= numworkers; p++) {
                 std::vector<int> requested_node_ids;
@@ -168,7 +171,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             // worker task
 
             // send a request to coordinator to get currentLevels for working nodes
-            std::vector<int> oal = graph->computeOAL((rank - 1) * chunk, workLoadSize);
+            std::vector<int> oal = graph->computeOAL();
             int node_degree_sum = oal.size(); // n + m
             mytype = FROM_WORKER + rank;
             MPI_Send(&node_degree_sum, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD);
@@ -183,6 +186,10 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             MPI_Recv(&group_index, 1, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             MPI_Recv(&permanentZeros[0], workLoad, MPI_INT, COORDINATOR, mytype, MPI_COMM_WORLD, &status);
             // perform computation
+            /**
+             * @todo: Check if we are reading the correct neighbours 
+             *        Print out the ADL from OAL and check if it's the same as the OG Graph
+            */
             int end_node = offset + workLoad;
             int start = 0;
             for (int currNode = offset; currNode < end_node; currNode++) {
