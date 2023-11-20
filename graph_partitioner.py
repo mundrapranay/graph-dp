@@ -68,8 +68,48 @@ def partition_graph(graph, n):
     #    out.close()
     tota_m_up = sum([len(data[n]) for n in data.keys()])
     assert(tota_m_up == total_m)
+
+
+
+def load_graph(graph):
+    f = open('./graphs/{0}'.format(graph), 'r')
+    lines = f.readlines()
+    del lines[0]
+    lines = [line.strip() for line in lines]
+    f.close()
+    data = defaultdict(list)
+    for l in lines:
+        edge = l.split(' ')
+        n1 = int(edge[0])
+        n2 = int(edge[1])
+        data[n1].append(n2)
+        data[n2].append(n1)
+    return data
+
+#    Adjacency List for Node: 297249 : [169245, 228507, 164276, ]
+def check_graphs_reads(graph):
+    full_graph_adl = load_graph(graph)
+    log_file = open('/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_1_partitioned_no_noise_no_bias_testing.txt', 'r')
+    lines = log_file.readlines()
+    lines = [line.strip() for line in lines]
+    log_file.close()
+    data = {}
+    for line in lines:
+        if line.startswith('Adjacency List for Node:'):
+            line_data = line.split(':')
+            node = int(line_data[1])
+            adl = [int(v) for v in line_data[2].replace('[', '').replace(']', '').split(',') if len(v.strip()) > 0]
+            data[node] = adl
+    
+    for n, v in full_graph_adl.items():
+       if (sorted(data[n]) != sorted(full_graph_adl[n])):
+           print(f'Discrepancy for Node {n}')
+
+
+
+
 if __name__ == '__main__':
-  partition_graph('zhang_dblp', 17)
+#   partition_graph('zhang_dblp', 17)
 #    partition_graph('zhang_orkut', 17)
-        
+    check_graphs_reads('zhang_dblp')
     
