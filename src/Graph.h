@@ -176,6 +176,17 @@ class Graph {
                 it++;
             }
 
+            // printing the ADL for debugging
+            std::cout << "ADL Read for file: " << filename << std::endl;
+            auto it = adjacencyList.begin();
+            while (it != adjacencyList.end()) {
+                std::cout << "Adjacency List for Node: " << it->first << "[";
+                for (auto n : it->second) {
+                    std::cout << n << ", ";
+                }
+                std::cout << "]" << std::endl;
+            }
+
             graphSize += al_size;
         }
 
