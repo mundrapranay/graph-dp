@@ -180,7 +180,7 @@ class Graph {
             std::cout << "ADL Read for file: " << filename << std::endl;
             auto it2 = adjacencyList.begin();
             while (it2 != adjacencyList.end()) {
-                std::cout << "Adjacency List for Node: " << it2->first << "[";
+                std::cout << "Adjacency List for Node: " << it2->first << " : [";
                 for (auto n : it2->second) {
                     std::cout << n << ", ";
                 }
