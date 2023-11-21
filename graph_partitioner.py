@@ -97,10 +97,13 @@ def check_graphs_reads(graph):
     for line in lines:
         if line.startswith('Adjacency List for Node:'):
             line_data = line.split(':')
-            node = int(line_data[1])
-            adl = [int(v) for v in line_data[2].replace('[', '').replace(']', '').split(',') if len(v.strip()) > 0]
-            data[node] = adl
-    
+            try:
+                node = int(line_data[1])
+                adl = [int(v) for v in line_data[2].replace('[', '').replace(']', '').split(',') if len(v.strip()) > 0]
+                data[node] = adl
+            except ValueError:
+                print(line)
+                
     for n, v in full_graph_adl.items():
        if (sorted(data[n]) != sorted(full_graph_adl[n])):
            print(f'Discrepancy for Node {n}')
