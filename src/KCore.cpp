@@ -360,9 +360,9 @@ int main(int argc, char** argv) {
         // graph = new distributed_kcore::Graph(file_loc, offset, workLoad);
         file_loc = file_loc + std::to_string(rank) + ".txt";
         // std::cout << rank << " | " << file_loc << std::endl;
-        MPI_Win_lock(MPI_LOCK_EXCLUSIVE, 0, 0, win);
+        // MPI_Win_lock(MPI_LOCK_EXCLUSIVE, 0, 0, win);
         graph = new distributed_kcore::Graph(file_loc, offset);
-        MPI_Win_unlock(0, win);
+        // MPI_Win_unlock(0, win);
         // graph->computeStats(file_loc, offset);
         pp_end = std::chrono::high_resolution_clock::now();
         pp_elapsed = (pp_end - pp_start);
