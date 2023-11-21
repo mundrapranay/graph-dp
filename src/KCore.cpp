@@ -331,7 +331,7 @@ int main(int argc, char** argv) {
     int extra = n % numworkers;
 
 
-    if (my_rank == COORDINATOR) {
+    if (rank == COORDINATOR) {
         w_size = (MPI_Aint)sizeof(int);
         e_size = sizeof(int);
         MPI_Alloc_mem(sizeof(int),MPI_INFO_NULL,&w_counter);
