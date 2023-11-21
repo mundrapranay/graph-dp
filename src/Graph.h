@@ -151,7 +151,7 @@ class Graph {
             while (std::getline(file, line)) {
                 std::vector<std::string> values = splitString(line, ' ');
                 std::vector<int> neighbors1;
-                // std::vector<int> neighbors2;
+                std::vector<int> neighbors2;
                 // to ensure that its zero indexed
                 int vertex = std::stoi(values[0]);
                 int ngh = std::stoi(values[1]);
@@ -161,10 +161,10 @@ class Graph {
                 }
                 adjacencyList[vertex].push_back(ngh);
 
-                // if (adjacencyList.find(ngh) == adjacencyList.end()) {
-                //     adjacencyList[ngh] = neighbors2;
-                // }
-                // adjacencyList[ngh].push_back(vertex);
+                if (adjacencyList.find(ngh) == adjacencyList.end()) {
+                    adjacencyList[ngh] = neighbors2;
+                }
+                adjacencyList[ngh].push_back(vertex);
             }
             file.close();
             graphSize = adjacencyList.size();
