@@ -318,7 +318,10 @@ int main(int argc, char** argv) {
     double lambda = 0.5;
     // double levels_per_group = 15.0;
 
-    
+    int *w_counter, counter;
+    MPI_Aint w_size;
+    int e_size;
+    MPI_Win win;
     MPI_Init(&argc, &argv);
     int numProcesses, rank;
     MPI_Comm_size(MPI_COMM_WORLD, &numProcesses);
@@ -326,6 +329,17 @@ int main(int argc, char** argv) {
     int numworkers = numProcesses - 1;
     int chunk = n / numworkers;
     int extra = n % numworkers;
+
+
+    if (my_rank == COORDINATOR) {
+        w_size = (MPI_Aint)sizeof(int);
+        e_size = sizeof(int);
+        MPI_Alloc_mem(sizeof(int),MPI_INFO_NULL,&w_counter);
+        *w_counter = 0;
+        MPI_Win_create(w_counter, w_size, e_size, MPI_INFO_NULL, MPI_COMM_WORLD, &win);
+    } else {
+        MPI_Win_create(NULL, 0, 1, MPI_INFO_NULL, MPI_COMM_WORLD, &win);
+    }
 
     std::vector<double> preprocessing_times;
     std::chrono::time_point<std::chrono::high_resolution_clock> pp_start, pp_end;
@@ -346,7 +360,9 @@ int main(int argc, char** argv) {
         // graph = new distributed_kcore::Graph(file_loc, offset, workLoad);
         file_loc = file_loc + std::to_string(rank) + ".txt";
         // std::cout << rank << " | " << file_loc << std::endl;
+        MPI_Win_lock(MPI_LOCK_EXCLUSIVE, 0, 0, win);
         graph = new distributed_kcore::Graph(file_loc, offset);
+        MPI_Win_unlock(0, win);
         // graph->computeStats(file_loc, offset);
         pp_end = std::chrono::high_resolution_clock::now();
         pp_elapsed = (pp_end - pp_start);
