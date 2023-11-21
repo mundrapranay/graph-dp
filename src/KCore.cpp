@@ -51,6 +51,9 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
 
     MPI_Status status;
     LDS *lds;
+    /**
+     * @todo: check if rounThresholds is the same as the central code
+    */
     std::vector<int> roundThresholds(workLoadSize, 0);
     std::vector<int> noised_degrees(workLoadSize, 0);
     std::vector<int> nodeDegrees;
@@ -76,6 +79,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             roundThresholds[i] = numberOfRounds;
         }
     }
+    // MPI_lock and print roundThresholds 
 
     noised_degrees.clear();
     noised_degrees.shrink_to_fit();
