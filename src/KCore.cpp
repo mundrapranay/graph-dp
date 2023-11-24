@@ -132,17 +132,17 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                 } 
             }
 
-            std::cout << "Round: " << r << std::endl;
-            // printing information for debugging
-            for (int i = 0; i < n; i++) {
-                std::cout << nextLevels[i] << " ";
-            }
-            std::cout << std::endl;
+            // std::cout << "Round: " << r << std::endl;
+            // // printing information for debugging
+            // for (int i = 0; i < n; i++) {
+            //     std::cout << nextLevels[i] << " ";
+            // }
+            // std::cout << std::endl;
 
-            for (int i = 0; i < n; i++) {
-                std::cout << permanentZeros[i] << " ";
-            }
-            std::cout << std::endl;
+            // for (int i = 0; i < n; i++) {
+            //     std::cout << permanentZeros[i] << " ";
+            // }
+            // std::cout << std::endl;
             
         } else {
             // worker task
