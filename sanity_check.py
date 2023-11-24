@@ -153,14 +153,38 @@ def debugger():
         if (pt_code_pz_dict[r] != oal_code_pz_dict[r]):
             print(f'Permanent Zeros Dont Match for Round {r}')
 
+
+def get_rounds(file):
+    f = open(file, 'r')
+    lines = f.readlines()
+    f.close()
+    lines = [line.strip().split('|') for line in lines]
+    data = {}
+    for value in lines:
+        data[int(value[0])] = int(value[1])
+    
+    return data
+
+def debugger_rt():
+    files = ['/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_1_dev_debugging_n2.txt', '/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_1_partitioned_debugging_n2.txt']
+    dev_testing_data = get_rounds(files[0])
+    dev_openstacks_data = get_rounds(files[1]) 
+    nodes = list(dev_openstacks_data.keys())
+    for n in nodes:
+        if (dev_testing_data[n] != dev_openstacks_data[n]):
+            print(f'Discrepancy for node: {n}')
+
+
+
 if __name__ == '__main__':
     # load_graph(274467)
     # preprocess_data()
-    for bf in range(1, 2):
-        output_file = f'/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_{bf}_partitioned_no_noise_no_bias_testing_n_17.txt'
-        core_numbers_distribution(output_file)
-        print()
+    # for bf in range(1, 2):
+    #     output_file = f'/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_{bf}_partitioned_no_noise_no_bias_testing_n_17.txt'
+    #     core_numbers_distribution(output_file)
+    #     print()
         
     # core_numbers_distribution()
     # cutoff_thresholds()
     # debugger()
+    debugger_rt()
