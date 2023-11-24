@@ -161,10 +161,10 @@ class Graph {
                 }
                 adjacencyList[vertex].push_back(ngh);
 
-                // if (adjacencyList.find(ngh) == adjacencyList.end()) {
-                //     adjacencyList[ngh] = neighbors2;
-                // }
-                // adjacencyList[ngh].push_back(vertex);
+                if (adjacencyList.find(ngh) == adjacencyList.end()) {
+                    adjacencyList[ngh] = neighbors2;
+                }
+                adjacencyList[ngh].push_back(vertex);
             }
             file.close();
             graphSize = adjacencyList.size();
