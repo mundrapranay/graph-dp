@@ -45,7 +45,7 @@ def run_benchmark():
         for bias in [0]:
             for factor_id in range(1):
                 for bias_factor in range(1, 2):
-                    output_file = f'/home/ubuntu/results_new/graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_no_noise_no_bias_dev_testing_oal.txt'
+                    output_file = f'/home/ubuntu/results_new/graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_dev_debugging_n2.txt'
                     if not os.path.exists(output_file):
                         cmd = [
                             'mpirun',

@@ -64,6 +64,9 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             int numberOfRounds = ceil(log2(noisedDegree)) * levels_per_group;
             roundThresholds[node] = numberOfRounds;
         }
+        for (int round = 0; round < roundThresholds.size(); round++) {
+            std::cout << round << " | " << roundThresholds[round] << std::endl;
+        } 
     }
     MPI_Barrier(MPI_COMM_WORLD);
     std::vector<int> permanentZeros(workLoadSize, 1);
