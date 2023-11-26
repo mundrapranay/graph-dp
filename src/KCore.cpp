@@ -60,6 +60,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
     std::vector<int> roundThresholds(workLoadSize, 0);
     std::vector<int> noised_degrees(workLoadSize, 0);
     std::vector<int> nodeDegrees;
+    std::vector<int> oal;
     if (rank == COORDINATOR) {
         roundThresholds.clear();
         roundThresholds.shrink_to_fit();
@@ -81,6 +82,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             int numberOfRounds = ceil(log2(noised_degrees[i])) * levels_per_group;
             roundThresholds[i] = numberOfRounds;
         }
+        oal = graph->computeOAL();
     }
     // MPI_lock and print roundThresholds 
     // if (rank != COORDINATOR) {
