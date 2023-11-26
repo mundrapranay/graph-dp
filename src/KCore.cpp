@@ -71,7 +71,7 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         int offset_nd = (rank - 1) * chunk; 
         int workLoad_nd = (rank == numworkers) ? chunk + extra : chunk;
         GeometricDistribution* geomThreshold = new GeometricDistribution(epsilon * factor);
-        nodeDegrees = graph->getNodeDegreeVector((rank - 1) * chunk);
+        nodeDegrees = graph->getNodeDegreeVector(offset_nd);
         for (int i = 0; i < nodeDegrees.size(); i++) {
             noised_degrees[i] = nodeDegrees[i];
             // noised_degrees[i] = nodeDegrees[i] + geomThreshold->Sample();
@@ -83,14 +83,14 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
         }
     }
     // MPI_lock and print roundThresholds 
-    if (rank != COORDINATOR) {
-        MPI_Win_lock(MPI_LOCK_EXCLUSIVE, 0, 0, win);
-        int offset_print = (rank - 1) * chunk;
-        for (int i = 0; i < roundThresholds.size(); i++) {
-            std::cout << i + offset_print << " | " << roundThresholds[i] << std::endl;
-        }
-        MPI_Win_unlock(0, win);
-    }
+    // if (rank != COORDINATOR) {
+    //     MPI_Win_lock(MPI_LOCK_EXCLUSIVE, 0, 0, win);
+    //     int offset_print = (rank - 1) * chunk;
+    //     for (int i = 0; i < roundThresholds.size(); i++) {
+    //         std::cout << i + offset_print << " | " << roundThresholds[i] << std::endl;
+    //     }
+    //     MPI_Win_unlock(0, win);
+    // }
     noised_degrees.clear();
     noised_degrees.shrink_to_fit();
     MPI_Barrier(MPI_COMM_WORLD);
