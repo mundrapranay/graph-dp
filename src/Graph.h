@@ -82,13 +82,13 @@ class Graph {
                 if (adjacencyList.find(vertex) == adjacencyList.end()) {
                     adjacencyList[vertex] = neighbors1;
                 }
-                if (adjacencyList.find(ngh) == adjacencyList.end()) {
-                    adjacencyList[ngh] = neighbors2;
-                }
-                adjacencyList[vertex].push_back(ngh);
-                adjacencyList[ngh].push_back(vertex);
+               // if (adjacencyList.find(ngh) == adjacencyList.end()) {
+                //    adjacencyList[ngh] = neighbors2;
+                //}
+                //adjacencyList[vertex].push_back(ngh);
+                //adjacencyList[ngh].push_back(vertex);
                 node_degrees[vertex] += 1;
-                node_degrees[ngh] += 1;
+                //node_degrees[ngh] += 1;
             }
             file.close();
             graphSize = adjacencyList.size();
@@ -127,12 +127,12 @@ class Graph {
                     adjacencyList[vertex].push_back(ngh);
                 }
 
-                if (workingNodes.find(ngh) != workingNodes.end()) {
-                    if (adjacencyList.find(ngh) == adjacencyList.end()) {
-                        adjacencyList[ngh] = neighbors2;
-                    }
-                    adjacencyList[ngh].push_back(vertex);
-                }
+               // if (workingNodes.find(ngh) != workingNodes.end()) {
+                 //   if (adjacencyList.find(ngh) == adjacencyList.end()) {
+                   //     adjacencyList[ngh] = neighbors2;
+                    //}
+                    //adjacencyList[ngh].push_back(vertex);
+                //}
             }
             file.close();
             graphSize = adjacencyList.size();
