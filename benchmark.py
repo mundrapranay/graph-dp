@@ -51,7 +51,7 @@ def run_benchmark():
                             'mpirun',
                             '-np', str(num_processes),
                             './build/DistributedGraphAlgorithm',
-                            f'./graphs/{graph}.txt',
+                            f'./graphs/{graph}',
                             str(eta), str(epsilon), str(phi),
                             str(factor_id), str(bias), str(bias_factor), str(GRAPH_SIZES[graph])
                         ]
