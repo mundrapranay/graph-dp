@@ -67,7 +67,7 @@ def core_numbers_distribution(filename):
     f = open(filename, 'r')
     lines = f.readlines()
     del lines[-1]
-    del lines[0]
+    #del lines[0]
     f.close()
     lines = [line.strip().split(':') for line in lines]
     estimated_core_numbers = []
@@ -180,7 +180,8 @@ if __name__ == '__main__':
     # load_graph(274467)
     # preprocess_data()
     for bf in range(1, 2):
-        output_file = f'/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_{bf}_partitioned_no_noise_no_bias_testing_n_17.txt'
+        #output_file = f'/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_{bf}_partitioned_no_noise_no_bias_testing_n_17.txt'
+        output_file = "/home/ubuntu/results_new/golang_zhang_dblp_v2.txt"
         core_numbers_distribution(output_file)
         print()
         
