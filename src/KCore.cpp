@@ -62,11 +62,11 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
             }
             // int numberOfRounds = ceil(log_a_to_base_b(noisedDegree, 1.0 + phi)) * levels_per_group;
             int numberOfRounds = ceil(log2(noisedDegree)) * levels_per_group;
-            roundThresholds[node] = numberOfRounds;
+            roundThresholds[node] = numberOfRounds + 1;
         }
-        for (int round = 0; round < roundThresholds.size(); round++) {
-            std::cout << round << " | " << roundThresholds[round] << std::endl;
-        } 
+        // for (int round = 0; round < roundThresholds.size(); round++) {
+        //     std::cout << round << " | " << roundThresholds[round] << std::endl;
+        // } 
     }
     MPI_Barrier(MPI_COMM_WORLD);
     std::vector<int> permanentZeros(workLoadSize, 1);
@@ -324,7 +324,7 @@ int main(int argc, char** argv) {
      
     if (rank == COORDINATOR) {
         // graph->printDegrees();
-        // std::cout << "Preprocessing Time: " << max_pp_time << std::endl;
+        std::cout << "Preprocessing Time: " << max_pp_time << std::endl;
         std::chrono::time_point<std::chrono::high_resolution_clock> algo_start, algo_end;
 	    std::chrono::duration<double> algo_elapsed;
         double algo_time = 0.0;
@@ -334,11 +334,11 @@ int main(int argc, char** argv) {
         algo_end = std::chrono::high_resolution_clock::now();
         algo_elapsed = algo_end - algo_start;
         // std::cout << "Printing Core Numbers" << std::endl;
-        // for (int i = 0; i < n; i++) {
-        //     std::cout<< i << " : " << estimated_core_numbers[i] << std::endl;
-        // }
+        for (int i = 0; i < n; i++) {
+            std::cout<< i << " : " << estimated_core_numbers[i] << std::endl;
+        }
         algo_time = algo_elapsed.count();
-        // std::cout << "Algorithm Time: " << algo_time << std::endl;
+        std::cout << "Algorithm Time: " << algo_time << std::endl;
     } else {
         distributed_kcore::LDS* lds = distributed_kcore::KCore_compute(rank, numProcesses, graph, eta, epsilon, phi, lambda, static_cast<int>(levels_per_group), factor, bias, bias_factor, n);
     }
