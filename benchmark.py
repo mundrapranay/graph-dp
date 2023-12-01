@@ -45,13 +45,13 @@ def run_benchmark():
         for bias in [0]:
             for factor_id in range(1):
                 for bias_factor in range(1, 2):
-                    output_file = f'/home/ubuntu/results_new/graph_{graph}_factor_id_{factor_id}_bias_{bias}_bias_factor_{bias_factor}_dev_debugging_n2.txt'
+                    output_file = f'/home/ubuntu/results_new/graph_{graph}_combined_test.txt'
                     if not os.path.exists(output_file):
                         cmd = [
                             'mpirun',
                             '-np', str(num_processes),
                             './build/DistributedGraphAlgorithm',
-                            f'./graphs/{graph}',
+                            f'./graphs/zhang_combined.txt',
                             str(eta), str(epsilon), str(phi),
                             str(factor_id), str(bias), str(bias_factor), str(GRAPH_SIZES[graph])
                         ]
