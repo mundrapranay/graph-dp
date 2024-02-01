@@ -1,7 +1,7 @@
 from collections import defaultdict
 from math import ceil
 import os
-
+import networkx as nx 
 
 GRAPH_SIZES = {
     'zhang_dblp' : 317080,
@@ -12,9 +12,20 @@ GRAPH_SIZES = {
     'hua_youtube' : 1138499,
     'zhang_orkut' : 3072441,
     'gplus' : 107614,
-    'imdb' : 896308
+    'imdb' : 896308,
+    'random_gen' : 1000
 }
 
+
+
+def generate_complete_graph(n, outputLoc):
+    G = nx.complete_graph(n)
+    edges = [e for e in G.edges]
+    out = open(outputLoc, 'w')
+    for e in edges:
+        u, v = e[0], e[1]
+        out.write('{0} {1}\n'.format(u, v))
+    out.close()
 
 
 def chunk_into_n(lst, n):
@@ -37,8 +48,8 @@ def calculate_workloads(n, num_process):
 
 def partition_graph(graph, n):
     processes = n - 1
-    #f = open('./graphs/{0}'.format(graph), 'r')
-    f = open('/home/ubuntu/TriangleLDP/data/{0}/{1}_adj.txt'.format(graph, graph.lower()), 'r')
+    f = open('./graphs/{0}'.format(graph), 'r')
+    # f = open('/home/ubuntu/TriangleLDP/data/{0}/{1}_adj.txt'.format(graph, graph.lower()), 'r')
     lines = f.readlines()
     del lines[0]
     lines = [line.strip() for line in lines]
@@ -115,8 +126,10 @@ def check_graphs_reads(graph):
 
 
 if __name__ == '__main__':
-    partition_graph('Gplus', 17)
-    partition_graph('IMDB', 17)
+    # partition_graph('Gplus', 17)
+    # partition_graph('IMDB', 17)
+    generate_complete_graph(1000, './graphs/random_gen')
+    partition_graph('ranodm_gen', 17)
 #   partition_graph('zhang_dblp', 17)
 #    partition_graph('zhang_orkut', 17)
     #check_graphs_reads('zhang_dblp')
