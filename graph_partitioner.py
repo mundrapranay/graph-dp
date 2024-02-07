@@ -51,7 +51,7 @@ def partition_graph(graph, n):
     f = open('./graphs/{0}'.format(graph), 'r')
     # f = open('/home/ubuntu/TriangleLDP/data/{0}/{1}_adj.txt'.format(graph, graph.lower()), 'r')
     lines = f.readlines()
-    del lines[0]
+    # del lines[0]
     lines = [line.strip() for line in lines]
     f.close()
     data = defaultdict(list)
