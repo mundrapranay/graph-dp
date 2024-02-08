@@ -49,8 +49,8 @@ def calculate_workloads(n, num_process):
 
 def partition_graph(graph, n):
     processes = n - 1
-    # f = open('./graphs/{0}'.format(graph), 'r')
-    f = open('/home/ubuntu/TriangleLDP/data/{0}/{1}_adj.txt'.format(graph, graph.lower()), 'r')
+    f = open('./graphs/{0}'.format(graph), 'r')
+    # f = open('/home/ubuntu/TriangleLDP/data/{0}/{1}_adj.txt'.format(graph, graph.lower()), 'r')
     lines = f.readlines()
     # del lines[0]
     lines = [line.strip() for line in lines]
