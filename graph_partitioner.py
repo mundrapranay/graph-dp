@@ -13,7 +13,7 @@ GRAPH_SIZES = {
     'zhang_orkut' : 3072441,
     'gplus' : 107614,
     'imdb' : 896308,
-    'random_gen' : 1000
+    'random_gen' : 1000,
     'random_gen_2' : 2500
 }
 
