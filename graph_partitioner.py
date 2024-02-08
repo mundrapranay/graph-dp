@@ -126,10 +126,10 @@ def check_graphs_reads(graph):
 
 
 if __name__ == '__main__':
-    # partition_graph('Gplus', 17)
-    # partition_graph('IMDB', 17)
-    generate_complete_graph(1000, './graphs/random_gen')
-    partition_graph('random_gen', 17)
+    partition_graph('Gplus', 17)
+    partition_graph('IMDB', 17)
+    # generate_complete_graph(1000, './graphs/random_gen')
+    # partition_graph('random_gen', 17)
 #   partition_graph('zhang_dblp', 17)
 #    partition_graph('zhang_orkut', 17)
     #check_graphs_reads('zhang_dblp')
