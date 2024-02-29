@@ -104,7 +104,7 @@ def core_numbers_distribution(filename, graph):
     # plt.cla()
     # plt.clf()
     # # print('Max Core Number: {0}'.format(max(core_numbers)))
-
+    return estimated_core_numbers
 
 def cutoff_thresholds():
     f = open('zhang_dblp_eta09_epsilon0.5_phi05_n17_rounds_lpg_thresholding_2.txt', 'r')
@@ -186,17 +186,18 @@ def debugger_rt():
 if __name__ == '__main__':
     # load_graph(274467)
     # preprocess_data()
-    for bf in ['dblp']:
+    for bf in ['dblp', 'orkut']:
         #output_file = f'/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_{bf}_partitioned_no_noise_no_bias_testing_n_17.txt'
         print(bf)
         print("CDP")
-        output_file = f"/home/ubuntu/results_new/golang_results/zhang_{bf}_4_1_1_central_dp_kcore.txt"
-        core_numbers_distribution(output_file, bf)
+        output_file = f"/home/ubuntu/results_new/golang_results/zhang_{bf}_4_1_1_central_dp_kcore_no_noise_final.txt"
+        approx_core_numbers_cdp = core_numbers_distribution(output_file, bf)
         print()
         print("LDP")
-        output_file = f"/home/ubuntu/results_new/golang_results/zhang_{bf}_4_1_1_local_dp_kcore.txt"
-        core_numbers_distribution(output_file, bf)
+        output_file = f"/home/ubuntu/results_new/golang_results/zhang_{bf}_4_1_1_local_dp_kcore_no_noise_final.txt"
+        approx_core_numbers_ldp = core_numbers_distribution(output_file, bf)
         print()
+        assert(approx_core_numbers_cdp == approx_core_numbers_ldp)
     #get_rounds('/home/ubuntu/golan_dblp_test.txt')
     # core_numbers_distribution()
     # cutoff_thresholds()
