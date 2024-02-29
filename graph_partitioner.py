@@ -136,6 +136,6 @@ if __name__ == '__main__':
 #    partition_graph('zhang_orkut', 17)
     #check_graphs_reads('zhang_dblp')
     # partition_graph('hua_livejournal', 17)
-    data = load_graph('hua_livejournal')
+    data = load_graph('livejournal_adj')
     print(len(data))
     
