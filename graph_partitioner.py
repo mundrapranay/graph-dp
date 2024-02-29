@@ -15,7 +15,8 @@ GRAPH_SIZES = {
     'imdb' : 896308,
     'random_gen' : 1000,
     'random_gen_2' : 2500,
-    'big_random' : 100000
+    'big_random' : 100000,
+    'dblp_adj' : 317080
 }
 
 
@@ -135,7 +136,7 @@ if __name__ == '__main__':
 #   partition_graph('zhang_dblp', 17)
 #    partition_graph('zhang_orkut', 17)
     #check_graphs_reads('zhang_dblp')
-    partition_graph('livejournal_adj', 17)
+    partition_graph('dblp_adj', 17)
     # data = load_graph('livejournal_adj')
     # print(len(data))
     
