@@ -191,11 +191,11 @@ if __name__ == '__main__':
         #output_file = f'/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_{bf}_partitioned_no_noise_no_bias_testing_n_17.txt'
         print(bf)
         print("CDP")
-        output_file = f"/home/ubuntu/results_new/golang_results/zhang_{bf}_0_1_1_central_dp_kcore_no_noise_final.txt"
+        output_file = f"/home/ubuntu/results_new/golang_results/{bf}_0_1_1_central_dp_kcore_no_noise_final.txt"
         approx_core_numbers_cdp = core_numbers_distribution(output_file, bf)
         print()
         print("LDP")
-        output_file = f"/home/ubuntu/results_new/golang_results/zhang_{bf}_0_1_1_local_dp_kcore_no_noise_final.txt"
+        output_file = f"/home/ubuntu/results_new/golang_results/{bf}_0_1_1_local_dp_kcore_no_noise_final.txt"
         approx_core_numbers_ldp = core_numbers_distribution(output_file, bf)
         print()
         i = 0
