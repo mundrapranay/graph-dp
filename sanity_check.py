@@ -186,7 +186,7 @@ def debugger_rt():
 if __name__ == '__main__':
     # load_graph(274467)
     # preprocess_data()
-    for bf in ['orkut']:
+    for bf in ['dblp']:
         #output_file = f'/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_{bf}_partitioned_no_noise_no_bias_testing_n_17.txt'
         print(bf)
         print("CDP")
