@@ -135,5 +135,7 @@ if __name__ == '__main__':
 #   partition_graph('zhang_dblp', 17)
 #    partition_graph('zhang_orkut', 17)
     #check_graphs_reads('zhang_dblp')
-    partition_graph('hua_livejournal', 17)
+    # partition_graph('hua_livejournal', 17)
+    data = load_graph('hua_livejournal')
+    print(len(data))
     
