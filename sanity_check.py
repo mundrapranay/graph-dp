@@ -51,8 +51,8 @@ def get_max_approx_index(pairs):
 
     return max_index
 
-def core_numbers_distribution(filename):
-    f = open('/home/ubuntu/ground_truth/zhang_orkut_cores', 'r')
+def core_numbers_distribution(filename, graph):
+    f = open('/home/ubuntu/ground_truth/zhang_{0}_cores'.format(graph), 'r')
     lines = f.readlines()
     # del lines[-1]
     f.close()
@@ -186,16 +186,16 @@ def debugger_rt():
 if __name__ == '__main__':
     # load_graph(274467)
     # preprocess_data()
-    for bf in ['dblp']:
+    for bf in ['dblp', 'orkut']:
         #output_file = f'/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_{bf}_partitioned_no_noise_no_bias_testing_n_17.txt'
         print(bf)
         print("CDP")
-        output_file = f"/home/ubuntu/results_new/golang_results/zhang_{bf}_0_1_1_central_dp_kcore_no_noise.txt"
-        core_numbers_distribution(output_file)
+        output_file = f"/home/ubuntu/results_new/golang_results/zhang_{bf}_0_1_1_central_dp_kcore_no_noise_final.txt"
+        core_numbers_distribution(output_file, bf)
         print()
         print("LDP")
-        output_file = f"/home/ubuntu/results_new/golang_results/zhang_{bf}_0_1_1_local_dp_kcore_no_noise.txt"
-        core_numbers_distribution(output_file)
+        output_file = f"/home/ubuntu/results_new/golang_results/zhang_{bf}_0_1_1_local_dp_kcore_no_noise_final.txt"
+        core_numbers_distribution(output_file, bf)
         print()
     #get_rounds('/home/ubuntu/golan_dblp_test.txt')
     # core_numbers_distribution()
