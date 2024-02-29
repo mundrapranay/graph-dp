@@ -76,19 +76,19 @@ def core_numbers_distribution(filename):
         estimated_core_numbers.append(cn)
     
     print(filename)
-    print('Max Approximated Core Number: {0}'.format(max(estimated_core_numbers)))
+    # print('Max Approximated Core Number: {0}'.format(max(estimated_core_numbers)))
     x = np.arange(len(core_numbers))
     approximation = [((s, t), (float(max(s,t)) / min(s, t))) for s,t in zip(core_numbers, estimated_core_numbers)]
     approximation_factor = np.array([float(max(s,t)) / min(s, t) for s,t in zip(core_numbers, estimated_core_numbers)])
-    l2_loss = np.linalg.norm(np.array(core_numbers) - np.array(estimated_core_numbers))
-    print('L2 Loss: {0}'.format(l2_loss))
+    # l2_loss = np.linalg.norm(np.array(core_numbers) - np.array(estimated_core_numbers))
+    # print('L2 Loss: {0}'.format(l2_loss))
     # df = pd.DataFrame(approximation_factor, columns=['Approximation Factor'])
     # print(df.head())
 
 
-    print('Average Approximation: {0}'.format(statistics.mean(approximation_factor)))
+    # print('Average Approximation: {0}'.format(statistics.mean(approximation_factor)))
     max_index = get_max_approx_index(approximation)
-    print(max_index)
+    print('Node ID: {0}'.format(max_index))
     print('Maximum Approximation Core Numbers: {0}, {1}'.format(approximation[max_index][0], approximation[max_index][1]))
     # print('Minimum Approximation: {0}'.format(min(approximation)))
     # for a in approximation:
@@ -186,14 +186,15 @@ def debugger_rt():
 if __name__ == '__main__':
     # load_graph(274467)
     # preprocess_data()
-    for bf in range(1):
+    for bf in ['dblp', 'orkut']:
         #output_file = f'/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_{bf}_partitioned_no_noise_no_bias_testing_n_17.txt'
+        print(bf)
         print("CDP")
-        output_file = f"/home/ubuntu/results_new/golang_results/zhang_orkut_4_1_1_central_dp_kcore_no_noise.txt"
+        output_file = f"/home/ubuntu/results_new/golang_results/zhang_{bf}_0_1_1_central_dp_kcore_no_noise_final.txt"
         core_numbers_distribution(output_file)
         print()
         print("LDP")
-        output_file = f"/home/ubuntu/results_new/golang_results/zhang_orkut_4_1_1_local_dp_kcore_no_noise.txt"
+        output_file = f"/home/ubuntu/results_new/golang_results/zhang_{bf}_0_1_1_local_dp_kcore_no_noise_final.txt"
         core_numbers_distribution(output_file)
         print()
     #get_rounds('/home/ubuntu/golan_dblp_test.txt')
