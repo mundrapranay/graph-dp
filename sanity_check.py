@@ -52,7 +52,8 @@ def get_max_approx_index(pairs):
     return max_index
 
 def core_numbers_distribution(filename, graph):
-    f = open('/home/ubuntu/ground_truth/zhang_{0}_cores'.format(graph), 'r')
+    # f = open('/home/ubuntu/ground_truth/zhang_{0}_cores'.format(graph), 'r')
+    f = open('/home/ubuntu/ground_truth/zhang_dblp_cores'.format(graph), 'r')
     lines = f.readlines()
     # del lines[-1]
     f.close()
