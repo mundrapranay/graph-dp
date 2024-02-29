@@ -191,18 +191,18 @@ if __name__ == '__main__':
         #output_file = f'/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_{bf}_partitioned_no_noise_no_bias_testing_n_17.txt'
         print(bf)
         print("CDP")
-        output_file = f"/home/ubuntu/results_new/golang_results/{bf}_0_1_1_central_dp_kcore_no_noise_final.txt"
+        output_file = f"/home/ubuntu/results_new/golang_results/{bf}_0_1_1_central_dp_kcore_noise_final.txt"
         approx_core_numbers_cdp = core_numbers_distribution(output_file, bf)
         print()
         print("LDP")
-        output_file = f"/home/ubuntu/results_new/golang_results/{bf}_0_1_1_local_dp_kcore_no_noise_final.txt"
+        output_file = f"/home/ubuntu/results_new/golang_results/{bf}_0_1_1_local_dp_kcore_noise_final.txt"
         approx_core_numbers_ldp = core_numbers_distribution(output_file, bf)
         print()
-        i = 0
-        for l_c, c_c in zip(approx_core_numbers_ldp, approx_core_numbers_cdp):
-            if l_c != c_c:
-                print('LDP Estimate: {0}\t CDP Estimte: {1}\t Node: {2}'.format(l_c, c_c, i))
-            i += 1
+        # i = 0
+        # for l_c, c_c in zip(approx_core_numbers_ldp, approx_core_numbers_cdp):
+        #     if l_c != c_c:
+        #         print('LDP Estimate: {0}\t CDP Estimte: {1}\t Node: {2}'.format(l_c, c_c, i))
+        #     i += 1
     #get_rounds('/home/ubuntu/golan_dblp_test.txt')
     # core_numbers_distribution()
     # cutoff_thresholds()
