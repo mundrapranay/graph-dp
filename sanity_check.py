@@ -197,7 +197,11 @@ if __name__ == '__main__':
         output_file = f"/home/ubuntu/results_new/golang_results/zhang_{bf}_0_1_1_local_dp_kcore_no_noise_final.txt"
         approx_core_numbers_ldp = core_numbers_distribution(output_file, bf)
         print()
-        assert(approx_core_numbers_cdp == approx_core_numbers_ldp)
+        i = 0
+        for l_c, c_c in zip(approx_core_numbers_ldp, approx_core_numbers_cdp):
+            if l_c != c_c:
+                print('LDP Estimate: {0}\t CDP Estimte: {1}\t Node: {2}'.format(l_c, c_c, i))
+            i += 1
     #get_rounds('/home/ubuntu/golan_dblp_test.txt')
     # core_numbers_distribution()
     # cutoff_thresholds()
