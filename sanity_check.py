@@ -52,7 +52,7 @@ def get_max_approx_index(pairs):
     return max_index
 
 def core_numbers_distribution(filename):
-    f = open('ground_truth/zhang_dblp_cores', 'r')
+    f = open('/home/ubuntu/ground_truth/zhang_dblp_cores', 'r')
     lines = f.readlines()
     # del lines[-1]
     f.close()
@@ -80,6 +80,8 @@ def core_numbers_distribution(filename):
     x = np.arange(len(core_numbers))
     approximation = [((s, t), (float(max(s,t)) / min(s, t))) for s,t in zip(core_numbers, estimated_core_numbers)]
     approximation_factor = np.array([float(max(s,t)) / min(s, t) for s,t in zip(core_numbers, estimated_core_numbers)])
+    l2_loss = np.linalg.norm(np.array(core_numbers) - np.array(estimated_core_numbers))
+    print('L2 Loss: {0}'.format(l2_loss))
     # df = pd.DataFrame(approximation_factor, columns=['Approximation Factor'])
     # print(df.head())
 
@@ -158,11 +160,16 @@ def get_rounds(file):
     f = open(file, 'r')
     lines = f.readlines()
     f.close()
-    lines = [line.strip().split('|') for line in lines]
+    lines = [line.strip() for line in lines]
     data = {}
+    max_threshold = 0
     for value in lines:
-        data[int(value[0])] = int(value[1])
-    
+        values = value.split('|')
+        if len(values) > 1:
+            data[int(values[0].strip())] = float(values[1].strip())
+            max_threshold = max(max_threshold, float(values[1].strip()))
+    print(max_threshold)
+
     return data
 
 def debugger_rt():
@@ -179,11 +186,12 @@ def debugger_rt():
 if __name__ == '__main__':
     # load_graph(274467)
     # preprocess_data()
-    for bf in range(1, 2):
-        output_file = f'/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_{bf}_partitioned_no_noise_no_bias_testing_n_17.txt'
+    for bf in range(5):
+        #output_file = f'/home/ubuntu/results_new/graph_zhang_dblp_factor_id_0_bias_0_bias_factor_{bf}_partitioned_no_noise_no_bias_testing_n_17.txt'
+        output_file = f"/home/ubuntu/results_new/golang_results/zhang_dblp_{bf}_1_1_noise_bias_debug_2.txt"
         core_numbers_distribution(output_file)
         print()
-        
+    #get_rounds('/home/ubuntu/golan_dblp_test.txt')
     # core_numbers_distribution()
     # cutoff_thresholds()
     # debugger()

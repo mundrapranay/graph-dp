@@ -224,8 +224,9 @@ LDS* KCore_compute(int rank, int nprocs, Graph* graph, double eta, double epsilo
                     }
                     double distribution_factor = (epsilon * remaingingBudget) / (2.0 * rounds_param);
                     GeometricDistribution* geom = new GeometricDistribution(distribution_factor);
-                    // int noise = geom->Sample();
-                    int noise = 0;
+                    int noise = geom->Sample();
+		    std :: cout << "Noise Sampled: " << noise << std::endl;
+		    //int noise = 0;
                     int U_hat_i = U_i + noise;
                     if (U_hat_i > pow((1 + phi), group_index)) {
                             nextLevels[currNode - offset] = 1;

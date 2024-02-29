@@ -1,7 +1,7 @@
 from collections import defaultdict
 from math import ceil
 import os
-
+import networkx as nx 
 
 GRAPH_SIZES = {
     'zhang_dblp' : 317080,
@@ -10,9 +10,24 @@ GRAPH_SIZES = {
     'hua_stackoverflow' : 2584164,
     'hua_usa' : 23947347,
     'hua_youtube' : 1138499,
-    'zhang_orkut' : 3072441
+    'zhang_orkut' : 3072441,
+    'gplus' : 107614,
+    'imdb' : 896308,
+    'random_gen' : 1000,
+    'random_gen_2' : 2500,
+    'big_random' : 100000
 }
 
+
+
+def generate_complete_graph(n, outputLoc):
+    G = nx.complete_graph(n)
+    edges = [e for e in G.edges]
+    out = open(outputLoc, 'w')
+    for e in edges:
+        u, v = e[0], e[1]
+        out.write('{0} {1}\n'.format(u, v))
+    out.close()
 
 
 def chunk_into_n(lst, n):
@@ -36,8 +51,9 @@ def calculate_workloads(n, num_process):
 def partition_graph(graph, n):
     processes = n - 1
     f = open('./graphs/{0}'.format(graph), 'r')
+    # f = open('/home/ubuntu/TriangleLDP/data/{0}/{1}_adj.txt'.format(graph, graph.lower()), 'r')
     lines = f.readlines()
-    del lines[0]
+    # del lines[0]
     lines = [line.strip() for line in lines]
     f.close()
     data = defaultdict(list)
@@ -51,23 +67,23 @@ def partition_graph(graph, n):
     # nodes = [i for i in range(GRAPH_SIZES[graph])]
     # nodes = sorted(list(data.keys()))
     # chunked_nodes = chunk_into_n(nodes, processes)
-    chunked_nodes = calculate_workloads(GRAPH_SIZES[graph], processes)
+    chunked_nodes = calculate_workloads(GRAPH_SIZES[graph.lower()], processes)
 
-    graph_directory = './graphs/{0}_partitioned_{1}/'.format(graph, n)
+    graph_directory = './graphs/{0}_partitioned_{1}/'.format(graph.lower(), n)
     os.makedirs(graph_directory, exist_ok=True)
     total_m = 0;
     for i, cn in enumerate(chunked_nodes):
        print("Partition : {0} | Nodes : {1} | ADL : {2}".format(i, len(cn), sum([len(data[n]) for n in cn])))
        total_m += sum([len(data[n]) for n in cn])
-    #    graph_file = graph_directory + '{0}.txt'.format(i + 1)
-    #    with open(graph_file, 'w') as out:
-    #       for node in cn:
-    #         adjacency_list = data[node]
-    #         for a in adjacency_list:
-    #             out.write('{0} {1}\n'.format(node, a))
-    #    out.close()
-    tota_m_up = sum([len(data[n]) for n in data.keys()])
-    assert(tota_m_up == total_m)
+       graph_file = graph_directory + '{0}.txt'.format(i + 1)
+       with open(graph_file, 'w') as out:
+          for node in cn:
+            adjacency_list = data[node]
+            for a in adjacency_list:
+                out.write('{0} {1}\n'.format(node, a))
+       out.close()
+    #tota_m_up = sum([len(data[n]) for n in data.keys()])
+    #assert(tota_m_up == total_m)
 
 
 
@@ -112,7 +128,11 @@ def check_graphs_reads(graph):
 
 
 if __name__ == '__main__':
+    # partition_graph('Gplus', 17)
+    # partition_graph('IMDB', 17)
+    generate_complete_graph(100000, './graphs/big_random')
+    partition_graph('big_random', 17)
 #   partition_graph('zhang_dblp', 17)
 #    partition_graph('zhang_orkut', 17)
-    check_graphs_reads('zhang_dblp')
+    #check_graphs_reads('zhang_dblp')
     
