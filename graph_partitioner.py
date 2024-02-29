@@ -6,7 +6,7 @@ import networkx as nx
 GRAPH_SIZES = {
     'zhang_dblp' : 317080,
     'hua_ctr' : 14081816,
-    'hua_livejournal' : 4846609,
+    'livejournal_adj' : 4846609,
     'hua_stackoverflow' : 2584164,
     'hua_usa' : 23947347,
     'hua_youtube' : 1138499,
@@ -135,7 +135,7 @@ if __name__ == '__main__':
 #   partition_graph('zhang_dblp', 17)
 #    partition_graph('zhang_orkut', 17)
     #check_graphs_reads('zhang_dblp')
-    # partition_graph('hua_livejournal', 17)
-    data = load_graph('livejournal_adj')
-    print(len(data))
+    partition_graph('livejournal_adj', 17)
+    # data = load_graph('livejournal_adj')
+    # print(len(data))
     
